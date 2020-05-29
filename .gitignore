@@ -2,3 +2,5 @@
 website/__pycache__
 berard/__pycache__
 website/migrations
+/tests
+media/img

@@ -1,0 +1,39 @@
+https://docs.docker.com/compose/django/
+
+ni Dockerfile
+FROM python:3.7
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+COPY requirements.txt /code/
+RUN pip install -r requirements.txt
+COPY . /code/
+
+ni requirements.txt
+Django>=2.0,<3.0
+psycopg2>=2.7,<3.0
+
+ni docker-compose.yml
+version: '3'
+    
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P@ssw0rd
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+
+!!!CREATE DJANGO PROJECT
+docker-compose run web django-admin startproject berard
+django-admin startproject

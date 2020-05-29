@@ -1,0 +1,116 @@
+﻿!!! VIRTUAL ENV (win 10)
+pip install virtualenvwrapper-win
+mkvirtualenv resto_env
+deactivate — Permet de sortir de l'environnement virtuel Python actuel
+workon — Lister tous les environnements virtuels disponibles
+workon name_of_environment — Activer l'environnement virtuel spécifié
+rmvirtualenv name_of_environment — Supprimer l'environnement virtuel spécifié
+
+
+!!!CREATE VIRTUAL ENV (linux)
+mkvirtualenv --python=python3.8 zendic
+workon myproject -> activate virtualenv
+(myproject)14:51 ~ $ pip install django
+OR
+python -m venv berard_site
+berard_site/bin/activate  -> win10
+source zendic/bin/activate   -> linux
+OR
+pip install virtualenv
+virtualenv zendic_venv
+.\zendic_venv\Scripts\activate.bat
+
+!!!DJANGO
+pip install django
+python -m django --version
+django-admin startproject "
+django-admin startapp "
+python -m pip install Django==3.0.3
+python -m pip freeze > requirements.txt
+python manage.py createsuperuser
+python manage.py runserver 
+
+
+!!!SHELL
+python manage.py shell
+from restaurant.models import Restaurant
+Restaurant.objects.all()
+Restaurant.objects.filter(user__username='fidji')
+
+post = Post.objects.get(title="Sample title")
+post.publish()
+Post.objects.order_by('created_date')
+Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+
+
+!!!SQL
+python manage.py makemigrations
+python manage.py migrate
+
+
+
+!!! apply migration to application before project if CustomUser with foreygn key
+python manage.py migrate restaurant
+
+!!! SERVER
+ln -s /home/leal2819/public_html/restaurant.fr/back/media /home/leal2819/public_html/ledainalexis.fr/dist/perso/restaurant-back
+source /home/leal2819/virtualenv/public_html/restaurant.fr/back/3.7/bin/activate && cd /home/leal2819/public_html/restaurant.fr/back
+ssh leal2819@michigan.o2switch.net
+git remote add origin https://Alex347:Daily365@gitlab.com/Alex347/restaurant
+python manage.py collectstatic 
+
+!!!Factory_boy
+pip install factory_boy
+python manage.py shell
+from tests.factories.groupe import GroupeFactory
+a = GroupeFactory()
+for i in range(5): obj = GroupeFactory()
+BUILD
+obj = GroupeFactory.build(nom='Groupe 1')
+obj.nom
+CREATE
+obj = GroupeFactory.create(nom='Groupe 1')
+obj.nom
+CREATE MANY
+groups = GroupeFactory.create_batch(5, nom=factory.Sequence(lambda n: 'Groupe {0}'.format(n)))
+len(groups)
+[group.nom for group in groups]
+CHECK
+from website.models import Groupe
+g = Groupe.objects.all()
+print(g)
+from tests.factories.groupe import GroupeFactory
+a = GroupeFactory()
+
+from tests.factories.famille import FamilleFactory
+obj = FamilleFactory()
+for i in range(100): obj = FamilleFactory()
+obj = FamilleFactory.create(nom='Famille 1')
+CREATE MANY
+families = FamilleFactory.create_batch(50, nom=factory.Sequence(lambda n: 'Famille {0}'.format(n)))
+len(families)
+[familly.nom for familly in families]
+CHECK
+from website.models import Groupe
+g = Groupe.objects.all()
+print(g)
+
+from tests.factories.article import ArticleFactory
+obj = ArticleFactory()
+for i in range(10000): obj = ArticleFactory()
+obj = ArticleFactory.create(nom='Article 1')
+CREATE MANY
+families = ArticleFactory.create_batch(50, nom=factory.Sequence(lambda n: 'Famille {0}'.format(n)))
+len(families)
+[familly.nom for familly in families]
+CHECK
+from website.models import Groupe
+g = Article.objects.all()
+print(g)
+
+
+
+!!!DOCKER
+docker-compose up
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate

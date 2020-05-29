@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'crispy_forms'
 ]
 
+CART_SESSION_ID = 'cart'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'website.processors.my_context_processor',
             ],
         },
     },
@@ -79,7 +82,8 @@ WSGI_APPLICATION = 'berard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': 'berard',
+        # 'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'P@ssw0rd',
         'HOST': 'localhost',
