@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% include "_navbar.html"%}
+     <div class="container">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div class="header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+         <h1 class="h2"> Liste des articles </h1>
+          </div>
+        {% if object_list %}
+            <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Libellé</th>
+                  <th>Cdt</th>
+                  <th>PV</th>
+                  <th>PA HT</th>
+                  <th>TVA</th>
+                  <th>Photo</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for field_name in object_list %}
+                <tr>
+                    <th>{{ field_name.date }}</th>
+                    <th><a href="detail_alert/{{ field_name.pk }}">{{ field_name.titre }}</a></th>
+                    <th>{{ field_name.resident.username }}</th>
+
+                    {% if field_name.etat == False %}
+                        <th><i style="color: red" class="fa fa-times" aria-hidden="true"></i></th>
+                    {% else %}
+                          <th><i style="color: green" class="fa fa-check-circle-o" aria-hidden="true"></i></th>
+                    {% endif %}
+                </tr>
+               {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+        {% else %}
+            <div class="content">
+                <h4>Pas de produits pour l'instant...</h4>
+            </div>
+        </main>
+    </div>
+    {% endif %}
+{% endblock %}
+{% block extrascripts %}
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>feather.replace()</script>
+
+{% endblock extrascripts %}
