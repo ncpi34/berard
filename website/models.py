@@ -52,7 +52,8 @@ class Article(models.Model):
     famille = models.ForeignKey(Famille,
                                 on_delete=models.CASCADE,
                                 related_name='article_by_familly')
-    image = models.CharField(max_length=4000)
+    image = models.TextField()
+    # image = models.CharField(max_length=4000)
     # image = models.ImageField(upload_to=RandomFileName('img/'), null=True, blank=True)
 
     # def __str__(self):

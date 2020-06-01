@@ -84,7 +84,7 @@ a = GroupeFactory()
 
 from tests.factories.famille import FamilleFactory
 obj = FamilleFactory()
-for i in range(100): obj = FamilleFactory()
+for i in range(80): obj = FamilleFactory()
 obj = FamilleFactory.create(nom='Famille 1')
 CREATE MANY
 families = FamilleFactory.create_batch(50, nom=factory.Sequence(lambda n: 'Famille {0}'.format(n)))

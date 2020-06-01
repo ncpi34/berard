@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% include "_navbar.html"%}
+    {% include "navbar.html"%}
 <div class="content">
           <div class="header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
          <h1 class="h2"> Liste des articles </h1>
@@ -33,7 +33,8 @@
 
 
                 {% if obj.image %}
-                    <th><img src="/media/{{ obj.image }}"/></th>
+{#                    <th><img src="/media/{{ obj.image }}"/></th>#}
+                    <th><img src="obj.image"/></th>
                 {% else %}
                     <th><img src="/media/img/nophoto.jpg"/></th>
                 {% endif %}

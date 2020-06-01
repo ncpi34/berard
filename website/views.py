@@ -107,8 +107,8 @@ def cart_detail(request):
 
 
 class ArticleView(LoginRequiredMixin, ListView):
-    template_name = 'home-page.html'
-    # template_name = 'home.html'
+    # template_name = 'home-page.html'
+    template_name = 'home.html'
     queryset = Article.objects.all()
     paginate_by = 50
     ordering = ['libelle']
