@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-
 # Create your models here.
+from django.urls import reverse
 from django.utils.html import format_html
 
 from website.helpers import RandomFileName
@@ -33,16 +33,26 @@ class Famille(models.Model):
                                on_delete=models.CASCADE,
                                related_name='familly_by_group')
 
+    class Meta:
+        ordering = ('nom',)
+        verbose_name = 'familly'
+        verbose_name_plural = 'famillies'
+
     def __str__(self):
         return self.nom
+
+    def get_absolute_url(self):
+        return reverse('website:products_by_familly',
+                       args=[self.nom])
 
 
 class Article(models.Model):
     code_article = models.CharField(max_length=15)
+    # slug = models.SlugField(max_length=200, db_index=True)
     libelle = models.CharField(max_length=40)
     conditionnement = models.CharField(max_length=30)
-    prix_vente = models.FloatField()
-    prix_achat = models.FloatField()
+    prix_vente = models.DecimalField(max_digits=10, decimal_places=2)
+    prix_achat = models.DecimalField(max_digits=10, decimal_places=2)
     gencode = models.IntegerField()
     taux_TVA = models.IntegerField()
     actif = models.BooleanField(default=False)
@@ -53,12 +63,20 @@ class Article(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='article_by_familly')
     image = models.TextField()
-    # image = models.CharField(max_length=4000)
     # image = models.ImageField(upload_to=RandomFileName('img/'), null=True, blank=True)
+    # image = models.ImageField(upload_to='img/%Y/%m/%d,  null=True, blank=True)
 
-    # def __str__(self):
-    #     return "%s %s" % (self.libelle, self.code_article)
-    #
+    class Meta:
+        ordering = ['code_article']
+        verbose_name = 'article'
+        # index_together = (('id', 'code_article'), )
+
+    def __str__(self):
+        return self.libelle
+
+    def get_absolute_url(self):
+        return reverse('website:product_detail',
+                       args=[self.id])
     # def get_img(self):
     #     if self.image:
     #         return format_html('<img src="{url}" width="50" height="50" />'.format(
@@ -72,13 +90,11 @@ class Article(models.Model):
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
 
-    class Meta:
-        ordering = ['code_article']
-
 
 class Historique(models.Model):
     date = models.DateTimeField(auto_now=True)
     article = models.ManyToManyField(Article)
+
     # utilisateur = models.ManyToOneRel(User)
 
     def __str__(self):

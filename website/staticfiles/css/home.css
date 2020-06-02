@@ -108,6 +108,7 @@ body {
   /*display:flex;*/
   /*flex-direction: column;*/
   left:0;
+  top:0;
 }
 .card{
   margin-bottom: 10px!important;

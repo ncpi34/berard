@@ -19,9 +19,7 @@ def get_menus():
 # to get submenu
 def get_families(group_name):
     # [{"name": "1","url": "/1",},{"name": "2","url": "/2",},]
-    print(group_name)
     famillies_query = Famille.objects.filter(groupe__nom=group_name).values_list('nom')
-    print(famillies_query)
     famillies = [list(i) for i in famillies_query]
     liste = []
     for item in range(len(famillies)):
@@ -34,7 +32,7 @@ MENUS = {
     'NAV_MENU_TOP': [
         {
             "name": "Logo",
-            "url": "/",
+            "url": "/home",
             "validators": ["menu_generator.validators.is_authenticated"],
         },
         {

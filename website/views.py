@@ -9,8 +9,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from website.cart import Cart
 from django.views.generic import ListView
+
+from website.filters import ArticleFilter
 from website.forms import LoginForm
 from website.models import Article, Groupe
+from django.db.models import Q
 
 """ login"""
 
@@ -106,17 +109,82 @@ def cart_detail(request):
 """ Products views"""
 
 
+# class ArticleView(LoginRequiredMixin, ListView):
+#     # template_name = 'home-page.html'
+#     model = Article
+#     template_name = 'home.html'
+#     # queryset = Article.objects.all()
+#     # paginate_by = 50
+#     # ordering = ['libelle']
+#     # context_object_name = 'articles'
+#     # login_url = ''
+#
+#     def get_queryset(self):
+#         article = Article.objects.all().order_by('libelle')[0:50]
+#         # return Article.objects.all()
+#         return article
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['filter'] = ArticleFilter(self.request.GET, queryset=self.get_queryset())
+
 class ArticleView(LoginRequiredMixin, ListView):
-    # template_name = 'home-page.html'
-    template_name = 'home.html'
-    queryset = Article.objects.all()
+    template_name = 'cards_test/products.html'
+    # template_name = 'home.html'
+    # queryset = Article.objects.filter(actif=True)
     paginate_by = 50
     ordering = ['libelle']
     context_object_name = 'articles'
     login_url = ''
 
-    # def get_queryset(self):
-    #     article = Article.objects.all().order_by('libelle')[0:50]
-    #     print(article)
-    #     # return Article.objects.all()
-    #     return article
+    def get_queryset(self):
+        if self.kwargs.get('nom'):
+            print(self.kwargs.get('nom'))
+            _name = self.kwargs.get("nom")
+            article = Article.objects.filter(Q(famille__nom=_name))
+            # article = ArticleFilter(queryset=_name)
+            return article
+        else:
+            article = Article.objects.filter(actif=True)
+            # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
+            return article
+
+
+class ArticleFiltersView(LoginRequiredMixin, ListView):
+    template_name = 'home.html'
+    paginate_by = 50
+    ordering = ['libelle']
+    context_object_name = 'articles'
+    login_url = ''
+
+    def get_queryset(self):
+        print('beginning of the method')
+        if self.kwargs.get('name'):
+            _name = self.kwargs.get("name")
+            article = Article.objects.filter(Q(famille__nom=_name))
+            # article = ArticleFilter(queryset=_name)
+            return article
+        elif self.request.GET.get('search'):
+            print('coucou')
+            print(self.request.GET.get('search'))
+            query = self.request.GET.get('search')
+            postresult = Article.objects.filter(Q(code_article__contains=query))
+            result = postresult
+        else:
+            result = None
+        return result
+
+
+class SearchView(ListView):
+    model = Article
+    template_name = 'home.html'
+    context_object_name = 'all_search_results'
+
+    def get_queryset(self):
+        result = super(SearchView, self).get_queryset()
+        query = self.request.GET.get('search')
+        if query:
+            postresult = Article.objects.filter(libelle=query)
+            result = postresult
+        else:
+            result = None
+        return result

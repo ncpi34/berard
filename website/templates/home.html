@@ -1,4 +1,29 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{#{% block content %}#}
+{# {% include "navbar.html"%}#}
+{#    <div class="content">#}
+{#    <div class="header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">#}
+{#         <h1 class="h2"> Liste des articles </h1>#}
+{#    <div>#}
+{#  <form method="GET">#}
+{#    {{ filter.form.as_p}}#}
+{#    <button type="submit" class="btn btn-primary">Rechercher</button>#}
+{#  </form>#}
+{#    <div class="{{ filter.form.as_p }}">#}
+{#    <p>Hello</p>#}
+{#    </div>#}
+{#  <ul>#}
+{#  {% for article in filter.qs %}#}
+{#    <li>#}
+{#        <a href="{% url 'snippets:detail' article.id %}">{{ article.libelle }}</a>#}
+{#    </li>#}
+{#  {% endfor %}#}
+{#  </ul>#}
+{#    </div>#}
+{#    </div>#}
+{#    </div>#}
+{#{% endblock %}#}
 {% block content %}
     {% include "navbar.html"%}
 <div class="content">
@@ -34,7 +59,7 @@
 
                 {% if obj.image %}
 {#                    <th><img src="/media/{{ obj.image }}"/></th>#}
-                    <th><img src="obj.image"/></th>
+                    <th><img src="{{ obj.image }}"/></th>
                 {% else %}
                     <th><img src="/media/img/nophoto.jpg"/></th>
                 {% endif %}
@@ -54,7 +79,7 @@
           </div>
         {% else %}
             <div class="content">
-                <h4>Pas de produits pour l'instant...</h4>
+                <h4>Pas d'articles pour l'instant...</h4>
             </div>
     {% endif %}
     </div>

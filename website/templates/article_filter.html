@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{# {% include "navbar.html"%}#}
+{#    <div class="content">#}
+{#    <div class="header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">#}
+{#         <h1 class="h2"> Liste des articles </h1>#}
+{#    <div>#}
+  <form method="get">
+    {{ filter.form.as_p}}
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+  </form>
+    <div class="{{ filter.form.as_p }}">
+    <p>Hello</p>
+    </div>
+  <ul>
+  {% for article in filter.qs %}
+    <li>
+        <a href="{% url 'snippets:detail' article.id %}">{{ article.libelle }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+{#    </div>#}
+{#    </div>#}
+{#    </div>#}
+{% endblock %}
+{#{% block content %}#}
+{#    {% include "navbar.html"%}#}
+{#<div class="content">#}
+{#          <div class="header d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">#}
+{#         <h1 class="h2"> Liste des articles </h1>#}
+{#          </div>#}
+{#        {% if articles %}#}
+{#            <div class="table-responsive">#}
+{#            <table class="table table-striped" >#}
+{#              <thead class="thead-dark" >#}
+{#                <tr>#}
+{#                  <th>Code</th>#}
+{#                  <th>Libellé</th>#}
+{#                  <th>Cdt</th>#}
+{#                  <th>PV</th>#}
+{#                  <th>PA HT</th>#}
+{#                  <th>Gencode</th>#}
+{#                  <th>TVA</th>#}
+{#                  <th>Photo</th>#}
+{#                </tr>#}
+{#              </thead>#}
+{#              <tbody>#}
+{#              {% for obj in articles %}#}
+{#                <tr>#}
+{#                    <th>{{ obj.code_article }}</th>#}
+{#                    <th><a href="#">{{ obj.libelle }}</a></th>#}
+{#                    <th>{{ obj.conditionnement }}</th>#}
+{#                    <th>{{ obj.prix_vente }}</th>#}
+{#                    <th>{{ obj.prix_achat }}</th>#}
+{#                    <th>{{ obj.gencode }}</th>#}
+{#                    <th>{{ obj.taux_TVA }}</th>#}
+{##}
+{##}
+{#                {% if obj.image %}#}
+{#                    <th><img src="/media/{{ obj.image }}"/></th>#}
+{#                {% else %}#}
+{#                    <th><img src="/media/img/nophoto.jpg"/></th>#}
+{#                {% endif %}#}
+{#                <th><a href="{% url 'cart_add' obj.id %}">Ajouter</a></th>#}
+{#                <th><a href="{% url 'cart_clear' %}">Supprimer</a></th>#}
+{#                <th><a href="{% url 'item_increment' value.obj %}">+</a></th>#}
+{#                <th><a href="{% url 'item_decrement' value.obj %}">-</a></th>#}
+{#                    {% if field_name.etat == False %}#}
+{#                        <th><i style="color: red" class="fa fa-times" aria-hidden="true"></i></th>#}
+{#                    {% else %}#}
+{#                          <th><i style="color: green" class="fa fa-check-circle-o" aria-hidden="true"></i></th>#}
+{#                    {% endif %}#}
+{#                </tr>#}
+{#               {% endfor %}#}
+{#              </tbody>#}
+{#            </table>#}
+{#          </div>#}
+{#        {% else %}#}
+{#            <div class="content">#}
+{#                <h4>Pas de produits pour l'instant...</h4>#}
+{#            </div>#}
+{#    {% endif %}#}
+{#    </div>#}
+{#{% endblock %}#}
+{#{% block extrascripts %}#}
+{#    <!-- Icons -->#}
+{#    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>#}
+{#    <script>feather.replace()</script>#}
+{##}
+{#{% endblock extrascripts %}#}
