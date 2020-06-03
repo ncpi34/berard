@@ -36,11 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'website',
-    'cart',
-    'django_filters',
+
+    # 'bootstrap_modal_forms'
     'crispy_forms',
     'menu_generator',
+    'django_filters',
+
+    'website',
+    'cart',
 ]
 
 CART_SESSION_ID = 'cart'

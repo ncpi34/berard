@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from website.models import ProfilUtilisateur, Article
+from website.models import ProfilUtilisateur, Article, Historique
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
 
@@ -30,3 +30,14 @@ admin.site.register(Article)
 #     list_filter = ['code_article', 'libelle']
 #     list_editable = ['actif']
     # prepopulated_fields = {'slug': ('libelle',)}
+    
+# class ArticlesInLine(admin.TabularInline):
+#     model = Article
+#     raw_id_fields = ['article']
+
+
+@admin.register(Historique)
+class HistoriqueViews(admin.ModelAdmin):
+    list_display = ['date', 'get_articles', 'utilisateur']
+    list_filter = ['date']
+    # inlines = [ArticlesInLine]

@@ -1,3 +1,4 @@
+# from bootstrap_modal_forms.generic import BSModalReadView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -46,6 +47,7 @@ def logout_view(request):
 
 
 class ArticleView(LoginRequiredMixin, ListView):
+
     template_name = 'website/products.html'
     # template_name = 'home.html'
     # queryset = Article.objects.filter(actif=False)
@@ -61,24 +63,30 @@ class ArticleView(LoginRequiredMixin, ListView):
             article = Article.objects.filter(Q(famille__nom=_name))
             # article = ArticleFilter(queryset=_name)
             return article
+        elif self.request.GET.get('code_article'):
+            print('coucou')
+            print(self.request.GET.get('code_article'))
+            query = self.request.GET.get('code_article')
+            postresult = Article.objects.filter(Q(code_article__contains=query))
+            result = postresult
+            return result
+        # else:
+        #     result = None
+        # return result
         else:
             article = Article.objects.filter(actif=False)
             # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
-        # if self.request.GET.get('search'):
 
-    #     print('coucou')
-    #     print(self.request.GET.get('search'))
-    #     query = self.request.GET.get('search')
-    #     postresult = Article.objects.filter(Q(code_article__contains=query))
-    #     result = postresult
-    # else:
-    #     result = None
-    # return result
+
+    # qs = self.model.objects.all()
+    # product_filtered_list = ProductFilter(self.request.GET, queryset=qs)
+    # return product_filtered_list.qs
 
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
+        context['filter'] = ArticleFilter()
         return context
 
 
@@ -111,3 +119,8 @@ class SearchView(ListView):
         else:
             result = None
         return result
+
+
+# class BookReadView(BSModalReadView):
+#     model = Article
+#     template_name = 'website/display_picture.html'

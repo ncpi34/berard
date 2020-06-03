@@ -7,7 +7,8 @@ class ArticleFilter(django_filters.FilterSet):
     class Meta:
         model = Article
         fields = {
-            'libelle':  ['icontains'],
+            'code_article': ['icontains'],
+            # 'libelle':  ['icontains'],
             # 'famille__nom': ['icontains']
         }
 

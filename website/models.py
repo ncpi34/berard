@@ -63,6 +63,7 @@ class Article(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='article_by_familly')
     image = models.TextField()
+
     # image = models.ImageField(upload_to=RandomFileName('img/'), null=True, blank=True)
     # image = models.ImageField(upload_to='img/%Y/%m/%d,  null=True, blank=True)
 
@@ -95,7 +96,29 @@ class Historique(models.Model):
     date = models.DateTimeField(auto_now=True)
     article = models.ManyToManyField(Article)
 
-    # utilisateur = models.ManyToOneRel(User)
+    # prix = models.DecimalField(max_digits=10, decimal_places=2)
+    # quantite = models.PositiveIntegerField(default=1)
+    utilisateur = models.ForeignKey(User,
+                                    related_name='user',
+                                    on_delete=models.CASCADE,
+                                    null=True)
 
     def __str__(self):
-        return self.date
+        return 'Historique {}'.format(self.id)
+
+    def get_cost(self):
+        return self.article.prix_vente
+        # articles = {}
+        # for item in self.article.libelle:
+        #     if articles[item]:
+        #         articles[item] += 1
+        #     else:
+        #         articles[item] = 1
+        #
+        # return articles
+
+    def get_total_cost(self):
+        return sum(item.get_cost() for item in self.article.id)
+
+    def get_articles(self):
+        return "\n".join([p.libelle for p in self.article.all()])

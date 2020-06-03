@@ -3,6 +3,7 @@
 {% load menu_generator %} # menus.py
 
 {% block content %}
+     {% include "_modal.html" %}
     <!--Main layout-->
   <main>
     <div class="container">
@@ -50,9 +51,14 @@
 
           <!-- Links -->
 
-          <form class="form-inline">
-            <div class="md-form my-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Chercher par code article" aria-label="Search">
+          <form class="form-inline" action="" method="get">
+            <div class="md-form my-0 mr-sm-2">
+                    {{ filter.form.as_p }}
+                <button><i class="fas fa-search"></i></button>
+{#              <input class="form-control mr-sm-2" type="text"#}
+{#                     placeholder="Chercher par code article" aria-label="Search"#}
+{#                     name=""#}
+{#              >#}
             </div>
           </form>
         </div>
@@ -80,8 +86,8 @@
               <!--Card image-->
               <div class="view overlay">
 
-               <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
-               class="img-fluid img-thumbnail card-img-top "/>
+               <img  src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
+               class="img_modal img-fluid img-thumbnail card-img-top "/>
 
 {#                <img src="{% if article.image %}#}
 {#                            {{ article.image.url }}#}
@@ -173,3 +179,15 @@
   </main>
 
 {% endblock content %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    // Create book button
+        $(".img_modal").modalForm({formURL: "{% url 'display_modal' %}"});
+
+        // Update book buttons
+        $(".img_modal").each(function () {
+          $(this).modalForm({formURL: $(this).data('id')});
+        });
+});
+</script>
