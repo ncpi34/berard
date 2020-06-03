@@ -7,9 +7,10 @@ from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from website.cart import Cart
-from django.views.generic import ListView
+# from website.cart import Cart
+from django.views.generic import ListView, DetailView
 
+from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm
 from website.models import Article, Groupe
@@ -59,78 +60,12 @@ def get_familly(request):
     print("coucou")
 
 
-""" Cart """
-
-
-@login_required(login_url="")
-def cart_add(request, id):
-    cart = Cart(request)
-    product = Article.objects.get(id=id)
-    cart.add(product=product)
-    return redirect("home")
-
-
-@login_required(login_url="")
-def item_clear(request, id):
-    cart = Cart(request)
-    product = Article.objects.get(id=id)
-    cart.remove(product)
-    return redirect("cart_detail")
-
-
-@login_required(login_url="")
-def item_increment(request, id):
-    cart = Cart(request)
-    product = Article.objects.get(id=id)
-    cart.add(product=product)
-    return redirect("cart_detail")
-
-
-@login_required(login_url="")
-def item_decrement(request, id):
-    cart = Cart(request)
-    product = Article.objects.get(id=id)
-    cart.decrement(product=product)
-    return redirect("cart_detail")
-
-
-@login_required(login_url="")
-def cart_clear(request):
-    cart = Cart(request)
-    cart.clear()
-    return redirect("cart_detail")
-
-
-@login_required(login_url="")
-def cart_detail(request):
-    return render(request, 'cart/cart_detail.html')
-
-
 """ Products views"""
 
-
-# class ArticleView(LoginRequiredMixin, ListView):
-#     # template_name = 'home-page.html'
-#     model = Article
-#     template_name = 'home.html'
-#     # queryset = Article.objects.all()
-#     # paginate_by = 50
-#     # ordering = ['libelle']
-#     # context_object_name = 'articles'
-#     # login_url = ''
-#
-#     def get_queryset(self):
-#         article = Article.objects.all().order_by('libelle')[0:50]
-#         # return Article.objects.all()
-#         return article
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['filter'] = ArticleFilter(self.request.GET, queryset=self.get_queryset())
-
 class ArticleView(LoginRequiredMixin, ListView):
-    template_name = 'cards_test/products.html'
+    template_name = 'website/products.html'
     # template_name = 'home.html'
-    # queryset = Article.objects.filter(actif=True)
+    # queryset = Article.objects.filter(actif=False)
     paginate_by = 50
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -144,34 +79,38 @@ class ArticleView(LoginRequiredMixin, ListView):
             # article = ArticleFilter(queryset=_name)
             return article
         else:
-            article = Article.objects.filter(actif=True)
+            article = Article.objects.filter(actif=False)
             # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
+        # if self.request.GET.get('search'):
+
+    #     print('coucou')
+    #     print(self.request.GET.get('search'))
+    #     query = self.request.GET.get('search')
+    #     postresult = Article.objects.filter(Q(code_article__contains=query))
+    #     result = postresult
+    # else:
+    #     result = None
+    # return result
+    def get_context_data(self, **kwargs):
+        context = super(ArticleView, self).get_context_data(**kwargs)
+        context['form'] = CartAddProductForm()
+        return context
 
 
-class ArticleFiltersView(LoginRequiredMixin, ListView):
-    template_name = 'home.html'
-    paginate_by = 50
-    ordering = ['libelle']
-    context_object_name = 'articles'
+class ArticleDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'website/product.html'
+    queryset = Article.objects.all()
     login_url = ''
 
-    def get_queryset(self):
-        print('beginning of the method')
-        if self.kwargs.get('name'):
-            _name = self.kwargs.get("name")
-            article = Article.objects.filter(Q(famille__nom=_name))
-            # article = ArticleFilter(queryset=_name)
-            return article
-        elif self.request.GET.get('search'):
-            print('coucou')
-            print(self.request.GET.get('search'))
-            query = self.request.GET.get('search')
-            postresult = Article.objects.filter(Q(code_article__contains=query))
-            result = postresult
-        else:
-            result = None
-        return result
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(Article, pk=id_)
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleDetailView, self).get_context_data(**kwargs)
+        context['form'] = CartAddProductForm()
+        return context
 
 
 class SearchView(ListView):

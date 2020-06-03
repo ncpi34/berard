@@ -55,7 +55,7 @@ class Article(models.Model):
     prix_achat = models.DecimalField(max_digits=10, decimal_places=2)
     gencode = models.IntegerField()
     taux_TVA = models.IntegerField()
-    actif = models.BooleanField(default=False)
+    actif = models.BooleanField(default=True)
     groupe = models.ForeignKey(Groupe,
                                on_delete=models.CASCADE,
                                related_name='article_by_group')

@@ -37,13 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'website',
+    'cart',
     'django_filters',
     'crispy_forms',
     'menu_generator',
 ]
 
 CART_SESSION_ID = 'cart'
-MENUS = 'website.menus'
+MENUS = 'website.menus' # during 15 days
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,7 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'website.processors.my_context_processor',
+
+                'cart.context_processors.cart',  # processor
             ],
         },
     },

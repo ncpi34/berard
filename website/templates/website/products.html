@@ -1,4 +1,4 @@
-{% extends "cards_test/base.html" %}
+{% extends "website/base.html" %}
 
 {% load menu_generator %} # menus.py
 
@@ -24,6 +24,7 @@
 
           <!-- Links -->
              <ul class="navbar-nav mr-auto">
+             <li>Tout</li>
             {% for item in left_menu %}
                 <li class="{% if item.selected %} active {% endif %}">
                 <a href="#{{ item.name }}" data-toggle="collapse" aria-expanded="false"
@@ -70,12 +71,15 @@
           <div class="col-lg-3 col-md-6 mb-4">
 
             <!--Card-->
+
             <div class="card">
 
               <!--Card image-->
               <div class="view overlay">
+
                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
                class="card-img-top"/>
+
 {#                <img src="{% if article.image %}#}
 {#                            {{ article.image.url }}#}
 {#                            {% else %}#}
@@ -83,21 +87,20 @@
 {#                            {% endif %}"#}
 {#                 class="card-img-top"#}
 {#                  alt="">#}
-                <a>
+
                   <div class="mask rgba-white-slight"></div>
-                </a>
+
               </div>
               <!--Card image-->
 
               <!--Card content-->
               <div class="card-body text-center">
                 <!--Category & Title-->
-                <a href="" class="grey-text">
-                  <h5>{{ article.famille.nom }}</h5>
-                </a>
+                  <h5 class="grey-text">{{ article.famille.nom }}</h5>
                 <h5>
                   <strong>
-                    <a href="" class="dark-grey-text">{{ article.libelle }}</a>
+                      <a href="{% url 'website:product_detail' pk=article.id %}"
+                         class="dark-grey-text">{{ article.libelle }}</a>
                   </strong>
                 </h5>
 
@@ -106,7 +109,12 @@
                   <strong>{{ article.prix_vente }} €</strong>
                 </h4>
                   <h4 class="font-weight-bold blue-text">
-                  <button class="btn btn-success">Ajouter au panier</button>
+                  <form action="{% url 'cart:cart_add' article.id %}" method="post"
+                    class="d-flex justify-content-left">
+                    {{ form }}
+                    {% csrf_token %}
+                    <input aria-label="Search" value="Add to cart" class="form-control" type="submit"/>
+                </form>
                 </h4>
 
               </div>
@@ -124,6 +132,23 @@
 
       </section>
       <!--Section: Products v.3-->
+        <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; début</a>
+            <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">suivante</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">avant &raquo;</a>
+        {% endif %}
+    </span>
+</div>
     {% else %}
         <div class="container">
         <h3>Pas d'articles pour le moment ...</h3>
