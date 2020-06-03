@@ -1,13 +1,9 @@
-from django.contrib.auth import authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-# from website.cart import Cart
 from django.views.generic import ListView, DetailView
 
 from cart.forms import CartAddProductForm
@@ -46,21 +42,8 @@ def logout_view(request):
     return redirect(reverse(login_view))
 
 
-""" Sidebar dynamic"""
-
-
-def my_context_processor(request):
-    # groups = [group.nom for group in Groupe.objects.all()]
-    groups = Groupe.objects.all()
-    print(groups)
-    return render(request, "_navbar.html", {'groups': groups})
-
-
-def get_familly(request):
-    print("coucou")
-
-
 """ Products views"""
+
 
 class ArticleView(LoginRequiredMixin, ListView):
     template_name = 'website/products.html'
@@ -92,6 +75,7 @@ class ArticleView(LoginRequiredMixin, ListView):
     # else:
     #     result = None
     # return result
+
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()

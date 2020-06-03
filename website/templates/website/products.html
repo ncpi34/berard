@@ -11,7 +11,10 @@
       <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
 
         <!-- Navbar brand -->
-        <span class="navbar-brand">Groupes</span>
+      <a class="navbar-brand waves-effect" href="/home">
+          <span class="navbar-brand">Groupes</span>
+      </a>
+
 
         <!-- Collapse button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
@@ -23,12 +26,11 @@
         <div class="collapse navbar-collapse" id="basicExampleNav">
 
           <!-- Links -->
-             <ul class="navbar-nav mr-auto">
-             <li>Tout</li>
+             <ul class="navbar-nav mx-auto">
             {% for item in left_menu %}
-                <li class="{% if item.selected %} active {% endif %}">
+                <li class="{% if item.selected %} active {% endif %} ml-2">
                 <a href="#{{ item.name }}" data-toggle="collapse" aria-expanded="false"
-                       class="dropdown-toggle"> <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>
+                       class="dropdown-toggle text-white"> <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>
                 </li>
 
                 {% if item.submenu %}
@@ -37,6 +39,7 @@
                         <li class="{% if menu.selected %} active {% endif %}">
                             <a href="{% url 'website:products_by_familly' nom=menu.name %}"
                                id="submenu"
+                               class="text-white text-center"
                             >{{ menu.name }}</a>
                         </li>
                     {% endfor %}
@@ -78,7 +81,7 @@
               <div class="view overlay">
 
                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
-               class="card-img-top"/>
+               class="img-fluid img-thumbnail card-img-top "/>
 
 {#                <img src="{% if article.image %}#}
 {#                            {{ article.image.url }}#}
@@ -96,24 +99,32 @@
               <!--Card content-->
               <div class="card-body text-center">
                 <!--Category & Title-->
-                  <h5 class="grey-text">{{ article.famille.nom }}</h5>
+                  <a href="{% url 'website:product_detail' pk=article.id %}">
+                    <h5 class="grey-text">{{ article.libelle }}</h5>
+                  </a>
                 <h5>
                   <strong>
-                      <a href="{% url 'website:product_detail' pk=article.id %}"
-                         class="dark-grey-text">{{ article.libelle }}</a>
+                      <p
+                         class="dark-grey-text">{{ article.conditionnement }}</p>
                   </strong>
                 </h5>
 
-                <h4 class="font-weight-bold blue-text">
-                    <label>Prix de vente</label>
-                  <strong>{{ article.prix_vente }} €</strong>
-                </h4>
+                <h6 class="font-weight-bold blue-text">
+                    <label>Prix Achat</label>
+                  <strong>{{ article.prix_achat}} €</strong>
+                </h6>
+                  <h6 class="font-weight-bold blue-text">
+                    <label>Prix Vente</label>
+                  <strong>{{ article.prix_vente}} €</strong>
+                </h6>
                   <h4 class="font-weight-bold blue-text">
                   <form action="{% url 'cart:cart_add' article.id %}" method="post"
                     class="d-flex justify-content-left">
                     {{ form }}
                     {% csrf_token %}
-                    <input aria-label="Search" value="Add to cart" class="form-control" type="submit"/>
+                      <button type="submit" class="form-control btn btn-success btn-sm">
+                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                        </button>
                 </form>
                 </h4>
 
@@ -132,29 +143,33 @@
 
       </section>
       <!--Section: Products v.3-->
+
+        <!-- Pagination-->
         <div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; début</a>
-            <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
-        {% endif %}
+            <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; début</a>
+                <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
+            {% endif %}
 
-        <span class="current">
-            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+            <span class="current">
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">suivante</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">avant &raquo;</a>
+            {% endif %}
         </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">suivante</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">avant &raquo;</a>
-        {% endif %}
-    </span>
-</div>
-    {% else %}
-        <div class="container">
-        <h3>Pas d'articles pour le moment ...</h3>
         </div>
-    {% endif %}
+        {% else %}
+            <div class="container">
+            <h3>Pas d'articles pour le moment ...</h3>
+            </div>
+        {% endif %}
     </div>
+   <!-- Pagination-->
+
   </main>
 
 {% endblock content %}

@@ -1,0 +1,80 @@
+{% extends 'website/base.html' %}
+{% load static %}
+
+{% block title %}
+    Panier
+{% endblock %}
+
+{% block content %}
+    <main>
+    <div class="container">
+    <div class="table-responsive text-nowrap">
+    <h2 class="text-center">Résumé de vos commandes</h2>
+    {% if cart %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Image</th>
+{#            <th scope="col">Price</th>#}
+            <th scope="col">Libellé</th>
+            <th scope="col">Prix Unitaire</th>
+            <th scope="col">Total</th>
+            <th scope="col">Quantité</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order_item in cart%}
+            {% with product=order_item.product %}
+        <tr>
+{#            <th scope="row">{{ forloop.counter }}</th>#}
+                <td>
+                    <a href="{{ product.get_absolute_url }}">
+                        <img class="img-fluid img-thumbnail"
+                             src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"/>
+                    </a>
+                </td>
+            <td>{{ order_item.libelle }}</td>
+            <td class="num">{{ order_item.prix_achat }}</td>
+            <td class="num">{{ order_item.total_price }}</td>
+                <td>
+                    <form action="{% url 'cart:cart_update' product.id %}" method="post">
+                        {{ order_item.update_quantity_form.quantity }}
+                        {{ order_item.update_quantity_form.update }}
+                        <input type="submit" class="btn btn-success btn-sm" value="Ok"/>
+                        {% csrf_token %}
+                    </form>
+            </td>
+            <td>
+                <a href="{% url 'cart:cart_remove' product.id %}"
+                   class="btn btn-danger btn-sm"
+                ><i class="far fa-trash-alt"></i></a>
+{#                <a href="{% url 'cart:cart_remove' product.id %}"><i class="fas fa-minus mr-2"></i></a>#}
+{#                {{ order_item.quantity }}#}
+{#                <a href="{% url 'cart:cart_add' product.id %}"><i class="fas fa-plus ml-2"></i></a>#}
+            </td>
+            {% endwith %}
+            {% endfor %}
+
+        </tr>
+
+        <tr class="total">
+            <td>Total</td>
+            <td colspan='4'></td>
+            <td class="num">{{ cart.get_total_price}}€</td>
+        </tr>
+        </tbody>
+    </table>
+
+    {% else %}
+        <div class="container text-center">
+            <h3>Votre panier est vide ...</h3>
+        </div>
+    {% endif %}
+
+    <p class="text-right">
+        <button class="btn btn-success">Commander</button>
+    </p>
+    </div>
+    </div>
+  </main>
+{% endblock %}

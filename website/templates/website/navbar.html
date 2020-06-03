@@ -34,34 +34,32 @@
         <!-- Right -->
         <ul class="navbar-nav nav-flex-icons">
           {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link waves-effect" href="{% url 'website:logout' %}" >
+                  <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-user"></i></span>
+                </a>
+          </li>
           <li class="nav-item">
-{#            <a href="{% url 'core:order-summary' %}" class="nav-link waves-effect">#}
-{#              <span class="badge red z-depth-1 mr-1"> {{ request.user|cart_item_count }} </span>#}
-{#              <span class="badge red z-depth-1 mr-1"> {{ request.user }} </span>#}
-{#              <i class="fas fa-shopping-cart"></i>#}
-{#              <span class="clearfix d-none d-sm-inline-block"> Cart </span>#}
-{#            </a>#}
-          <a  class="nav-link waves-effect">
-              <span class="badge red z-depth-1 mr-1">{% with total_items=cart|length %} </span>
+          <a  class="nav-link waves-effect" href="{% url 'cart:cart_detail' %}">
+                {% with total_items=cart|length %}
               {% if cart|length > 0 %}
-                  Your Cart:
-                  <a href="{% url 'cart:cart_detail' %}">
-                  {{ total_items }} produit{{ total_items|pluralize }},
-                  {{ cart.get_total_price }}€
-                  </a>
+                  <span class="badge green z-depth-1 mr-1">
+                  {{ total_items }}
+                  </span>
               {% else %}
-                  <p>jj</p>
-                {% endif %}
+                  <span class="badge red z-depth-1 mr-1">
+                  0
+                  </span>
+              {% endif %}
           {% endwith %}
-              <span class="badge red z-depth-1 mr-1"> </span>
-              <i class="fas fa-shopping-cart"></i>
-              <span class="clearfix d-none d-sm-inline-block"> Cart </span>
+            <i class="fas fa-shopping-cart"></i>
+            <span class="clearfix d-none d-sm-inline-block"></span>
             </a>
 
           </li>
           <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'website:logout' %}">
-              <span class="clearfix d-none d-sm-inline-block"> Deconnexion </span>
+            <a class="nav-link waves-effect" href="{% url 'website:logout' %}" >
+              <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
             </a>
           </li>
           {% else %}
