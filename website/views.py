@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm
-from website.models import Article, Groupe
+from website.models import Article, Groupe, Historique
 from django.db.models import Q
 
 """ login"""
@@ -57,13 +57,11 @@ class ArticleView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.kwargs.get('nom'):
-            print(self.kwargs.get('nom'))
             _name = self.kwargs.get("nom")
             article = Article.objects.filter(Q(famille__nom=_name))
             # article = ArticleFilter(queryset=_name)
             return article
         elif self.request.GET.get('code_article'):
-            print('coucou')
             print(self.request.GET.get('code_article'))
             query = self.request.GET.get('code_article')
             postresult = Article.objects.filter(Q(code_article__contains=query))
@@ -84,10 +82,30 @@ class ArticleView(LoginRequiredMixin, ListView):
         return context
 
 
+class ArticleByFamillyView(LoginRequiredMixin, ListView):
+    template_name = 'website/products.html'
+    paginate_by = 50
+    ordering = ['libelle']
+    context_object_name = 'articles'
+    login_url = ''
+
+    def get_queryset(self):
+        print(self.kwargs.get('nom'))
+        _name = self.kwargs.get("nom")
+        article = Article.objects.filter(Q(famille__nom=_name))
+        return article
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleByFamillyView, self).get_context_data(**kwargs)
+        context['form'] = CartAddProductForm()
+        return context
+
+
 class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/product.html'
     queryset = Article.objects.all()
     login_url = ''
+
     # context_object_name = 'article'
 
     def get_object(self):
@@ -105,3 +123,17 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
 # class BookReadView(BSModalReadView):
 #     model = Article
 #     template_name = 'website/display_picture.html'
+
+"""History"""
+
+
+class HistoryView(LoginRequiredMixin, ListView):
+    template_name = 'website/history.html'
+    queryset = Historique.objects.all()
+    login_url = ''
+
+    def get_queryset(self):
+        print(self.request.user)
+        _user = self.request.user.id
+        history = Historique.objects.filter(Q(utilisateur__id=_user))
+        return history

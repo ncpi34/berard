@@ -3,22 +3,22 @@
 {% load menu_generator %} # menus.py
 
 {% block content %}
-     {% include "_modal.html" %}
+     {% include "website/modals/_modal.html" %}
     <!--Main layout-->
   <main>
     <div class="container">
  {% get_menu "NAV_MENU_LEFT" as left_menu %}
       <!--Navbar-->
-      <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
+      <nav class="navbar navbar-expand-lg navbar-dark lighten-3 mt-3 mb-5">
 
         <!-- Navbar brand -->
       <a class="navbar-brand waves-effect" href="/home">
-          <span class="navbar-brand">Groupes</span>
+          <span class="navbar-brand text-dark">Groupes</span>
       </a>
 
 
         <!-- Collapse button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+        <button class="navbar-toggler alert-dark" type="button" data-toggle="collapse" data-target="#basicExampleNav"
           aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,22 +29,26 @@
           <!-- Links -->
              <ul class="navbar-nav mx-auto">
             {% for item in left_menu %}
-                <li class="{% if item.selected %} active {% endif %} ml-2">
+                <li class="{% if item.selected %} active {% endif %} ml-2 nav-item dropdown">
                 <a href="#{{ item.name }}" data-toggle="collapse" aria-expanded="false"
-                       class="dropdown-toggle text-white"> <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>
-                </li>
+                   class="nav-link dropdown-toggle text-dark"
+                > <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>
 
                 {% if item.submenu %}
-                    <ul class="collapse list-unstyled" id="{{ item.name }}">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="{{ item.name }}">
+
                     {% for menu in item.submenu %}
-                        <li class="{% if menu.selected %} active {% endif %}">
+
+{#                        <a href="{{ menu.get_absolute_url }}" id="submenu"#}
+{#                           class="text-white text-center">{{ menu.name }}</a>#}
                             <a href="{% url 'website:products_by_familly' nom=menu.name %}"
                                id="submenu"
-                               class="text-white text-center"
+                               class="text-center dropdown-item"
                             >{{ menu.name }}</a>
-                        </li>
+
                     {% endfor %}
-                    </ul>
+                    </div>
+                    </li>
              {% endif %}
             {% endfor %}
             </ul>
@@ -91,7 +95,9 @@
               <div class="view overlay">
 
                <img  src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
-               class="img_modal img-fluid img-thumbnail card-img-top "/>
+               class="img_modal img-fluid img-thumbnail card-img-top "
+               data-id="{% url 'website:product_photo' article.id %}"
+               />
 
 {#                <img src="{% if article.image %}#}
 {#                            {{ article.image.url }}#}
@@ -109,7 +115,7 @@
               <!--Card content-->
               <div class="card-body text-center">
                 <!--Category & Title-->
-                  <a href="{% url 'website:product_detail' pk=article.id %}">
+                  <a href="{{article.get_absolute_url}} ">
                     <h5 class="grey-text">{{ article.libelle }}</h5>
                   </a>
                 <h5>
@@ -159,22 +165,22 @@
         <div class="pagination">
             <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; début</a>
+                <a href="?page=1">début</a>
                 <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
             {% endif %}
 
             <span class="current">
-                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
             </span>
 
             {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.paginator.num_pages }}">dernière</a>
                 <a href="?page={{ page_obj.next_page_number }}">suivante</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">avant &raquo;</a>
             {% endif %}
         </span>
         </div>
         {% else %}
-            <div class="container">
+            <div class="container text-center mt-5" style="min-height: 50vh">
             <h3>Pas d'articles pour le moment ...</h3>
             </div>
         {% endif %}
@@ -182,17 +188,20 @@
    <!-- Pagination-->
 
   </main>
+    {% load static %}
+     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+      <!-- You can alternatively load the minified version -->
+      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+                // Modal Photo
+                $(".img_modal").each(function () {
+                    console.log('okkkkkkkkkkkkkk')
+                  $(this).modalForm({formURL: $(this).data('id')});
+                });
+        });
+    </script>
 
 {% endblock content %}
 
-<script type="text/javascript">
-$(document).ready(function() {
-    // Create book button
-        $(".img_modal").modalForm({formURL: "{% url 'display_modal' %}"});
 
-        // Update book buttons
-        $(".img_modal").each(function () {
-          $(this).modalForm({formURL: $(this).data('id')});
-        });
-});
-</script>

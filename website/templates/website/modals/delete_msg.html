@@ -1,0 +1,22 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h3 class="modal-title">Article</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <p>Êtes vous sûr de supprimer cette articles de votre panier
+      <strong></strong> ?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+  </div>
+
+</form>

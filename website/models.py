@@ -42,6 +42,8 @@ class Famille(models.Model):
         return self.nom
 
     def get_absolute_url(self):
+        print('familly')
+        print(self.nom)
         return reverse('website:products_by_familly',
                        args=[self.nom])
 
