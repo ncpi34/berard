@@ -1,13 +1,22 @@
 {#{% load cart_template_tags %}#}
 {% load menu_generator %}
+{% load static %}
  {% get_menu "NAV_MENU_TOP" as top_menu %}
 <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
     <div class="container">
 
       <!-- Brand -->
       <a class="navbar-brand waves-effect" href="/home">
-        <strong class="blue-text">Logo</strong>
+          <img class="w-25" src="{% static 'img/logo.jpg' %}"/>
       </a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li>
+        <h3 class="text-center">Berard Distribution</h3>
+      </li>
+    </ul>
+  </div>
 
       <!-- Collapse -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -38,36 +47,35 @@
                 <a class="nav-link waves-effect" href="{% url 'website:logout' %}" >
                   <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-user"></i></span>
                 </a>
-          </li>
-          <li class="nav-item">
-          <a  class="nav-link waves-effect" href="{% url 'cart:cart_detail' %}">
-                {% with total_items=cart|length %}
-              {% if cart|length > 0 %}
-                  <span class="badge green z-depth-1 mr-1">
-                  {{ total_items }}
-                  </span>
+              </li>
+              <li class="nav-item">
+                  <a  class="nav-link waves-effect" href="{% url 'cart:cart_detail' %}">
+                        {% with total_items=cart|length %}
+                      {% if cart|length > 0 %}
+                          <span class="badge green z-depth-1 mr-1">
+                          {{ total_items }}
+                          </span>
+                      {% else %}
+                          <span class="badge red z-depth-1 mr-1">
+                          0
+                          </span>
+                      {% endif %}
+                  {% endwith %}
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="clearfix d-none d-sm-inline-block"></span>
+                    </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link waves-effect" href="{% url 'website:logout' %}" >
+                  <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
+                </a>
+              </li>
               {% else %}
-                  <span class="badge red z-depth-1 mr-1">
-                  0
-                  </span>
-              {% endif %}
-          {% endwith %}
-            <i class="fas fa-shopping-cart"></i>
-            <span class="clearfix d-none d-sm-inline-block"></span>
-            </a>
-
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'website:logout' %}" >
-              <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
-            </a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'login' %}">
-              <span class="clearfix d-none d-sm-inline-block"> Connexion </span>
-            </a>
-          </li>
+              <li class="nav-item">
+                <a class="nav-link waves-effect" href="{% url 'login' %}">
+                  <span class="clearfix d-none d-sm-inline-block"> Connexion </span>
+                </a>
+              </li>
 {#          <li class="nav-item">#}
 {#            <a class="nav-link waves-effect" href="{% url 'account_signup' %}">#}
 {#              <span class="clearfix d-none d-sm-inline-block"> Signup </span>#}

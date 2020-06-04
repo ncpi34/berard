@@ -31,7 +31,7 @@
 
             <p class="lead font-weight-bold">Libellé</p>
 
-            <p>{{ object.libellé }}</p>
+            <p>{{ object.libelle }}</p>
 
             {% comment %} <form class="d-flex justify-content-left">
               <!-- Default input -->
@@ -46,7 +46,7 @@
                 class="d-flex justify-content-left">
               {{ form }}
               {% csrf_token %}
-              <input aria-label="Search" value="Add to cart" class="form-control" type="submit"/>
+              <input aria-label="Search" value="Ajouter au panier" class="form-control btn-success" type="submit"/>
           </form>
 
           </div>
@@ -60,53 +60,55 @@
 
       <hr>
 
+ <h4 class="my-4 h4 text-center">Informations additionnelles</h4>
+
       <!--Grid row-->
       <div class="row d-flex justify-content-center wow fadeIn">
 
         <!--Grid column-->
         <div class="col-md-6 text-center">
+            <span>Conditionnement:</span>
+          <p>{{ object.conditionnement }}</p>
+        </div>
+        <!--Grid column-->
 
-          <h4 class="my-4 h4">Additional information</h4>
+          <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Prix d'achat:</span>
+          <p>{{ object.prix_achat }}</p>
+        </div>
+        <!--Grid column-->
 
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
-            voluptates,
-            quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
+          <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Taux TVA:</span>
+          <p>{{ object.taux_TVA }}%</p>
+        </div>
+        <!--Grid column-->
 
+           <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Prix de vente:</span>
+          <p>{{ object.prix_vente }}%</p>
         </div>
         <!--Grid column-->
 
       </div>
       <!--Grid row-->
 
-      <!--Grid row-->
-      <div class="row wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-12 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-lg-4 col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-      </div>
-      <!--Grid row-->
+{#      <!--Grid row-->#}
+{#      <div class="row wow fadeIn">#}
+{##}
+{#        <!--Grid column-->#}
+{#        <div class="col-lg-4 col-md-12 mb-4">#}
+{##}
+{#          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">#}
+{##}
+{#        </div>#}
+{#        <!--Grid column-->#}
+{##}
+{#      </div>#}
+{#      <!--Grid row-->#}
 
     </div>
   </main>

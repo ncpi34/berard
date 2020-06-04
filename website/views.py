@@ -47,7 +47,6 @@ def logout_view(request):
 
 
 class ArticleView(LoginRequiredMixin, ListView):
-
     template_name = 'website/products.html'
     # template_name = 'home.html'
     # queryset = Article.objects.filter(actif=False)
@@ -78,11 +77,6 @@ class ArticleView(LoginRequiredMixin, ListView):
             # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
 
-
-    # qs = self.model.objects.all()
-    # product_filtered_list = ProductFilter(self.request.GET, queryset=qs)
-    # return product_filtered_list.qs
-
     def get_context_data(self, **kwargs):
         context = super(ArticleView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
@@ -94,31 +88,18 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/product.html'
     queryset = Article.objects.all()
     login_url = ''
+    # context_object_name = 'article'
 
     def get_object(self):
+        print('func 1')
         id_ = self.kwargs.get('pk')
         return get_object_or_404(Article, pk=id_)
 
     def get_context_data(self, **kwargs):
+        print('func 2')
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
         return context
-
-
-class SearchView(ListView):
-    model = Article
-    template_name = 'home.html'
-    context_object_name = 'all_search_results'
-
-    def get_queryset(self):
-        result = super(SearchView, self).get_queryset()
-        query = self.request.GET.get('search')
-        if query:
-            postresult = Article.objects.filter(libelle=query)
-            result = postresult
-        else:
-            result = None
-        return result
 
 
 # class BookReadView(BSModalReadView):

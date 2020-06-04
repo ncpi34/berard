@@ -53,8 +53,12 @@
 
           <form class="form-inline" action="" method="get">
             <div class="md-form my-0 mr-sm-2">
+                <div class="input-group">
                     {{ filter.form.as_p }}
-                <button><i class="fas fa-search"></i></button>
+                     <span class="input-group-btn">
+                        <button><i class="fas fa-search"></i></button>
+                     </span>
+                </div>
 {#              <input class="form-control mr-sm-2" type="text"#}
 {#                     placeholder="Chercher par code article" aria-label="Search"#}
 {#                     name=""#}
@@ -125,13 +129,14 @@
                 </h6>
                   <h4 class="font-weight-bold blue-text">
                   <form action="{% url 'cart:cart_add' article.id %}" method="post"
-                    class="d-flex justify-content-left">
-                    {{ form }}
-                    {% csrf_token %}
-                      <button type="submit" class="form-control btn btn-success btn-sm">
-                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                        </button>
-                </form>
+                    class="d-flex justify-content-left small">
+                     {% csrf_token %}
+                            {{ form }}
+                      <input aria-label="Search" value="Ajouter au panier" class="form-control btn-success btn-sm" type="submit"/>
+{#                              <button type="submit" class="form-control btn btn-success btn-sm">#}
+{#                                <i class="fa fa-cart-plus" aria-hidden="true"></i>#}
+{#                              </button>#}
+                  </form>
                 </h4>
 
               </div>
