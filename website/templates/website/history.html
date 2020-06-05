@@ -10,15 +10,15 @@
     <div class="container">
     <div class="table-responsive text-nowrap">
     <h2 class="text-center mt-3">Historique de vos commandes</h2>
+    {% if histories %}
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Image</th>
 {#            <th scope="col">Price</th>#}
             <th scope="col">Libellé</th>
             <th scope="col">Prix Unitaire</th>
-            <th scope="col">Total</th>
             <th scope="col">Quantité</th>
+            <th scope="col">Total</th>
         </tr>
         </thead>
         <tbody>
@@ -32,41 +32,25 @@
 {#                    </a>#}
                 </td>
             <td>{{ order_item.libelle }}</td>
-            <td class="num">
-                <div class="mb-5">{{ order_item.prix_achat }}</div>
-                <div><a
-{#                        data-id="{% url 'cart:cart_remove' product.id %}"#}
-{#                        href="{% url 'cart:cart_remove' product.id %}"#}
-                   class="delete_article btn btn-danger btn-sm"
-                ><i class="far fa-trash-alt"></i></a>
-                </div>
-            </td>
-            <td class="num">{{ order_item.total_price }}</td>
-
-
-
-{#                <a href="{% url 'cart:cart_remove' product.id %}"><i class="fas fa-minus mr-2"></i></a>#}
-{#                {{ order_item.quantity }}#}
-{#                <a href="{% url 'cart:cart_add' product.id %}"><i class="fas fa-plus ml-2"></i></a>#}
-
-
-
+            <td class="num">{{ item.prix_achat }}</td>
+            <td class="num">{{ item.quantite }}</td>
+            <td class="num">{{ item.total_price }}</td>
         </tr>
 
-        <tr class="total">
-            <td>Total</td>
-            <td colspan='1'></td>
-            <td class="num">{{ cart.get_total_price}}€</td>
-        </tr>
+{#        <tr class="total">#}
+{#            <td>Total</td>#}
+{#            <td colspan='1'></td>#}
+{#            <td class="num">{{ item.get_total_price}}€</td>#}
+{#        </tr>#}
         </tbody>
     </table>
 
-{#    {% else %}#}
+{% else %}
         <div class="container text-center mt-5" style="min-height: 50vh">
             <h3>Votre historique est vide ...</h3>
         </div>
 
-{#    {% endif %}#}
+{% endif %}
     </div>
     </div>
   </main>

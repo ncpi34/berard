@@ -131,9 +131,9 @@ class HistoryView(LoginRequiredMixin, ListView):
     template_name = 'website/history.html'
     queryset = Historique.objects.all()
     login_url = ''
+    context_object_name = 'histories'
 
     def get_queryset(self):
-        print(self.request.user)
         _user = self.request.user.id
         history = Historique.objects.filter(Q(utilisateur__id=_user))
         return history
