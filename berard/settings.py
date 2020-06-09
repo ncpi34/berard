@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     'website',
     'cart',
+    'file_integration'
 ]
 
 CART_SESSION_ID = 'cart'
