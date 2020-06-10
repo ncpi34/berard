@@ -5,6 +5,8 @@ import string
 import numpy as np
 
 import json
+
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from website.models import Article
@@ -143,6 +145,18 @@ class ClientViews(object):
         else:
             return float(0.00)
 
+    @staticmethod
+    def regex_client_code(self):
+        if self:
+            try:
+                match = re.search(r'[A-Z]?\d+$', self)
+                print(match)
+            except ValueError:
+                raise ValueError
+
+        else:
+            return ''
+
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
@@ -150,20 +164,16 @@ class ClientViews(object):
             try:
                 print('beginning db insert')
                 print(rst['libelle'])
-                article, created = Article.objects.update_or_create(
-                    libelle=rst['libelle'],
-                    # libelle=rst['libelle'].lower(),
-                    code_article=rst["code_article"],
-                    prix_vente=rst["prix_vente"],
-                    prix_achat_1=rst["prix_achat_1"],
-                    prix_achat_2=rst["prix_achat_2"],
-                    prix_achat_3=rst["prix_achat_3"],
-                    prix_achat_4=rst["prix_achat_4"],
-                    gencode=rst["gencode"],
-                    conditionnement=rst["conditionnement"],
-                    # taux_TVA=rst["taux_TVA"],
-                    # groupe=rst["groupe"],
-                    # famille=rst["famille"],
+                article, created = User.objects.update_or_create(
+                    last_name=rst['nom'],
+                    first_name=rst["prenom"],
+                    email=rst["email"],
+                    password=rst["email"],
+
+                    adresse=rst["adresse"],
+                    telephone=rst["telephone"],
+                    tarif=rst["tarif"],
+                    numero_client=rst["numero_client"],
                 )
 
                 # article.save
@@ -183,7 +193,7 @@ class ClientViews(object):
 
         try:
             # LOCAL
-            a = open('TCLT.PLN', 'r')
+            a = open('TCLT_TEST.PLN', 'r')
 
             # FTP
             # ftp = FTP(host, user, passw)
@@ -193,36 +203,30 @@ class ClientViews(object):
 
             text_lines = a.readlines()
             reg = [(re.split(r"\s{2,}", item)) for item in text_lines]  # multidimensional list
-            print(reg)
-
+            # print(reg)
 
             # array of dict
-            # obj_bdd = [{
-            #     "code_article": val[0][10:16],
-            #     "libelle": cls.check_name(val[1], val[2]),
-            #     "prix_vente": cls.is_float_with_two_decimals(val[-6], val[-7]),
-            #     "prix_achat_1": cls.is_float(val[4], val[5], val[6]),
-            #     "prix_achat_2": cls.is_float(val[5], val[6], val[7]),
-            #     "prix_achat_3": cls.is_float(val[6], val[7], val[8]),
-            #     "prix_achat_4": cls.is_float(val[7], val[8], val[9]),
-            #     "gencode": val[-8][0:-1],
-            #     # "conditionnement": cls.check_conditionning(val[-17], val[-16]),
-            #     "conditionnement": cls.check_conditionning(val[1], val[2]),
-            #     # "taux_TVA": 6,  # TO DEFINE
-            #     "groupe": cls.check_group(val[2]),
-            #     "famille": cls.check_family(val[2]),
-            # } for val in reg]
+            obj_bdd = [{
+                "nom": val,
+                "prenom": val,
+                "adresse": val,
+                "telephone": val,
+                "email": val,
+                "tarif": val,
+                "code_client": val[0][-8:],
 
-            # print([i['libelle'] for i in obj_bdd])
+            } for val in reg]
+
+            print([i['code_client'] for i in obj_bdd])
             # print(obj_bdd[2])
             # print(obj_bdd[16])
             # print(obj_bdd[4249])
 
             # cls.insert_into_db(obj_bdd)  # call method to insert in db
             # resp = json.dumps(obj_bdd[1557])
-            # resp = json.dumps(reg)
-            # return HttpResponse(resp, content_type='application/json')
-            return render(request, 'home.html')
+            resp = json.dumps(reg)
+            return HttpResponse(resp, content_type='application/json')
+            # return render(request, 'home.html')
 
         except OSError as error:
             print("OS error: {0}".format(error))
