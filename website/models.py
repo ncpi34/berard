@@ -49,22 +49,28 @@ class Famille(models.Model):
 
 
 class Article(models.Model):
-    code_article = models.CharField(max_length=15)
+    code_article = models.CharField(max_length=25, null=True)
     # slug = models.SlugField(max_length=200, db_index=True)
-    libelle = models.CharField(max_length=40)
-    conditionnement = models.CharField(max_length=30)
-    prix_vente = models.DecimalField(max_digits=10, decimal_places=2)
-    prix_achat = models.DecimalField(max_digits=10, decimal_places=2)
-    gencode = models.IntegerField()
-    taux_TVA = models.IntegerField()
+    libelle = models.CharField(max_length=150, null=True)
+    conditionnement = models.CharField(null=True,
+                                       max_length=30)
+    prix_vente = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
+    prix_achat_1 = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
+    prix_achat_2 = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
+    prix_achat_3 = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
+    prix_achat_4 = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
+    gencode = models.CharField(max_length=40, null=True)
+    taux_TVA = models.IntegerField(null=True)
     actif = models.BooleanField(default=True)
     groupe = models.ForeignKey(Groupe,
                                on_delete=models.CASCADE,
-                               related_name='article_by_group')
+                               related_name='article_by_group',
+                               null=True)
     famille = models.ForeignKey(Famille,
                                 on_delete=models.CASCADE,
-                                related_name='article_by_familly')
-    image = models.TextField()
+                                related_name='article_by_familly',
+                                null=True)
+    image = models.TextField(null=True, blank=True)
 
     # image = models.ImageField(upload_to=RandomFileName('img/'), null=True, blank=True)
     # image = models.ImageField(upload_to='img/%Y/%m/%d,  null=True, blank=True)

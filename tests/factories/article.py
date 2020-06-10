@@ -10,8 +10,11 @@ class ArticleFactory(factory.django.DjangoModelFactory):
     libelle = factory.Sequence(lambda n: "libellé %03d" % n)
     conditionnement = factory.Sequence(lambda n: "cdt par %03d" % n)
     prix_vente = 10.00
-    prix_achat = 15.00
-    gencode = 120354
+    prix_achat_1 = 16.00
+    prix_achat_2 = 17.00
+    prix_achat_3 = 18.00
+    prix_achat_4 = 19.00
+    gencode = 'AAA120546'
     taux_TVA = 20
     groupe = factory.Iterator(Groupe.objects.all())
     famille = factory.Iterator(Famille.objects.all())
