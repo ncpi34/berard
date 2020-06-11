@@ -14,9 +14,9 @@ admin.site.unregister(Group)
 @admin.register(ProfilUtilisateur)
 class UsersViews(admin.ModelAdmin):
     list_display = ['utilisateur', 'telephone', 'adresse',
-                    'code_client', 'tarif', 'actif']
-    list_filter = ['code_client', 'actif']
-    list_editable = ['actif', 'code_client']
+                    'code_client', 'tarif']
+    list_filter = ['code_client']
+    list_editable = ['code_client']
 
 # admin.site.unregister(User)
 # admin.site.register(UsersViews)

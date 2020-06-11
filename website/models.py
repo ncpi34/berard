@@ -9,12 +9,12 @@ from website.helpers import RandomFileName
 
 
 class ProfilUtilisateur(models.Model):
-    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
-    telephone = models.CharField(max_length=10)
-    adresse = models.CharField(max_length=100)
-    code_client = models.CharField(max_length=10)
+    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,)
+    telephone = models.CharField(max_length=20)
+    adresse = models.TextField()
+    code_client = models.CharField(max_length=30)
     tarif = models.CharField(max_length=10)
-    actif = models.BooleanField(default=False)
+    # actif = models.BooleanField(default=True)
 
     def __str__(self):
         return self.code_client

@@ -13,135 +13,27 @@ from website.models import Article
 
 
 class ArticleViews(object):
-
-    # GROUP
+    # change to float
     @staticmethod
-    def check_group(self):
-        if self:
-            find = re.search(',', self)
-            if find:
-                table_split = self.replace(',', ' ').replace('-', ' ').split()
-                if table_split:
-                    if len(table_split) > 4:
-                        return int(table_split[-3].lstrip('0'))
-                    else:
-                        return int(table_split[1].lstrip('0'))
-                else:
-                    return int(self[0:2].lstrip('0'))
-        else:
-            # print('ERROR: no group')
-            return ""
-
-    # FAMILY
-    @staticmethod
-    def check_family(self):
-        if self:
-            if re.search(',', self):
-                table_split = self.replace(',', ' ').replace('-', ' ').split()
-                if table_split:
-                    if len(table_split) > 4:
-                        return int(table_split[-2].lstrip('0'))
-                    else:
-                        return int(table_split[1].lstrip('0'))
-                else:
-                    return int(self[0:2].lstrip('0'))
-        else:
-            # print('ERROR: no familly')
-            return ""
-
-    # NAME_PRODUCT
-    @staticmethod
-    def check_name(name, val_to_check):
-        if name and val_to_check:
-            table_split = val_to_check.replace(',', ' ').replace('-', ' ').split()
-            if table_split:
-                if len(table_split) > 4:
-                    # print(table_split)
-                    # print(name + ' ' + concatenation)
-                    concatenation = ' '.join(table_split[0:-4])
-                    return name + ' ' + concatenation
-                else:
-                    return name
-            else:
-                return ''
-        else:
-            # print('ERROR: no name product')
-            return ""
-
-    # Conditionning
-    @staticmethod
-    def check_conditionning(val_to_check, second_val):
-        if second_val and val_to_check:
-            # print((val_to_check, second_val))
-            if re.search(',', val_to_check):
-                try:
-                    match = re.search(r'[+-]?\d+,', val_to_check)
-                    if match:
-                        match_split = match.group().replace(',', '')
-                        if len(match_split) > 2 and int(match_split[-2:]) <= 50:
-                            return int(match_split[-2:])
-                        elif len(match_split) > 2 and int(match_split[-2:]) > 50:
-                            print()
-                            return int(match_split[-1:])
-                        else:
-                            return int(match_split)
-                except ValueError:
-                    return 0
-
-            elif re.search(',', second_val):
-                try:
-                    match = re.search(r'[+-]?\d+,', second_val)
-                    if match:
-                        match_split = match.group().replace(',', '')
-                        if len(match_split) > 2 and int(match_split[-2:]) <= 50:
-                            return int(match_split[-2:])
-                        elif len(match_split) > 2 and int(match_split[-2:]) > 50:
-                            return int(match_split[-1:])
-                        else:
-                            return int(match_split)
-                except ValueError:
-                    return 0
-
-            else:
-                # print('ERROR: no data in file for conditionning')
-                return 0
-        else:
-            # print('ERROR: no conditionning name')
-            return 0
-
-    # check if string could be convert to float
-    @staticmethod
-    def is_float(val_to_test, second_val, third_val):
-        if val_to_test and second_val and third_val:
+    def is_integer(self):
+        try:
+            integer =int(self)
+            return integer
+        except ValueError:
             try:
-                res = float(val_to_test.replace(',', '.'))
-                return res
-
+                str_split = self.split(',')
+                return int(str_split[0])
             except ValueError:
-                try:
-                    res = float(second_val.replace(',', '.'))
-                    return res
-                except ValueError:
-                    res = float(third_val.replace(',', '.'))
-                    return res
+                return self
 
-        else:
-            return float(0.00)
-
-    # check if string could be convert to float with two decimals
+    # change to integer
     @staticmethod
-    def is_float_with_two_decimals(val_to_test, second_val):
-        if val_to_test and second_val:
-            try:
-                res = float(val_to_test.replace(',', '.'))
-                return res
-
-            except ValueError:
-                res = round(float(second_val.replace(',', '.')), 2)
-                return res
-
-        else:
-            return float(0.00)
+    def is_float(self):
+        try:
+            float_self = float(self.replace(',', '.'))
+            return float_self
+        except ValueError:
+            return 0.00
 
     # Insert in DB
     @staticmethod
@@ -191,35 +83,34 @@ class ArticleViews(object):
             a = open('TART.PLN', 'r')
 
             text_lines = a.readlines()
-            reg = [(re.split(r"\s{2,}", item)) for item in text_lines]  # multidimensional list
 
             # array of dict
             obj_bdd = [{
-                "code_article": val[0][10:16],
-                "libelle": cls.check_name(val[1], val[2]),
-                "prix_vente": cls.is_float_with_two_decimals(val[-6], val[-7]),
-                "prix_achat_1": cls.is_float(val[4], val[5], val[6]),
-                "prix_achat_2": cls.is_float(val[5], val[6], val[7]),
-                "prix_achat_3": cls.is_float(val[6], val[7], val[8]),
-                "prix_achat_4": cls.is_float(val[7], val[8], val[9]),
-                "gencode": val[-8][0:-1],
-                # "conditionnement": cls.check_conditionning(val[-17], val[-16]),
-                "conditionnement": cls.check_conditionning(val[1], val[2]),
-                # "taux_TVA": 6,  # TO DEFINE
-                "groupe": cls.check_group(val[2]),
-                "famille": cls.check_family(val[2]),
-            } for val in reg]
+                "code_article": cls.is_integer(val[10:16]),
+                "libelle": val[18:54],
+                "conditionnement": cls.is_integer(val[54:58]),
 
-            # print([i['libelle'] for i in obj_bdd])
-            # print(obj_bdd[2])
-            # print(obj_bdd[16])
-            # print(obj_bdd[4249])
+                "prix_achat_1": cls.is_float(val[83:91]),
+                "prix_achat_2": cls.is_float(val[91:99]),
+                "prix_achat_3": cls.is_float(val[99:107]),
+                "prix_achat_4": cls.is_float(val[107:115]),
+                "prix_vente": cls.is_float(val[161:169]),
+
+                "gencode": val[228:241],
+                # # "taux_TVA": 6,  # TO DEFINE
+
+                "groupe": cls.is_integer(val[58:60]),
+                "famille": cls.is_integer(val[62:64]),
+                "sous_famille": cls.is_integer(val[66:68]),
+            } for val in text_lines]
+
+            # print([i['code_article'] for i in obj_bdd])
 
             cls.insert_into_db(obj_bdd)  # call method to insert in db
-            # resp = json.dumps(obj_bdd[1557])
+
             resp = json.dumps(obj_bdd)
             return HttpResponse(resp, content_type='application/json')
-            # return render(request, obj_bdd)
+
 
         except OSError as error:
             print("OS error: {0}".format(error))
