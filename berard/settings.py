@@ -89,8 +89,8 @@ WSGI_APPLICATION = 'berard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'berard_test',
-        # 'NAME': 'berard',
+        # 'NAME': 'berard_test',
+        'NAME': 'berard',
         # 'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'P@ssw0rd',

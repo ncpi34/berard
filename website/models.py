@@ -9,11 +9,12 @@ from website.helpers import RandomFileName
 
 
 class ProfilUtilisateur(models.Model):
-    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True,)
+    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, )
     telephone = models.CharField(max_length=20)
     adresse = models.TextField()
     code_client = models.CharField(max_length=30)
     tarif = models.CharField(max_length=10)
+
     # actif = models.BooleanField(default=True)
 
     def __str__(self):
@@ -21,22 +22,22 @@ class ProfilUtilisateur(models.Model):
 
 
 class Groupe(models.Model):
-    nom = models.CharField(max_length=40)
+    nom = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nom
 
 
 class Famille(models.Model):
-    nom = models.CharField(max_length=40)
+    nom = models.CharField(max_length=100)
     groupe = models.ForeignKey(Groupe,
                                on_delete=models.CASCADE,
-                               related_name='familly_by_group')
+                               related_name='family_by_group')
 
     class Meta:
         ordering = ('nom',)
-        verbose_name = 'familly'
-        verbose_name_plural = 'famillies'
+        verbose_name = 'family'
+        verbose_name_plural = 'families'
 
     def __str__(self):
         return self.nom
@@ -44,7 +45,28 @@ class Famille(models.Model):
     def get_absolute_url(self):
         print('familly')
         print(self.nom)
-        return reverse('website:products_by_familly',
+        return reverse('website:products_by_family',
+                       args=[self.nom])
+
+
+class SousFamille(models.Model):
+    nom = models.CharField(max_length=100)
+    famille = models.ForeignKey(Famille,
+                                on_delete=models.CASCADE,
+                                related_name='sub_family_by_family')
+
+    class Meta:
+        ordering = ('nom',)
+        verbose_name = 'sub_family'
+        verbose_name_plural = 'sub_families'
+
+    def __str__(self):
+        return self.nom
+
+    def get_absolute_url(self):
+        print('subfamilly')
+        print(self.nom)
+        return reverse('website:products_by_sub_family',
                        args=[self.nom])
 
 
@@ -70,6 +92,10 @@ class Article(models.Model):
                                 on_delete=models.CASCADE,
                                 related_name='article_by_familly',
                                 null=True)
+    sous_famille = models.ForeignKey(SousFamille,
+                                     on_delete=models.CASCADE,
+                                     related_name='article_by_sub_familly',
+                                     null=True)
     image = models.TextField(null=True, blank=True)
 
     # image = models.ImageField(upload_to=RandomFileName('img/'), null=True, blank=True)

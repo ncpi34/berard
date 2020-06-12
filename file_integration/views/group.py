@@ -6,34 +6,34 @@ import csv
 
 from website.models import Groupe, Famille
 
-"""Groups Families and Sub-Families"""
+""" Groups """
 
 
-class Familly(object):
+class GroupViews(object):
 
     @classmethod
-    def create_families(cls):
+    def create_group(cls, request, **kwargs):
+        csv_path = 'D:\Société Berard\GROUPE FAMILLE SOUS FAMILLE\groupe.csv'  # Csv file path
 
-
-
-        CSV_PATH = 'D:\Société Berard\GROUPE FAMILLE SOUS FAMILLE\famille.csv'  # Csv file path
-
-        with open(CSV_PATH, newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter=';', quotechar=';')
-            for column in spamreader:
+        with open(csv_path, newline='') as csvfile:
+            csv_reader = csv.reader(csvfile, delimiter=';', quotechar='|')
+            next(csv_reader)
+            for row in csv_reader:
                 try:
-                    familly = Famille(nom=column[1],)
-
-                    # You have to save the object before adding the m2m relations
-                    familly.save()
-                    familly.groupe.add(column[2])  #
-                    # group = Group.objects.get(name='user')
-                    # user.groups.set([group])  # groups MtM
+                    print(row[1])
+                    group = Groupe(nom=row[1], )
+                    # # print(group)
+                    #
+                    # # You have to save the object before adding the m2m relations
+                    group.save()
 
                 except Exception as e:
-                    raise e
+                    print(e)
+                    # raise e
 
-        return 'something'
+        # return 'something'
 
-        # resp = json.dumps(obj_bdd)
-        # return HttpResponse(resp, content_type='application/json')
+        # resp = json.dumps(csv_reader)
+        return HttpResponse(request, content_type='application/json')
+
+
