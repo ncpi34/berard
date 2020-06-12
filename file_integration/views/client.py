@@ -40,12 +40,9 @@ class ClientViews(object):
                     tarif=rst["tarif"],
                     code_client=rst["code_client"],
                 )
-
-                # article.save
-                # article.groupe.add(rst["groupe"])
-                # article.famille.add(rst["famille"])
                 print('inserted')
             except Exception as err:
+                print('not inserted', rst['code_client'])
                 print(err)
                 raise err
 
@@ -63,13 +60,11 @@ class ClientViews(object):
             # FTP
             ftp = FTP(host, user, passw)
             ftp.cwd('/Rep/EXPORT')
-            # print(ftp.dir())
             a = open('TCLT.PLN', 'r')
 
             text_lines = a.readlines()
 
             # array of dict
-
             obj_bdd = [{
                 # "nom": val[1],
                 # # "prenom": val[1],

@@ -13,6 +13,7 @@ from website.models import Article, Groupe, Famille, SousFamille
 
 
 class ArticleViews(object):
+    # Check errors
     @staticmethod
     def get_errors_on_three_values(val_1, val_2, val_3):
         try:
@@ -29,6 +30,7 @@ class ArticleViews(object):
                 except ValueError:
                     print('error on three values')
 
+    # Check errors
     @staticmethod
     def get_error_on_one_value(val_1):
         print(val_1)
@@ -48,7 +50,7 @@ class ArticleViews(object):
             else:
                 return int(reg[2][0:2].lstrip('0'))
 
-    # change to float
+    # change to integer
     @staticmethod
     def is_integer(self):
         if self:
@@ -70,7 +72,7 @@ class ArticleViews(object):
         else:
             return None
 
-    # change to integer
+    # change to float
     @staticmethod
     def is_float(self):
         try:
@@ -82,19 +84,17 @@ class ArticleViews(object):
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
+        f = open('ERREURS_ARTICLES.txt', 'w')
         for rst in self:
-            print('beginning method')
-
+            # Check if no null
             if rst["groupe"] is not None or rst["famille"] is not None or rst["sous_famille"] is not None:
-
-                print('beginning db insert')
                 print(rst['libelle'])
+
+                # ManyToOne
                 group = Groupe.objects.get(id=rst["groupe"])
-                print(group)
                 family = Famille.objects.get(id=rst["famille"])
-                print(family)
                 subfamily = SousFamille.objects.get(id=rst["sous_famille"])
-                print(subfamily)
+
                 try:
 
                     article, created = Article.objects.update_or_create(
@@ -116,12 +116,14 @@ class ArticleViews(object):
                     print('inserted')
 
                 except Exception as err:
+                    print('not inserted', rst['code_article'])
                     print(err)
                     raise err
             else:
-                f = open('ERREURS_ARTICLES.txt', 'w')
-                f.write(rst['libelle'] + '\n')
-                f.close()
+
+                # f.write(rst['libelle'] + '\n')
+                f.write(rst['code_article'] + '\n')
+        f.close()
 
     # Index_method
     @classmethod
@@ -164,7 +166,6 @@ class ArticleViews(object):
             } for val in text_lines]
 
             # print([i['sous_famille'] for i in obj_bdd])
-            # print(obj_bdd[14])
 
             cls.insert_into_db(obj_bdd)  # call method to insert in db
 

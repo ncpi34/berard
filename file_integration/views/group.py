@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 import io
 import csv
+from pyexcel_xlsx import get_data as xlsx_get
+from django.utils.datastructures import MultiValueDictKeyError
 
 from website.models import Groupe, Famille
 
@@ -17,6 +19,7 @@ class GroupViews(object):
 
         with open(csv_path, newline='') as csvfile:
             csv_reader = csv.reader(csvfile, delimiter=';', quotechar='|')
+            csv_reader = xlsx_get(csvfile, column_limit=4)
             next(csv_reader)
             for row in csv_reader:
                 try:
