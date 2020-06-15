@@ -31,6 +31,7 @@ class Groupe(models.Model):
 class Famille(models.Model):
     nom = models.CharField(max_length=100)
     groupe = models.ForeignKey(Groupe,
+                               null=True,
                                on_delete=models.CASCADE,
                                related_name='family_by_group')
 
@@ -52,6 +53,7 @@ class Famille(models.Model):
 class SousFamille(models.Model):
     nom = models.CharField(max_length=100)
     famille = models.ForeignKey(Famille,
+                                null=True,
                                 on_delete=models.CASCADE,
                                 related_name='sub_family_by_family')
 

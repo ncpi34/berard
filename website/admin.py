@@ -18,10 +18,13 @@ class UsersViews(admin.ModelAdmin):
     list_filter = ['code_client']
     list_editable = ['code_client']
 
+
 # admin.site.unregister(User)
 # admin.site.register(UsersViews)
 
 admin.site.register(Article)
+
+
 # @admin.register(Article)
 # class ArticleViews(admin.ModelAdmin):
 #     list_display = ['code_article', 'libelle', 'conditionnement',
@@ -29,8 +32,8 @@ admin.site.register(Article)
 #                     'groupe', 'famille', 'image']
 #     list_filter = ['code_article', 'libelle']
 #     list_editable = ['actif']
-    # prepopulated_fields = {'slug': ('libelle',)}
-    
+# prepopulated_fields = {'slug': ('libelle',)}
+
 # class ArticlesInLine(admin.TabularInline):
 #     model = Article
 #     raw_id_fields = ['article']
@@ -41,3 +44,6 @@ class HistoriqueViews(admin.ModelAdmin):
     list_display = ['date', 'get_articles', 'utilisateur']
     list_filter = ['date']
     # inlines = [ArticlesInLine]
+
+
+admin.site.site_header = 'Administration Berard Distribution'

@@ -16,8 +16,8 @@ import json
 class GroupViews(object):
 
     def __init__(self):
-        self.csv_path = 'D:\Société Berard\GROUPE FAMILLE SOUS FAMILLE\groupe.csv'  # Csv file path
-        self.xlsx_path = 'D:\Société Berard\GROUPE FAMILLE SOUS FAMILLE\groupe.xlsx'  # Xlsx file path
+        self.csv_path = 'resources/group_family_subfamily/groupe.csv'  # Csv file path
+        self.xlsx_path = 'resources/group_family_subfamily/groupe.xlsx'  # Xlsx file path
 
     @classmethod
     def create_group_csv(cls, request, **kwargs):
@@ -29,11 +29,11 @@ class GroupViews(object):
             for row in csv_reader:
                 try:
                     print(row[1])
-                    group = Groupe(nom=row[1], )
+                    group = Groupe.objects.update_or_create(nom=row[1], )
                     # # print(group)
                     #
                     # # You have to save the object before adding the m2m relations
-                    group.save()
+                    # group.save()
 
                 except Exception as e:
                     print(e)
@@ -44,49 +44,61 @@ class GroupViews(object):
         # resp = json.dumps(csv_reader)
         return HttpResponse(request, content_type='application/json')
 
-
     @classmethod
-    def create_groupand_others_xlsx(cls, request, **kwargs):
+    def create_group_and_others_xlsx(cls, request, **kwargs):
         self = cls()
         data = get_data(self.xlsx_path, start_row=1)
 
         # Groupe
         for row in data['Groupe']:
-            print(row)
+            print(row[1])
             try:
+                # group = Groupe.objects.update_or_create(nom=row[1], )
                 group = Groupe(nom=row[1], )
                 group.save()
             except Exception as e:
+                print('group_creation')
                 print(e)
                 raise e
+        print('groupe creation done')
+
         # FAMILY
         for row in data['Famille']:
-            print(row)
+            print(row[1])
             try:
+                int(row[0])
+                print('Groupe_id', row[0])
                 group = Groupe.objects.get(id=int(row[0]))
-                print(group)
-                family = Famille(nom=row[1],
-                                 groupe=group)
-
-                # You have to save the object before adding the m2m relations
-                family.save()
+                print('GROUP', group)
+                family = Famille.objects.update_or_create(nom=row[1],
+                                                          groupe=group)
+            except ValueError:
+                family = Famille.objects.update_or_create(nom=row[1],
+                                                          groupe=None)
 
             except Exception as e:
+                print('family_creation_error')
+                print(e)
                 raise e
+        print('family creation done')
+
         # FAMILY
         for row in data['SousFamille']:
-            print(row)
+            print(row[1])
             try:
+                int(row[0])
                 family = Famille.objects.get(id=int(row[0]))
-                sub_family = SousFamille(nom=row[1],
-                                         famille=family)
-                # You have to save the object before adding the m2m relations
-                sub_family.save()
+                print('FAMILY', family)
+                sub_family = SousFamille.objects.update_or_create(nom=row[1], famille=family)
+
+            except ValueError:
+                sub_family = SousFamille.objects.update_or_create(nom=row[1], famille=None)
 
             except Exception as e:
+                print('subfamily_creation_error')
+                print(e)
                 raise e
+        print('subfamily creation done')
 
         # resp = json.dumps(csv_reader)
         return HttpResponse(request, content_type='application/json')
-
-

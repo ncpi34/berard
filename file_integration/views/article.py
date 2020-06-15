@@ -159,13 +159,18 @@ class ArticleViews(object):
                 "gencode": val[228:241],
                 # # "taux_TVA": 6,  # TO DEFINE
 
+                "tri": val[58:68],
                 "groupe": cls.is_integer(val[58:60]),
                 # "famille": cls.is_integer(val[62:64]),
                 "famille": cls.is_integer(val[61:64]),
                 "sous_famille": cls.is_integer(val[65:68]),
             } for val in text_lines]
 
-            # print([i['sous_famille'] for i in obj_bdd])
+            f = open('tri.txt', 'w')
+            [f.write(i['tri'] + '\n') for i in obj_bdd]
+            f.close()
+
+            # print([i['tri'] for i in obj_bdd])
 
             cls.insert_into_db(obj_bdd)  # call method to insert in db
 
