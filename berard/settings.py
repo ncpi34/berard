@@ -19,6 +19,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
+root = environ.Path(__file__) - 3  # three folder back (/a/b/c/ - 3 = /)
+env = environ.Env(DEBUG=(bool, False), )
+environ.Env.read_env()
+
+SITE_ROOT = root()
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
+TEMPLATE_DEBUG = DEBUG
+
+DATABASES = {
+    'default': env.db(),
+    'extra': env.db('DATABASE_URL')
+}
+
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'kr10r4_n87g+t57b&n#x-^7c+yh!%%+94g0(^_*8&gbwe(+91_'
 
@@ -154,3 +169,14 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+# To reset password
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+# EMAIL_HOST = ''
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'Epicups Team <admin@epicups.com>'

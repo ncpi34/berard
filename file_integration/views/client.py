@@ -15,6 +15,10 @@ from website.models import Article, ProfilUtilisateur
 
 
 class ClientViews(object):
+    @staticmethod
+    def concat(val_1, val_2):
+        print(val_2)
+        return val_1 + val_2
 
     # Insert in DB
     @staticmethod
@@ -27,11 +31,11 @@ class ClientViews(object):
                     # last_name=rst['nom'],
                     # first_name=rst["prenom"],
                     email=rst["email"],
-                    # password=rst["email"],
+                    # password=rst["mot_de_passe"],
                     username=rst["code_client"]
 
                 )
-                user.set_password(rst["email"])
+                user.set_password(rst["mot_de_passe"])
                 user.save()
                 user_one_to_one = ProfilUtilisateur.objects.update_or_create(
                     utilisateur=user,
@@ -54,13 +58,13 @@ class ClientViews(object):
         passw = "cMp5jU1C"
 
         try:
-            # LOCAL
-            # a = open('TCLT_TEST.PLN', 'r')
-
             # FTP
-            ftp = FTP(host, user, passw)
-            ftp.cwd('/Rep/EXPORT')
-            a = open('TCLT.PLN', 'r')
+            # ftp = FTP(host, user, passw)
+            # ftp.cwd('/Rep/EXPORT')
+            # a = open('TCLT.PLN', 'r')
+
+            # LOCAL
+            a = open('tests/file_from_client/TCLT.PLN', 'r')
 
             text_lines = a.readlines()
 
@@ -72,9 +76,11 @@ class ClientViews(object):
                 "tarif": int(val[232]),
                 "telephone": val[182:196],
                 "adresse": val[26:171].replace('  ', ' '),
-                "code_client": val[10:17],
+                "code_client": val[10:16],
+                'mot_de_passe':val[10:16] + val[146:151]
 
             } for val in text_lines]
+            # print([i['mot_de_passe'] for i in obj_bdd])
 
             cls.insert_into_db(obj_bdd)  # call method to insert in db
 
