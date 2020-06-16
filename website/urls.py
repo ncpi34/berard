@@ -18,4 +18,6 @@ urlpatterns = [
     path('home_photo/<int:id>/', ArticleDetailView.as_view(), name='product_photo'),
 
     path('history/', HistoryView.as_view(), name='history'),
+
+    path('forgot_password/', ForgotPasswordView.as_view(), name='forgot_password'),
 ]

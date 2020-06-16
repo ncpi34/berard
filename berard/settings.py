@@ -27,19 +27,13 @@ environ.Env.read_env()
 SITE_ROOT = root()
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
+
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': env.db(),
     'extra': env.db('DATABASE_URL')
 }
-
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kr10r4_n87g+t57b&n#x-^7c+yh!%%+94g0(^_*8&gbwe(+91_'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -64,7 +58,7 @@ INSTALLED_APPS = [
 ]
 
 CART_SESSION_ID = 'cart'
-MENUS = 'website.menus' # during 15 days
+MENUS = 'website.menus'  # during 15 days
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,7 +75,10 @@ ROOT_URLCONF = 'berard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            # add directory templates
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,24 +94,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'berard.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'berard_test',
-        # 'NAME': 'berard',
-        # 'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'P@ssw0rd',
-        'HOST': 'localhost',
-        # 'HOST': 'db',
-        'PORT': 5432,
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -152,9 +131,10 @@ USE_TZ = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 STATIC_URL = '/static_root/'  # path admin statics
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR + '/website/staticfiles'),  # path  not admin statics
-]
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR + 'staticfiles'),  # path  not admin statics
+    # os.path.join(BASE_DIR + '/website/staticfiles'),  # path  not admin statics
+)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')  # path to save (public)
@@ -171,13 +151,14 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 # To reset password
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
-# EMAIL_HOST = ''
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = ''
-# EMAIL_HOST_PASSWORD = ''
-# EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'Epicups Team <admin@epicups.com>'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = False
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ledain.alexis@gmail.com'
+EMAIL_HOST_PASSWORD = 'Daily365'

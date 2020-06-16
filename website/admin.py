@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
+from django.utils.text import Truncator
+
 from website.models import ProfilUtilisateur, Article, Historique
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
@@ -20,7 +22,10 @@ class ArticleViews(admin.ModelAdmin):
     ordering = ('libelle',)
     search_fields = ('libelle', 'code_article', 'gencode', )
     fieldsets = (
-        ('Choisir sa visibilité', {'fields': ('actif',)}),
+        ('Choisir sa visibilité',
+         # 'description': 'une description',
+        # 'classes': 'wide' or 'extrapretty' or 'collapse',
+         {'fields': ('actif',)}),
 
     )
 
@@ -35,7 +40,19 @@ class ArticleViews(admin.ModelAdmin):
 class HistoriqueViews(admin.ModelAdmin):
     list_display = ['date', 'get_articles', 'utilisateur']
     list_filter = ['date']
+    date_hierarchy = 'date'
     # inlines = [ArticlesInLine]
+
+    # def show_content_part(self, article):
+    #     """
+    #     Retourne les 40 premiers caractères du contenu de l'article,
+    #     suivi de points de suspension si le texte est plus long.
+    #     """
+    #     return Truncator(article.contenu).chars(40, truncate='...')
+    #
+    # # En-tête de notre colonne
+    # show_content_part.short_description = 'Aperçu du contenu'
+# admin.site.register(Historique, HistoriqueViews)
 
 
 # CustomUser

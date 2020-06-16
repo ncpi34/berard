@@ -2,16 +2,22 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView
+from django.views import View
+from django.views.generic import ListView, DetailView, TemplateView
 
+from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
-from website.forms import LoginForm
+from website.forms import LoginForm, ForgotPassForm
 from website.models import Article, Groupe, Historique
 from django.db.models import Q
+from django.core.mail import send_mail, BadHeaderError
+
 
 """ login"""
 
@@ -26,9 +32,10 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             # admin = User.objects.filter(username=username, groups__name='admin')  # Check if admin
             if user:
-                messages.success(request, 'Vous êtes bien connecté')
+                # messages.success(request, 'Vous êtes bien connecté')
                 login(request, user)
-                return redirect('/home')
+                return redirect('website:products')
+                # return HttpResponse("Vous avez été redirigé.")
             else:
                 messages.error(request, 'Vos identifiants sont erronés')
                 error = True
@@ -40,7 +47,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect(reverse(login_view))
+    return redirect('website:login')
 
 
 """ Products views"""
@@ -71,7 +78,7 @@ class ArticleView(LoginRequiredMixin, ListView):
         #     result = None
         # return result
         else:
-            article = Article.objects.filter(actif=False)
+            article = Article.objects.filter(actif=True)
             # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
 
@@ -111,6 +118,8 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     def get_object(self):
         print('func 1')
         id_ = self.kwargs.get('pk')
+        # article.nb_vues += 1  # views_numb
+        # article.save()
         return get_object_or_404(Article, pk=id_)
 
     def get_context_data(self, **kwargs):
@@ -137,3 +146,45 @@ class HistoryView(LoginRequiredMixin, ListView):
         _user = self.request.user.id
         history = Historique.objects.filter(Q(utilisateur__id=_user))
         return history
+
+
+""" Password forgot"""
+
+
+class ForgotPasswordView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = ForgotPassForm()
+        return render(request, 'auth/password_forgot.html', locals())
+
+    def post(self, request):
+        if request.method == "POST":
+            form = ForgotPassForm(request.POST)
+            if form.is_valid():
+                mail = form.cleaned_data['email']
+                user = User.objects.get(email=mail)
+
+                if user:
+                    print(user.email)
+                    try:
+                        send_mail(
+                            'Mot de passe oublié',
+                            'Votre mot de passe: ' + user.password,
+                            'ledain.alexis@gmail.fr',
+                            # EMAIL_HOST_USER,
+                            ['a.ledain@ncpi.fr'],
+                            fail_silently=False,
+                        )
+                        print(mail)
+                        print('its work!!!')
+                        messages.success(request, 'Vous allez recevoir un email contenant les instructions à suivre')
+                        return render(request, 'auth/password_forgot.html', locals())
+                        # return HttpResponse('ok !!!')
+                    except BadHeaderError:
+                        messages.error(request, 'Nous ne parvenons pas à vous envoyer un email')
+                        return render(request, 'auth/password_forgot.html', locals())
+
+                else:
+                    messages.error(request, 'Vos identifiants sont erronés')
+                    return render(request, 'auth/password_forgot.html', locals())
+

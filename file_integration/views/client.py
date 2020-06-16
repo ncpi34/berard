@@ -58,14 +58,14 @@ class ClientViews(object):
         passw = "cMp5jU1C"
 
         try:
-            # FTP
-            # ftp = FTP(host, user, passw)
-            # ftp.cwd('/Rep/EXPORT')
-            # a = open('TCLT.PLN', 'r')
-
             # LOCAL
-            a = open('tests/file_from_client/TCLT.PLN', 'r')
-
+            # a = open('tests/file_from_client/TCLT.PLN', 'r')
+            # FTP
+            ftp = FTP(host, user, passw)
+            ftp.cwd('/Rep/EXPORT')
+            # files = ftp.dir()
+            # print(files)
+            a = open('TCLT.PLN', 'r')
             text_lines = a.readlines()
 
             # array of dict
@@ -82,7 +82,7 @@ class ClientViews(object):
             } for val in text_lines]
             # print([i['mot_de_passe'] for i in obj_bdd])
 
-            cls.insert_into_db(obj_bdd)  # call method to insert in db
+            # cls.insert_into_db(obj_bdd)  # call method to insert in db
 
             resp = json.dumps(obj_bdd)
             return HttpResponse(resp, content_type='application/json')

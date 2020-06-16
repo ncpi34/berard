@@ -134,14 +134,13 @@ class ArticleViews(object):
 
         try:
             # LOCAL
-            # a = open('TART.PLN', 'r')
+            # a = open('tests/file_from_client/TART.PLN', 'r')
             # a = open('TEST.PLN', 'r')
 
             # FTP
             ftp = FTP(host, user, passw)
             ftp.cwd('/Rep/EXPORT')
             a = open('TART.PLN', 'r')
-
             text_lines = a.readlines()
 
             # array of dict
@@ -172,7 +171,7 @@ class ArticleViews(object):
 
             # print([i['tri'] for i in obj_bdd])
 
-            cls.insert_into_db(obj_bdd)  # call method to insert in db
+            # cls.insert_into_db(obj_bdd)  # call method to insert in db
 
             resp = json.dumps(obj_bdd)
             return HttpResponse(resp, content_type='application/json')
