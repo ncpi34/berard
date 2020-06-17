@@ -17,6 +17,8 @@ from website.forms import LoginForm, ForgotPassForm
 from website.models import Article, Groupe, Historique, ProfilUtilisateur
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
+from django.views.decorators.cache import cache_page
+
 import time
 
 """ login"""
@@ -189,9 +191,10 @@ class ForgotPasswordView(View):
                     )
                     print('reset password work!!!')
                     messages.success(request, 'Vous allez recevoir un email contenant les instructions à suivre')
+                    # messages.add_message(request, messages.SUCCESS, 'Vous allez recevoir un email contenant les instructions à suivre')
                     # time.sleep(5)
-                    return redirect(reverse('website:login'))
-                    # return render(request, 'auth/password_forgot.html', locals())
+                    # return redirect(reverse('website:login'))
+                    return render(request, 'auth/password_forgot.html', locals())
 
                 except User.DoesNotExist:
                     messages.error(request,

@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 
     'website',
     'cart',
-    'file_integration'
+    'file_integration',
 ]
 
 CART_SESSION_ID = 'cart'
@@ -162,3 +162,11 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ledain.alexis@gmail.com'
 EMAIL_HOST_PASSWORD = 'Daily365'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'cache_crepes'
+    }
+}
