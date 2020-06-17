@@ -7,4 +7,9 @@
     </div>
 {% endfor %}
 {% load static %}
-<script type="text/javascript" src="{% static 'js/flashMessages.js' %}"></script>
+<script type="text/javascript">
+    let msg = document.getElementById('msg')
+    setTimeout(() => {
+        msg.remove();
+}, 5000);
+</script>

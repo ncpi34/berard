@@ -77,7 +77,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             # add directory templates
-            os.path.join(BASE_DIR, 'templates'),
+            # os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -132,8 +132,8 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 STATIC_URL = '/static_root/'  # path admin statics
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR + 'staticfiles'),  # path  not admin statics
-    # os.path.join(BASE_DIR + '/website/staticfiles'),  # path  not admin statics
+    # os.path.join(BASE_DIR + 'static_root'),  # path  not admin statics
+    os.path.join(BASE_DIR + '/website/staticfiles'),  # path  not admin statics
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

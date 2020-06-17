@@ -14,35 +14,49 @@ from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
-from website.models import Article, Groupe, Historique
+from website.models import Article, Groupe, Historique, ProfilUtilisateur
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
-
+import time
 
 """ login"""
 
 
-def login_view(request):
-    error = False
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(username=username, password=password)
-            # admin = User.objects.filter(username=username, groups__name='admin')  # Check if admin
-            if user:
-                # messages.success(request, 'Vous êtes bien connecté')
-                login(request, user)
-                return redirect('website:products')
-                # return HttpResponse("Vous avez été redirigé.")
-            else:
-                messages.error(request, 'Vos identifiants sont erronés')
-                error = True
-    else:
+class LoginView(View):
+    def get(self, request):
         form = LoginForm()
+        return render(request, 'auth/login.html', locals())
 
-    return render(request, 'auth/login.html', locals())
+    def post(self, request):
+        if request.method == "POST":
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data["username"]
+                password = form.cleaned_data["password"]
+                try:
+                    user = User.objects.get(username=username, password=password)
+                    try:
+                        tarif = user.profilutilisateur.tarif
+                        # user = authenticate(username=username, password=password)
+                        # admin = User.objects.filter(username=username, groups__name='admin')  # Check if admin
+                        if user and tarif:
+                            if tarif is not '0':
+                                # messages.success(request, 'Vous êtes bien connecté')
+                                login(request, user)
+                                request.session['tarif'] = int(user.profilutilisateur.tarif)
+                                return redirect('website:products')
+                                # return HttpResponse("Vous avez été redirigé.")
+                        else:
+                            messages.error(request, 'Vos identifiants sont erronés')
+                            return render(request, 'auth/login.html', locals())
+
+                    except ProfilUtilisateur.DoesNotExist:
+                        messages.error(request, "Vous n'avez pas accès à ce site")
+                        return render(request, 'auth/login.html', locals())
+
+                except User.DoesNotExist:
+                    messages.error(request, "Vous n'avez pas de compte")
+                    return render(request, 'auth/login.html', locals())
 
 
 def logout_view(request):
@@ -65,20 +79,20 @@ class ArticleView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         if self.kwargs.get('nom'):
             _name = self.kwargs.get("nom")
-            article = Article.objects.filter(Q(famille__nom=_name))
+            article = Article.objects.filter(Q(actif=True) & Q(famille__nom=_name)).exclude(Q(prix_achat_1=0.00))
             # article = ArticleFilter(queryset=_name)
             return article
         elif self.request.GET.get('code_article'):
             print(self.request.GET.get('code_article'))
             query = self.request.GET.get('code_article')
-            postresult = Article.objects.filter(Q(code_article__contains=query))
+            postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query))
             result = postresult
             return result
         # else:
         #     result = None
         # return result
         else:
-            article = Article.objects.filter(actif=True)
+            article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
             # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
 
@@ -162,29 +176,24 @@ class ForgotPasswordView(View):
             form = ForgotPassForm(request.POST)
             if form.is_valid():
                 mail = form.cleaned_data['email']
-                user = User.objects.get(email=mail)
+                try:
+                    User.objects.get(email=mail)
+                    user = User.objects.get(email=mail)
+                    send_mail(
+                        'Mot de passe oublié',
+                        'Votre mot de passe: ' + user.password,
+                        'ledain.alexis@gmail.fr',
+                        # EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=False,
+                    )
+                    print('reset password work!!!')
+                    messages.success(request, 'Vous allez recevoir un email contenant les instructions à suivre')
+                    # time.sleep(5)
+                    return redirect(reverse('website:login'))
+                    # return render(request, 'auth/password_forgot.html', locals())
 
-                if user:
-                    print(user.email)
-                    try:
-                        send_mail(
-                            'Mot de passe oublié',
-                            'Votre mot de passe: ' + user.password,
-                            'ledain.alexis@gmail.fr',
-                            # EMAIL_HOST_USER,
-                            ['a.ledain@ncpi.fr'],
-                            fail_silently=False,
-                        )
-                        print(mail)
-                        print('its work!!!')
-                        messages.success(request, 'Vous allez recevoir un email contenant les instructions à suivre')
-                        return render(request, 'auth/password_forgot.html', locals())
-                        # return HttpResponse('ok !!!')
-                    except BadHeaderError:
-                        messages.error(request, 'Nous ne parvenons pas à vous envoyer un email')
-                        return render(request, 'auth/password_forgot.html', locals())
-
-                else:
-                    messages.error(request, 'Vos identifiants sont erronés')
+                except User.DoesNotExist:
+                    messages.error(request,
+                                   'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard distribution')
                     return render(request, 'auth/password_forgot.html', locals())
-

@@ -136,19 +136,34 @@
                     <h5 class="grey-text">{{ article.libelle|title }}</h5>
                   </a>
                 <h5>
+
                   <strong>
                       <p
-                         class="dark-grey-text">{{ article.conditionnement }}</p>
+                         class="dark-grey-text">
+                          {% if article.conditionnement is None%}
+                              quantité lot indéfinie
+                              {% else %}
+                               par lot de {{ article.conditionnement }}
+                          {% endif %}
+                      </p>
                   </strong>
                 </h5>
 
-                <h6 class="font-weight-bold blue-text">
-                    <label>Prix Achat</label>
-                  <strong>{{ article.prix_achat}} €</strong>
-                </h6>
+{#                <h6 class="font-weight-bold blue-text">#}
+{#                    <label>Prix Achat</label>#}
+{#                  <strong>{{ article.prix_achat}} €</strong>#}
+{#                </h6>#}
                   <h6 class="font-weight-bold blue-text">
-                    <label>Prix Vente</label>
-                  <strong>{{ article.prix_vente}} €</strong>
+{#                    <label>Prix de vente</label>#}
+                  <strong>
+                          {% if request.session.tarif == 1  %} {{ article.prix_achat_1 }}
+                              {% elif request.session.tarif == 2 %} {{ article.prix_achat_2 }}
+                              {% elif request.session.tarif == 3 %} {{ article.prix_achat_3 }}
+                              {% elif request.session.tarif == 4 %} {{ article.prix_achat_4 }}
+                              {% else %} Prix non disponible
+                          {% endif %}€
+
+                  </strong>
                 </h6>
                   <h4 class="font-weight-bold blue-text">
                   <form action="{% url 'cart:cart_add' article.id %}" method="post"

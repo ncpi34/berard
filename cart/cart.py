@@ -56,8 +56,8 @@ class Cart(object):
                 'article_id': id,
                 'libelle': product.libelle,
                 'quantity': 0,
-                'prix_achat': str(product.prix_achat),
-                'image': product.image
+                'prix_achat': str(self.get_price_by_user(product)),
+                'image': product.image,
             }
             if update_quantity:
                 self.cart[product.id]['quantity'] = quantity
@@ -70,6 +70,18 @@ class Cart(object):
         self.session[settings.CART_SESSION_ID] = self.cart
         # mark the session as "modified" to make sure it is saved
         self.session.modified = True
+
+    def get_price_by_user(self, product):
+        tarif_id = self.request.session.get('tarif')
+        # return product[tarif]
+        if tarif_id == 1:
+            return product.prix_achat_1
+        elif tarif_id == 2:
+            return product.prix_achat_2
+        elif tarif_id == 3:
+            return product.prix_achat_3
+        else:
+            return product.prix_achat_4
 
     def remove(self, product):
         """
@@ -102,4 +114,3 @@ class Cart(object):
                 break
             else:
                 print("Erreur panier")
-

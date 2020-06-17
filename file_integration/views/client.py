@@ -1,3 +1,4 @@
+import ftplib
 import re
 from ftplib import FTP
 import os
@@ -23,20 +24,21 @@ class ClientViews(object):
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
+        print('beginning db insert')
         for rst in self:
             try:
-                print('beginning db insert')
                 print(rst['email'])
                 user, created = User.objects.update_or_create(
                     # last_name=rst['nom'],
                     # first_name=rst["prenom"],
-                    email=rst["email"],
-                    # password=rst["mot_de_passe"],
+                    email=rst["email"].replace(' ', ''),
+                    password=rst["mot_de_passe"],
                     username=rst["code_client"]
 
                 )
-                user.set_password(rst["mot_de_passe"])
-                user.save()
+                # to encrypt Password
+                # user.set_password(rst["mot_de_passe"])
+                # user.save()
                 user_one_to_one = ProfilUtilisateur.objects.update_or_create(
                     utilisateur=user,
                     adresse=rst["adresse"],
@@ -45,10 +47,27 @@ class ClientViews(object):
                     code_client=rst["code_client"],
                 )
                 print('inserted')
-            except Exception as err:
-                print('not inserted', rst['code_client'])
-                print(err)
-                raise err
+            except Exception:
+                try:
+                    print(rst['email'])
+                    user = User.objects.filter(username=rst["code_client"]).update(
+                        # last_name=rst['nom'],
+                        # first_name=rst["prenom"],
+                        email=rst["email"].replace(' ', ''),
+                        password=rst["mot_de_passe"],
+                        username=rst["code_client"]
+                    )
+                    ProfilUtilisateur.objects.filter(utilisateur=user).update(
+                        utilisateur=user,
+                        adresse=rst["adresse"],
+                        telephone=rst["telephone"],
+                        tarif=rst["tarif"],
+                        code_client=rst["code_client"],
+                    )
+                except Exception as err:
+                    print('not inserted', rst['code_client'])
+                    print(err)
+                    raise err
 
     # Index_method
     @classmethod
@@ -61,32 +80,47 @@ class ClientViews(object):
             # LOCAL
             # a = open('tests/file_from_client/TCLT.PLN', 'r')
             # FTP
-            ftp = FTP(host, user, passw)
+            ftp = FTP(host)
+            ftp.login(user, passw)
             ftp.cwd('/Rep/EXPORT')
-            # files = ftp.dir()
-            # print(files)
-            a = open('TCLT.PLN', 'r')
-            text_lines = a.readlines()
+            ftp.retrbinary('RETR TCLT.PLN', open('TCLT.PLN', 'wb').write)
+            ftp.quit()
+            file = open('TCLT.PLN', 'r')
+            # file = open('TCLT.PLN', 'wb')
+            # ftp.retrbinary('RETR TCLT', file.write)
+            # file.close()
+            # ftp.close()
+
+            # from urllib2 import urlopen
+            #
+            # u = urlopen("ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/readme.txt")
+            #
+            # for line in u:
+            #     print
+            #     line
+
+            text_lines = file.readlines()
 
             # array of dict
             obj_bdd = [{
-                # "nom": val[1],
-                # # "prenom": val[1],
+                "nom": val[438:509],
+                "prenom": val[438:509],
                 "email": val[438:509],
                 "tarif": int(val[232]),
                 "telephone": val[182:196],
                 "adresse": val[26:171].replace('  ', ' '),
                 "code_client": val[10:16],
-                'mot_de_passe':val[10:16] + val[146:151]
+                'mot_de_passe': val[10:16] + val[146:151]
 
             } for val in text_lines]
             # print([i['mot_de_passe'] for i in obj_bdd])
 
-            # cls.insert_into_db(obj_bdd)  # call method to insert in db
+            cls.insert_into_db(obj_bdd)  # call method to insert in db
 
             resp = json.dumps(obj_bdd)
+            file.close()
             return HttpResponse(resp, content_type='application/json')
 
-        except OSError as error:
-            print("OS error: {0}".format(error))
+        except Exception as error:
+            print("Error: {0}".format(error))
             raise error

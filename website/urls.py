@@ -8,7 +8,8 @@ from django_filters.views import FilterView
 app_name = 'website'
 
 urlpatterns = [
-    path('', login_view, name='login'),
+    path('', LoginView.as_view(), name='login'),
+    # path('', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
 
     url(r'home/$', ArticleView.as_view(), name='products'),

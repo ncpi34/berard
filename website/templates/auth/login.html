@@ -1,15 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'website/base.html' %}
   {% load crispy_forms_tags %}
 
 {% block content %}
     {% include 'helpers/messages.html' %}
     <div class="container">
         <h1  style="margin-bottom: 100px; margin-top: 50px" class="text-center justify-content-center">Espace Connexion</h1>
-{#        <form method="POST">#}
-{#    {% csrf_token %}#}
-{#    {% form form=form %}{% endform %}#}
-{#    <button type="submit" name="_submit" class="btn">Submit</button>#}
-{#</form>#}
+{#        #}
         <div class="form-row">
         <form method="post" class="form-group col-md-3 mx-auto" action="">
             <div class="form-row justify-content-center">
@@ -24,6 +20,8 @@
                 </div>
             </form>
         </div>
+
     </div>
+{#    <h1>Helllllllllllooooooooooooooooooo</h1>#}
 {% endblock %}
 
