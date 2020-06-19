@@ -98,17 +98,28 @@ class Cart(object):
         """
         return sum(Decimal(item['prix_achat']) * item['quantity'] for item in self.cart.values())
 
-    def clear(self):
-        # remove cart from session
-        del self.session[settings.CART_SESSION_ID]
-        self.save()
+    def clear(self):  # remove cart from session
+        try:
+            del self.cart
+            self.save()
+        except Exception as e:
+            print('CART ERROR', e)
+
+    def clear_all(self, products):  # remove all item in cart
+        try:
+            for product in products:
+                product_id = str(product['article_id'])
+                if product_id in self.cart:
+                    del self.cart[product_id]
+                    self.save()
+        except Exception as e:
+            print('ERRORR CLEANNING CART', e)
 
     def decrement(self, product):
         for key, value in self.cart.items():
             if key == str(product.id):
-
                 value['quantité'] = value['quantité'] - 1
-                if (value['quantité'] < 1):
+                if value['quantité'] < 1:
                     return redirect('cart:cart_detail')
                 self.save()
                 break

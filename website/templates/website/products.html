@@ -1,5 +1,6 @@
 {% extends "website/base.html" %}
 
+
 {% load menu_generator %} # menus.py
 
 {% block content %}
@@ -141,9 +142,9 @@
                       <p
                          class="dark-grey-text">
                           {% if article.conditionnement is None%}
-                              quantité lot indéfinie
+                              lot indéfini
                               {% else %}
-                               par lot de {{ article.conditionnement }}
+                               lot de {{ article.conditionnement }}
                           {% endif %}
                       </p>
                   </strong>
@@ -233,19 +234,6 @@
    <!-- Pagination-->
 
   </main>
-    {% load static %}
-     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-      <!-- You can alternatively load the minified version -->
-      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-                // Modal Photo
-                $(".img_modal").each(function () {
-                    console.log('okkkkkkkkkkkkkk')
-                  $(this).modalForm({formURL: $(this).data('id')});
-                });
-        });
-    </script>
 
 {% endblock content %}
 

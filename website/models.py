@@ -109,7 +109,7 @@ class Article(models.Model):
         # index_together = (('id', 'code_article'), )
 
     def __str__(self):
-        return self.libelle
+        return '{}'.format(self.libelle)
 
     def get_absolute_url(self):
         return reverse('website:product_detail',
@@ -128,33 +128,55 @@ class Article(models.Model):
     # get_img.allow_tags = True
 
 
-class Historique(models.Model):
+class HistoriqueCommande(models.Model):
     date = models.DateTimeField(auto_now=True)
-    article = models.ManyToManyField(Article)
-
-    # prix = models.DecimalField(max_digits=10, decimal_places=2)
-    # quantite = models.PositiveIntegerField(default=1)
     utilisateur = models.ForeignKey(User,
                                     related_name='user',
                                     on_delete=models.CASCADE,
                                     null=True)
 
-    def __str__(self):
-        return 'Historique {}'.format(self.id)
+    class Meta:
+        ordering = ('-date',)
 
-    def get_cost(self):
-        return self.article.prix_vente
-        # articles = {}
-        # for item in self.article.libelle:
-        #     if articles[item]:
-        #         articles[item] += 1
-        #     else:
-        #         articles[item] = 1
-        #
-        # return articles
+    def __str__(self):
+        return 'Commande {}'.format(self.id)
+
+    def get_absolute_url(self):
+        return reverse('website:order_detail',
+                       args=[self.id])
+
+    def get_number_products(self):
+        total = 0
+        for item in self.items.all():
+            total += item.quantite
+        return total
 
     def get_total_cost(self):
-        return sum(item.get_cost() for item in self.article.id)
+        return sum(item.get_cost() for item in self.items.all())
 
     def get_articles(self):
-        return "\n".join([p.libelle for p in self.article.all()])
+        return [item.get_article() for item in self.items.all()]
+
+
+
+class ProduitCommande(models.Model):
+    commande = models.ForeignKey(HistoriqueCommande,
+                                 related_name='items',
+                                 on_delete=models.CASCADE)
+    article = models.ForeignKey(Article,
+                                related_name='orders_items',
+                                on_delete=models.CASCADE)
+    prix = models.DecimalField(max_digits=100,
+                               decimal_places=2,
+                               default=0)
+    quantite = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return '{}'.format(self.id)
+
+    def get_cost(self):
+        return self.prix * self.quantite
+
+    def get_article(self):
+        return self
+

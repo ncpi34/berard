@@ -14,7 +14,7 @@ from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
-from website.models import Article, Groupe, Historique, ProfilUtilisateur
+from website.models import Article, Groupe, ProfilUtilisateur, HistoriqueCommande
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
 from django.views.decorators.cache import cache_page
@@ -128,40 +128,48 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/product.html'
     queryset = Article.objects.all()
     login_url = ''
-
     # context_object_name = 'article'
 
     def get_object(self):
-        print('func 1')
         id_ = self.kwargs.get('pk')
         # article.nb_vues += 1  # views_numb
         # article.save()
         return get_object_or_404(Article, pk=id_)
 
     def get_context_data(self, **kwargs):
-        print('func 2')
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
         return context
 
 
-# class BookReadView(BSModalReadView):
-#     model = Article
-#     template_name = 'website/display_picture.html'
-
-"""History"""
+"""Order Summary"""
 
 
-class HistoryView(LoginRequiredMixin, ListView):
-    template_name = 'website/history.html'
-    queryset = Historique.objects.all()
+class OrderSummaryView(LoginRequiredMixin, ListView):
+    template_name = 'website/order_summary/order_summary.html'
+    queryset = HistoriqueCommande.objects.all()
     login_url = ''
     context_object_name = 'histories'
 
     def get_queryset(self):
         _user = self.request.user.id
-        history = Historique.objects.filter(Q(utilisateur__id=_user))
+        history = HistoriqueCommande.objects.filter(Q(utilisateur__id=_user)).order_by('-date')[:4]
         return history
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'website/order_summary/order_detail.html'
+    queryset = HistoriqueCommande.objects.all()
+    login_url = ''
+    # context_object_name = 'article'
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(HistoriqueCommande, pk=id_)
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetailView, self).get_context_data(**kwargs)
+        return context
 
 
 """ Password forgot"""

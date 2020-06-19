@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 'bootstrap_modal_forms'
+    'bootstrap_modal_forms',
     'crispy_forms',
     'menu_generator',
     'django_filters',
+    'widget_tweaks',
 
     'website',
     'cart',
@@ -118,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 

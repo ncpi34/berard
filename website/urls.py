@@ -18,7 +18,8 @@ urlpatterns = [
     path('home_detail/<int:pk>', ArticleDetailView.as_view(), name='product_detail'),
     path('home_photo/<int:id>/', ArticleDetailView.as_view(), name='product_photo'),
 
-    path('history/', HistoryView.as_view(), name='history'),
+    path('order_summary/', OrderSummaryView.as_view(), name='order_summary'),
+    path('order_detail/<int:pk>', OrderDetailView.as_view(), name='order_detail'),
 
     path('forgot_password/', ForgotPasswordView.as_view(), name='forgot_password'),
 ]

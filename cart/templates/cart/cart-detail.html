@@ -1,11 +1,8 @@
 {% extends 'website/base.html' %}
 {% load static %}
 
-{#{% block title %}#}
-{#    Panier#}
-{#{% endblock %}#}
-
 {% block content %}
+    {% include "cart/_modal.html" %}
     <main>
     <div class="container">
     <div class="table-responsive text-nowrap">
@@ -37,15 +34,16 @@
                 </td>
             <td>{{ order_item.libelle }}</td>
             <td class="num">
-                <div class="mb-5">{{ order_item.prix_achat }}</div>
-                <div><a
-{#                        data-id="{% url 'cart:cart_remove' product.id %}"#}
-                        href="{% url 'cart:cart_remove' product.id %}"
-                   class="delete_article btn btn-danger btn-sm"
-                ><i class="far fa-trash-alt"></i></a>
+                <div class="mb-5">{{ order_item.prix_achat }}€</div>
+                <div><button type="button"
+                             class="delete-article btn btn-danger btn-sm"
+                             data-id="{% url 'cart:cart_remove' product.id %}"
+    {#                        href="{% url 'cart:cart_remove' product.id %}"#}
+
+                ><i class="far fa-trash-alt"></i></button>
                 </div>
             </td>
-            <td class="num">{{ order_item.total_price }}</td>
+            <td class="num">{{ order_item.total_price }}€</td>
                 <td>
                     <form action="{% url 'cart:cart_update' product.id %}" method="post">
                         {{ order_item.update_quantity_form.quantity }}
@@ -74,7 +72,7 @@
         </tbody>
     </table>
          <p class="text-right">
-            <button class="btn btn-success">Commander</button>
+            <button id="send-order" class="btn btn-success">Commander</button>
         </p>
 
     <!-- {% else %} -->
@@ -86,15 +84,26 @@
     </div>
     </div>
   </main>
-     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-      <!-- You can alternatively load the minified version -->
-      <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-    <script>
-    $(document).ready(function() {
-        $(".delete_article").each(function () {
-          $(this).modalForm({formURL: $(this).data('id')});
-        });
 
-      });
-    </script>
 {% endblock %}
+{% block extrascripts %}
+
+
+    <script>
+
+
+    $(document).ready(function() {
+       // send_order button
+        $("#send-order").modalForm({formURL: "{% url 'cart:send_order' %}"});
+
+        // Delete article buttons
+
+        $(".delete-article").each(function () {
+          $(this).modalForm({formURL: $(this).data('id')});
+
+        });
+    });
+
+    </script>
+
+{% endblock extrascripts %}

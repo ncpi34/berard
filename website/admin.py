@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.utils.text import Truncator
 
-from website.models import ProfilUtilisateur, Article, Historique
+from website.models import ProfilUtilisateur, Article, HistoriqueCommande, ProduitCommande
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
 
@@ -16,15 +16,15 @@ admin.site.unregister(Group)
 @admin.register(Article)
 class ArticleViews(admin.ModelAdmin):
     list_display = ('code_article', 'libelle',
-                    'conditionnement','prix_vente',
+                    'conditionnement', 'prix_vente',
                     'gencode', 'image', 'actif')
     list_filter = ['code_article', 'libelle']
     ordering = ('libelle',)
-    search_fields = ('libelle', 'code_article', 'gencode', )
+    search_fields = ('libelle', 'code_article', 'gencode',)
     fieldsets = (
         ('Choisir sa visibilité',
          # 'description': 'une description',
-        # 'classes': 'wide' or 'extrapretty' or 'collapse',
+         # 'classes': 'wide' or 'extrapretty' or 'collapse',
          {'fields': ('actif',)}),
 
     )
@@ -32,16 +32,17 @@ class ArticleViews(admin.ModelAdmin):
 
 # prepopulated_fields = {'slug': ('libelle',)}
 
-# class ArticlesInLine(admin.TabularInline):
-#     model = Article
-#     raw_id_fields = ['article']
+class ArticlesInLine(admin.TabularInline):
+    model = ProduitCommande
+    raw_id_fields = ['article']
 
-@admin.register(Historique)
+
+@admin.register(HistoriqueCommande)
 class HistoriqueViews(admin.ModelAdmin):
     list_display = ['date', 'get_articles', 'utilisateur']
     list_filter = ['date']
     date_hierarchy = 'date'
-    # inlines = [ArticlesInLine]
+    inlines = [ArticlesInLine]
 
     # def show_content_part(self, article):
     #     """
@@ -52,6 +53,8 @@ class HistoriqueViews(admin.ModelAdmin):
     #
     # # En-tête de notre colonne
     # show_content_part.short_description = 'Aperçu du contenu'
+
+
 # admin.site.register(Historique, HistoriqueViews)
 
 
