@@ -1,4 +1,6 @@
 import json
+import re
+
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 import io
@@ -29,7 +31,7 @@ class GroupViews(object):
             for row in csv_reader:
                 try:
                     print(row[1])
-                    group = Groupe.objects.update_or_create(nom=row[1], )
+                    group = Groupe.objects.get_or_create(nom=row[1], )
                     # # print(group)
                     #
                     # # You have to save the object before adding the m2m relations
@@ -51,53 +53,93 @@ class GroupViews(object):
 
         # Groupe
         for row in data['Groupe']:
-            print(row[1])
             try:
-                # group = Groupe.objects.update_or_create(nom=row[1], )
-                group = Groupe(nom=row[1], )
-                group.save()
+                group = Groupe.objects.get_or_create(nom=row[1],
+                                                     pk=row[0])
+                # group = Groupe(nom=row[1], )
+                # group.save()
             except Exception as e:
-                print('group_creation')
-                print(e)
+                print('ERROR group_creation', e)
                 raise e
         print('groupe creation done')
 
         # FAMILY
-        for row in data['Famille']:
-            print(row[1])
-            try:
-                int(row[0])
-                print('Groupe_id', row[0])
-                group = Groupe.objects.get(id=int(row[0]))
-                print('GROUP', group)
-                family = Famille.objects.update_or_create(nom=row[1],
-                                                          groupe=group)
-            except ValueError:
-                family = Famille.objects.update_or_create(nom=row[1],
-                                                          groupe=None)
+        for row in data['FamilleMTM']:
 
-            except Exception as e:
-                print('family_creation_error')
-                print(e)
-                raise e
+            if row[0] is not "":
+
+                if re.search(',', str(row[0])):
+                    tab_str_split = str(row[0]).split(',')
+                    Famille.objects.update_or_create(nom=row[1],
+                                                     pk=row[2])
+
+                    for item in tab_str_split:
+                        group = Groupe.objects.get(id=item)
+                        family = Famille.objects.get(nom=row[1],
+                                                     pk=row[2])
+                        family.groupe.add(group)
+
+                elif re.search('.', str(row[0])):
+                    tab_str_split = str(row[0]).split('.')
+                    print(tab_str_split)
+                    Famille.objects.update_or_create(nom=row[1],
+                                                     pk=row[2])
+                    for item in tab_str_split:
+                        group = Groupe.objects.get(id=int(item))
+                        family = Famille.objects.get(nom=row[1],
+                                                     pk=row[2])
+                        family.groupe.add(group)
+
+                else:
+                    group = Groupe.objects.get(id=row[0])
+                    print('GROUP', group)
+                    family = Famille.objects.get(nom=row[1],
+                                                 pk=row[2])
+                    family.groupe.add(group)
+            else:
+                family = Famille.objects.get_or_create(nom=row[1],
+                                                       pk=row[2])
+                print("no value for family")
+
         print('family creation done')
 
-        # FAMILY
-        for row in data['SousFamille']:
-            print(row[1])
-            try:
-                int(row[0])
-                family = Famille.objects.get(id=int(row[0]))
-                print('FAMILY', family)
-                sub_family = SousFamille.objects.update_or_create(nom=row[1], famille=family)
+        # SUBFAMILY
+        for row in data['SousFamilleMTM']:
 
-            except ValueError:
-                sub_family = SousFamille.objects.update_or_create(nom=row[1], famille=None)
+            if row[0] is not "":
 
-            except Exception as e:
-                print('subfamily_creation_error')
-                print(e)
-                raise e
+                if re.search(',', str(row[0])):
+                    tab_str_split = str(row[0]).split(',')
+                    SousFamille.objects.update_or_create(nom=row[1],
+                                                         pk=row[2])
+
+                    for item in tab_str_split:
+                        family = Famille.objects.get(id=item)
+                        subfamily = SousFamille.objects.get(nom=row[1],
+                                                            pk=row[2])
+                        subfamily.famille.add(family)
+
+                elif re.search('.', str(row[0])):
+                    tab_str_split = str(row[0]).split('.')
+                    print(tab_str_split)
+                    SousFamille.objects.update_or_create(nom=row[1],
+                                                         pk=row[2])
+                    for item in tab_str_split:
+                        family = Famille.objects.get(id=int(item))
+                        subfamily = SousFamille.objects.get(nom=row[1],
+                                                            pk=row[2])
+                        subfamily.famille.add(family)
+
+                else:
+                    family = Famille.objects.get(id=row[0])
+                    subfamily = SousFamille.objects.get(nom=row[1],
+                                                        pk=row[2])
+                    subfamily.famille.add(family)
+            else:
+                subfamily = SousFamille.objects.get_or_create(nom=row[1],
+                                                              pk=row[2])
+                print("no value for subfamily")
+
         print('subfamily creation done')
 
         # resp = json.dumps(csv_reader)

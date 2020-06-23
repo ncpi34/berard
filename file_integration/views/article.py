@@ -8,6 +8,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 from website.models import Article, Groupe, Famille, SousFamille
+import os.path
 
 """ Article File"""
 
@@ -84,8 +85,43 @@ class ArticleViews(object):
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
-        f = open('ERREURS_ARTICLES.txt', 'w')
+        f = open('resources/erreurs/ERREURS_ARTICLES.txt', 'w')
         for rst in self:
+
+             # Families
+            if os.path.isfile('resources/famille/famille_' + str(rst['famille']) + '.txt'):
+                file = open('resources/famille/famille_' + str(rst['famille']) + '.txt', 'a')
+                files = open('resources/famille/famille_' + str(rst['famille']) + '.txt', 'r')
+                strings = files.read()
+                if str(rst['groupe']) in strings:
+                    file.close()
+                else:
+                    file.write(str(rst['groupe']))
+                    file.write(', ')
+                    file.close()
+            else:
+                file = open('resources/famille/famille_' + str(rst['famille']) + '.txt', 'w')
+                file.write(str(rst['groupe']))
+                file.write(', ')
+                file.close()
+
+            # SubFamilies
+            if os.path.isfile('resources/sousfamille/sousfamille_' + str(rst['sous_famille']) + '.txt'):
+                file = open('resources/sousfamille/sousfamille_' + str(rst['sous_famille']) + '.txt', 'a')
+                files = open('resources/sousfamille/sousfamille_' + str(rst['sous_famille']) + '.txt', 'r')
+                strings = files.read()
+                if str(rst['famille']) in strings:
+                    file.close()
+                else:
+                    file.write(str(rst['famille']))
+                    file.write(', ')
+                    file.close()
+            else:
+                file = open('resources/sousfamille/sousfamille_' + str(rst['sous_famille']) + '.txt', 'w')
+                file.write(str(rst['famille']))
+                file.write(', ')
+                file.close()
+
             # Check if no null
             if rst["groupe"] is not None or rst["famille"] is not None or rst["sous_famille"] is not None:
                 print(rst['libelle'])
