@@ -1,0 +1,50 @@
+{% extends 'website/base.html' %}
+
+{% load static %}
+
+
+{% block content %}
+    <main>
+    <div class="container" >
+    <div class="table-responsive text-nowrap" style="min-height: 70vh">
+    <h2 class="text-center mt-4 mb-5">Historique de vos commandes</h2>
+    {% if histories %}
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th scope="col">Date</th>
+            <th scope="col">Nombre de produits</th>
+            <th scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for history in histories %}
+
+        <tr>
+
+            <th>
+                <a style="color:blue" href="{{ history.get_absolute_url }}">
+                {{ history.date }}
+                </a>
+            </th>
+            <td>{{ history.get_number_products|title }}</td>
+            <td class="num">{{ history.get_total_cost }}€</td>
+
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% else %}
+        <div class="container text-center mt-5" style="min-height: 50vh">
+            <h3>Votre historique de commande est vide ...</h3>
+        </div>
+
+{% endif %}
+    </div>
+    </div>
+  </main>
+{% endblock %}

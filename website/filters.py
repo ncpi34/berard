@@ -12,6 +12,7 @@ class ArticleFilter(django_filters.FilterSet):
                                                  'style': 'border: 1px solid black;'
                                                           'border-radius: 4px;'
                                                           'text:center;'
+                                                          'background-color:white;'
                                              }))
 
     class Meta:

@@ -32,13 +32,13 @@
             {% for item in left_menu %}
 
 
-                {% if forloop.counter <= 6 %}
+{#                {% if forloop.counter <= 6 %}#}
                 <li class="{% if item.selected %} active {% endif %} ml-2 nav-item dropdown">
                 <a href="#{{ item.name }}" data-toggle="collapse" aria-expanded="false"
                    class="nav-link dropdown-toggle text-dark"
                 > <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>
 
-                {% endif %}
+{#                {% endif %}#}
 
 {#                {% if forloop.counter > 7 %}#}
 {##}

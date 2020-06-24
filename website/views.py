@@ -70,7 +70,7 @@ def logout_view(request):
 
 
 class ArticleView(LoginRequiredMixin, ListView):
-    template_name = 'website/products.html'
+    template_name = 'website_sidenav/products.html'
     # template_name = 'home.html'
     # queryset = Article.objects.filter(actif=False)
     paginate_by = 50
@@ -79,9 +79,20 @@ class ArticleView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        if self.kwargs.get('nom'):
-            _name = self.kwargs.get("nom")
+
+        if self.kwargs.get('group'):
+            _name = self.kwargs.get("group")
+            article = Article.objects.filter(Q(actif=True) & Q(groupe__nom=_name)).exclude(Q(prix_achat_1=0.00))
+            # article = ArticleFilter(queryset=_name)
+            return article
+        elif self.kwargs.get('family'):
+            _name = self.kwargs.get("family")
             article = Article.objects.filter(Q(actif=True) & Q(famille__nom=_name)).exclude(Q(prix_achat_1=0.00))
+            # article = ArticleFilter(queryset=_name)
+            return article
+        elif self.kwargs.get('subfamily'):
+            _name = self.kwargs.get("subfamily")
+            article = Article.objects.filter(Q(actif=True) & Q(sous_famille__nom=_name)).exclude(Q(prix_achat_1=0.00))
             # article = ArticleFilter(queryset=_name)
             return article
         elif self.request.GET.get('code_article'):

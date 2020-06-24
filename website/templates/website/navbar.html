@@ -1,90 +1,160 @@
 {#{% load cart_template_tags %}#}
 {% load menu_generator %}
-{% load static %}
- {% get_menu "NAV_MENU_TOP" as top_menu %}
-<nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
-    <div class="container">
 
-      <!-- Brand -->
-      <a class="navbar-brand waves-effect" href="{% url 'website:products' %}">
+{% load static %}
+<script>
+		$(document).ready(function(){
+			$(".hamburger").click(function(){
+			   $(".wrapper").toggleClass("collapse");
+			});
+		});
+</script>
+
+ {% get_menu "NAV_MENU_TOP" as top_menu %}
+<!-- Navbar top -->
+<div class="fixed-top">
+  <div class="top_navbar">
+    <div class="hamburger">
+       <div class="one"></div>
+       <div class="two"></div>
+       <div class="three"></div>
+    </div>
+
+    <div class="top_menu ">
+      <div class="logo">
+          <a class="navbar-brand waves-effect" href="{% url 'website:products' %}">
           <img class="w-25" src="{% static 'img/logo.jpg' %}"/>
       </a>
+      </div>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li>
-        <h3 class="text-center">Berard Distribution</h3>
-      </li>
-    </ul>
-  </div>
 
-      <!-- Collapse -->
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Links -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        <!-- Left -->
-        <ul class="navbar-nav mr-auto">
-          {% comment %} <li class="nav-item active">
-            <a class="nav-link waves-effect" href="/">Home
-              <span class="sr-only">(current)</span>
+      <ul>
+        <li>
+            <a href="{% url 'website:order_summary' %}" >
+                <i class="fas fa-user"></i>
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="/checkout">
-            Checkout</a>
-          </li> {% endcomment %}
-        </ul>
+        </li>
 
-        <!-- Right -->
-        <ul class="navbar-nav nav-flex-icons">
-          {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link waves-effect" href="{% url 'website:order_summary' %}" >
-                  <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-user"></i></span>
-                </a>
-              </li>
-              <li class="nav-item">
-                  <a  class="nav-link waves-effect" href="{% url 'cart:cart_detail' %}">
+        <li>
+            <a href="{% url 'cart:cart_detail' %}">
                     <i class="fas fa-shopping-cart"></i>
                         {% with total_items=cart|length %}
                       {% if cart|length > 0 %}
-                          <span style="left:0px;top: -1px"
-                                class="badge green z-depth-1 mr-1 position-absolute rounded-circle">
+                          <span class="badge green z-depth-1 mr-1 position-absolute rounded-circle">
                           {{ total_items }}
                           </span>
                       {% else %}
-                          <span style="left:0px;top: -1px"
-                                class="badge red z-depth-1 mr-1 position-absolute rounded-circle">
+                          <span class="badge red z-depth-1 mr-1 position-absolute rounded-circle">
                           0
                           </span>
                       {% endif %}
                   {% endwith %}
-                    </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link waves-effect" href="{% url 'website:logout' %}" >
-                  <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
-                </a>
-              </li>
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link waves-effect" href="{% url 'website:login' %}">
-                  <span class="clearfix d-none d-sm-inline-block"> Connexion </span>
-                </a>
-              </li>
-{#          <li class="nav-item">#}
-{#            <a class="nav-link waves-effect" href="{% url 'account_signup' %}">#}
-{#              <span class="clearfix d-none d-sm-inline-block"> Signup </span>#}
-{#            </a>#}
-{#          </li>#}
-          {% endif %}
-        </ul>
-      </div>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'website:logout' %}" >
+                <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
+            </a>
+        </li>
 
+
+      </ul>
     </div>
-  </nav>
+  </div>
+</div>
+<!-- Navbar top -->
+
+<!--Sidebar -->
+{% get_menu "NAV_MENU_LEFT" as left_menu %}
+
+    <div class="sidebar">
+         <!-- Links -->
+             <ul>
+
+            {% for item in left_menu %}
+
+
+                <li>
+
+                <div class="row">
+                    <div class="col-12 col-md-8" >
+
+                          <a href="{% url 'website:products_by_group' group=item.name %}">
+                            <span class="icon"><i class="fas fa-book"></i></span>
+                            <span class="title">{{ item.name|title }} </span>
+                          </a>
+
+                    </div>
+
+                    <div class="col-6 col-md-1 mt-2">
+                      <a href="#{{ item.id }}" data-toggle="collapse" aria-expanded="false"
+                                   class="dropdown-toggle">
+                      </a>
+                    </div>
+
+                </div>
+
+
+
+
+
+                 <!-- SubLinks -->
+                {% if item.submenu %}
+                     <ul class="collapse list-unstyled" id="{{ item.id }}">
+                    {% for menu in item.submenu %}
+                        <li>
+                            <a href="{% url 'website:products_by_family' family=menu.name %}"
+                                 id="submenu" class="dropdown-item">
+                                  {{ menu.name|title }}
+                              </a>
+
+{#                        <div class="row">#}
+{#                            <div class="col-12 col-md-8" >#}
+{#                              <a href="{% url 'website:products_by_family' family=menu.name %}"#}
+{#                                 id="submenu" class="dropdown-item">#}
+{#                                  {{ menu.name|title }}#}
+{#                              </a>#}
+{#                            </div>#}
+{#                            <div class="col-6 col-md-1 mt-2">#}
+{#                              <a href="#menu{{ menu.id }}" data-toggle="collapse" aria-expanded="false"#}
+{#                                           class="dropdown-toggle">#}
+{#                              </a>#}
+{#                            </div>#}
+{#                        </div>#}
+
+{#                            <!-- SubsubLinks -->#}
+{#                            {% if menu.subsubmenu %}#}
+{#                                 <ul class="collapse list-unstyled" id="menu{{ menu.id }}">#}
+{#                                {% for submenu in menu.subsubmenu %}#}
+{#                                    <li>#}
+{#                                        <a href="{% url 'website:products_by_subfamily' subfamily=submenu.name %}"#}
+{#                                           id="subsubmenu"#}
+{#                                           class="dropdown-item"#}
+{#                                        >{{ submenu.name|title }}</a>#}
+{#                                    </li>#}
+{#                                {% endfor %}#}
+{#                                 </ul>#}
+{#                            {% endif %}#}
+{#                            <!-- Subsublinks -->#}
+
+                        </li>
+
+                    {% endfor %}
+
+
+
+                     </ul>
+                {% endif %}
+                <!-- Sublinks -->
+
+
+
+            {% endfor %}
+            </ul>
+
+          <!-- Links -->
+
+  </div>
+
+<!--Sidebar -->
+

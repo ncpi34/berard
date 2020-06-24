@@ -1,30 +1,53 @@
-from website.models import Groupe, Famille
+import itertools
+
+from website.models import Groupe, Famille, SousFamille
 
 """ Dynamic menus and submenus from DB"""
 
 
 # to get parent menu
 def get_menus():
-    group_query = Groupe.objects.all().values_list('nom')  # Groupe
+    group_query = Groupe.objects.exclude(nom='DIVERS').values_list('nom', 'pk')  # Groupe
     groups = [list(i) for i in group_query]
+    # groups = list(itertools.chain(*group_query))
+    # print(groups)
 
-    liste = [{"name": item[0][0], 'url': '#',  # retrieve query to array of dictionnaries
+    liste = [{"id": item[0][1],
+              "name": item[0][0], 'url': '#',  # retrieve query to array of dictionnaries
               'validators': ["menu_generator.validators.is_authenticated"],
-              "submenu": get_families(item[0][0])
+              "submenu": get_families(item[0][0]),
               } for item in zip(groups)]
+    # [print(i, '\n') for i in liste]
 
     return liste
 
 
-# to get submenu
+# to get families
 def get_families(group_name):
-    # [{"name": "1","url": "/1",},{"name": "2","url": "/2",},]
-    famillies_query = Famille.objects.filter(groupe__nom=group_name).values_list('nom')
-    famillies = [list(i) for i in famillies_query]
+    families_query = Famille.objects.filter(groupe__nom=group_name).values_list('nom', 'pk')
+    families = [list(i) for i in families_query]
     liste = []
-    for item in range(len(famillies)):
-        temp = {'name': famillies[item][0], 'url': '#'}
+    for item in range(len(families)):
+        temp = {'id':  families[item][1],
+                'name': families[item][0],
+                'subsubmenu': get_sub_families(families[item][0]),
+                'url': '#'}
         liste.append(temp)
+    return liste
+
+
+# to get subfamilies
+def get_sub_families(family_name):
+
+    subfamilies_queries = SousFamille.objects.filter(famille__nom=family_name).values_list('nom')
+
+    subfamilies = list(itertools.chain(*subfamilies_queries))
+
+    liste = []
+    for item in range(len(subfamilies)):
+        temp = {'name': subfamilies[item], 'url': '#'}
+        liste.append(temp)
+
     return liste
 
 
