@@ -1,4 +1,7 @@
-﻿!!! VIRTUAL ENV (win 10)
+﻿pip install django==2.2 --upgrade
+pip install --upgrade django-extensions
+
+!!! VIRTUAL ENV (win 10)
 pip install virtualenvwrapper-win
 mkvirtualenv resto_env
 deactivate — Permet de sortir de l'environnement virtuel Python actuel

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from django.contrib.messages import constants as messages
 import environ
+from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,10 +37,34 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ['*']
+# MATERIAL_ADMIN_SITE = {
+#     'HEADER':  _('Demo'),
+#     'TITLE':  _('Demo'),
+#     'FAVICON':  'demo.png',
+#     'MAIN_BG_COLOR':  'green',
+#     'MAIN_HOVER_COLOR':  'black',
+#     'PROFILE_PICTURE':  'profile-background.jpeg',
+#     'PROFILE_BG':  'profile-background.jpeg',
+#     'LOGIN_LOGO':  'profile-background.jpeg',
+#     'LOGOUT_BG':  'profile-background.jpeg',
+#     'SHOW_THEMES':  True,
+#     'TRAY_REVERSE': True,
+#     'NAVBAR_REVERSE': True,
+#     'SHOW_COUNTS': False,
+#     'APP_ICONS': {
+#         'invitations': 'send',
+#     },
+#     'MODEL_ICONS': {
+#         'invitation': 'contact_mail',
+#     }
+# }
 
 # Application definition
 
 INSTALLED_APPS = [
+    # 'material.admin',
+    # 'material.admin.default',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,16 +157,17 @@ USE_TZ = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 STATIC_URL = '/static_root/'  # path admin statics
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')  # path to save (public)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATICFILES_DIRS = (
     # os.path.join(BASE_DIR + 'static_root'),  # path  not admin statics
     os.path.join(BASE_DIR + '/website/staticfiles'),  # path  not admin statics
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')  # path to save (public)
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Flash messages
 MESSAGE_TAGS = {

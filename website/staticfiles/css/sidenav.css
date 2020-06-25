@@ -88,8 +88,9 @@
   top: 60px;
   left: 0;
   background-color:#048c44;
-  /*max-width: 200px;*/
-  width:70px;
+  max-width: 250px;
+  min-width: 70px;
+  /*width:70px;*/
   /*height navbar*/
   height: calc(100% - 80px);
   border-bottom-left-radius: 20px;
@@ -155,8 +156,9 @@
   line-height: 22px;
 }
 
+
 /*.wrapper.collapse .sidebar{*/
-/*  width: 70px;*/
+/*  width: 250px;*/
 /*}*/
 
 /*.wrapper.collapse .sidebar ul li a{*/
@@ -176,8 +178,8 @@
 /*  margin-left: 70px;*/
 /*}*/
 .myContent{
-  margin-left: 250px;
-  transition: all 0.5s ease;
+  /*margin-left: 250px;*/
+  transition: all 0.3s ease;
 }
 .mySideNav{
   width: 250px;

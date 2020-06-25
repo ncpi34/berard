@@ -1,109 +1,33 @@
 {% extends "website/base.html" %}
 
 
-{% load menu_generator %} # menus.py
+{% block navbar %}
+{% include "website/sidenav.html" %}
+{% endblock %}
 
 {% block content %}
+
      {% include "website/modals/_modal.html" %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+
     <!--Main layout-->
   <main>
-    <div class="container">
- {% get_menu "NAV_MENU_LEFT" as left_menu %}
-      <!--Navbar-->
-      <nav class="navbar navbar-expand-lg navbar-dark lighten-3 mt-3 mb-5">
 
-        <!-- Navbar brand -->
-{#      <a class="navbar-brand waves-effect" href="{% url 'website:products' %}">#}
-{#          <span class="navbar-brand text-dark">Groupes</span>#}
-{#      </a>#}
-
-
-        <!-- Collapse button -->
-        <button class="navbar-toggler alert-dark" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-          aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Collapsible content -->
-        <div class="collapse navbar-collapse" id="basicExampleNav">
-
-          <!-- Links -->
-             <ul class="navbar-nav mx-auto">
-            {% for item in left_menu %}
-
-
-{#                {% if forloop.counter <= 6 %}#}
-                <li class="{% if item.selected %} active {% endif %} ml-2 nav-item dropdown">
-                <a href="#{{ item.name }}" data-toggle="collapse" aria-expanded="false"
-                   class="nav-link dropdown-toggle text-dark"
-                > <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>
-
-{#                {% endif %}#}
-
-{#                {% if forloop.counter > 7 %}#}
-{##}
-{##}
-{#                     <li class="{% if item.selected %} active {% endif %} ml-2 nav-item dropdown">#}
-{#                <a href="#{{ item.name }}" data-toggle="collapse" aria-expanded="false"#}
-{#                   class="nav-link dropdown-toggle text-dark"#}
-{#                > <i class="{{ item.icon_class }}" ></i> {{ item.name }}</a>#}
-{##}
-{#                {% endif %}#}
-
-
-
-                {% if item.submenu %}
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="{{ item.name }}">
-
-                    {% for menu in item.submenu %}
-
-{#                        <a href="{{ menu.get_absolute_url }}" id="submenu"#}
-{#                           class="text-white text-center">{{ menu.name }}</a>#}
-                            <a href="{% url 'website:products_by_family' nom=menu.name %}"
-                               id="submenu"
-                               class="text-center dropdown-item"
-                            >{{ menu.name }}</a>
-
-                    {% endfor %}
-                    </div>
-                    </li>
-             {% endif %}
-            {% endfor %}
-            </ul>
-
-          <!-- Links -->
-
-          <form class="form-inline" action="" method="get">
-            <div class="md-form my-0 mr-sm-2">
-                <div class="input-group">
-                    {{ filter.form.as_p }}
-                     <span class="input-group-btn">
-                        <button><i class="fas fa-search"></i></button>
-                     </span>
-                </div>
-{#              <input class="form-control mr-sm-2" type="text"#}
-{#                     placeholder="Chercher par code article" aria-label="Search"#}
-{#                     name=""#}
-{#              >#}
-            </div>
-          </form>
-        </div>
-        <!-- Collapsible content -->
-
-      </nav>
-      <!--/.Navbar-->
-
-
+    <div class="main_container" >
     {% if articles %}
 
- <section class="text-center mb-4">
+
+ <section class=" mb-4">
+
 
         <!--Grid row-->
         <div class="row wow fadeIn">
 
               {% for article in articles %}
           <!--Grid column-->
-          <div class="col-lg-3 col-md-6 mb-4">
+          <div class="articles col-lg-3 col-md-6 mb-4">
 
             <!--Card-->
 
@@ -139,8 +63,7 @@
                 <h5>
 
                   <strong>
-                      <p
-                         class="dark-grey-text">
+                      <p class="dark-grey-text">
                           {% if article.conditionnement is None%}
                               lot indéfini
                               {% else %}
@@ -171,7 +94,7 @@
                     class="d-flex justify-content-left small">
                      {% csrf_token %}
                             {{ form }}
-                      <input aria-label="Search" value="Ajouter au panier" class="form-control btn-success btn-sm" type="submit"/>
+                      <input aria-label="Search" value="Ajouter" class="form-control btn-success btn-sm" type="submit"/>
 {#                              <button type="submit" class="form-control btn btn-success btn-sm">#}
 {#                                <i class="fa fa-cart-plus" aria-hidden="true"></i>#}
 {#                              </button>#}
@@ -194,17 +117,6 @@
       </section>
       <!--Section: Products v.3-->
         {# Mise en forme de la pagination ici #}
-{% if is_paginated %}
-    <div class="pagination">
-           {% if page_obj.has_previous %}
-               <a href="?page={{ page_obj.previous_page_number }}">Précédente</a> —
-           {% endif %}
-           Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
-           {% if page_obj.has_next %}
-              — <a href="?page={{ page_obj.next_page_number }}">Suivante</a>
-           {% endif %}
-    </div>
-{% endif %}
 
         <!-- Pagination-->
 {#        {% if page_obj.has_previous %}#}
@@ -232,8 +144,24 @@
         {% endif %}
     </div>
    <!-- Pagination-->
+  {% if is_paginated %}
+    <div class="pagination justify-content-end mr-5">
+           {% if page_obj.has_previous %}
+               <a href="?page={{ page_obj.previous_page_number }}">Précédente</a> —
+           {% endif %}
+           Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+           {% if page_obj.has_next %}
+              — <a href="?page={{ page_obj.next_page_number }}">Suivante</a>
+           {% endif %}
+    </div>
+{% endif %}
+
 
   </main>
+    </div>
+
+
+
 
 {% endblock content %}
 

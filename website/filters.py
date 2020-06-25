@@ -8,12 +8,15 @@ class ArticleFilter(django_filters.FilterSet):
     code_article = django_filters.CharFilter(label='',
                                              lookup_expr='icontains',
                                              widget=TextInput(attrs={
+
+                                                 'class': 'searchTerm',
                                                  'placeholder': 'code article',
-                                                 'style': 'border: 1px solid black;'
-                                                          'border-radius: 4px;'
-                                                          'text:center;'
-                                                          'background-color:white;'
-                                             }))
+                                                 'style':
+                                                     'border-radius: 4px;color:black;'
+                                                     'text:center;'
+                                                     'background-color:white;'
+                                             })
+                                             )
 
     class Meta:
         model = Article

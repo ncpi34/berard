@@ -1,0 +1,164 @@
+{% load static %}
+{% load menu_generator %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+{#<link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">#}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+  <nav>
+    <div class="nav-wrapper green">
+
+      {% get_menu "NAV_MENU_TOP" as top_menu %}
+
+    <!--Top menu -->
+        <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+
+        <div>
+                   <!-- Searchform-->
+          <form class="hide-on-med-and-down" id="form1" action="" method="get">
+              <div class="wrap">
+               <div class="search mt-3">
+                   {{ filter.form.as_p }}
+            {#      <input type="text" class="searchTerm" placeholder="What are you looking for?">#}
+                  <button type="submit" class="searchButton">
+                    <i class="fa fa-search"></i>
+                 </button>
+               </div>
+            </div>
+          </form>
+            <!-- Searchform-->
+
+
+            <ul class="three_icons hide-on-med-and-down">
+
+                <li>
+                    <a href="{% url 'cart:cart_detail' %}">
+                        {% with total_items=cart|length %}
+                      {% if cart|length > 0 %}
+                          <span class="badge green z-depth-1 position-absolute rounded-circle">
+                          {{ total_items }}
+                          </span>
+                      {% else %}
+                          <span class="badge red z-depth-1  position-absolute rounded-circle">
+                          0
+                          </span>
+                      {% endif %}
+                  {% endwith %}
+                    <i class="fas fa-shopping-cart"></i>
+
+            </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'website:logout' %}" >
+                        <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'website:order_summary' %}" ><i class="fas fa-user"></i></a>
+                </li>
+
+
+            </ul>
+
+
+
+
+
+
+        </div>
+      </div>
+
+      <!--Top menu -->
+
+<!--SideNav -->
+      <ul class="side-nav grey darken-2" id="mobile-demo">
+
+        <li class="sidenav-header green">
+            <a href="{% url 'website:products' %}">
+                <img class="w-25 circle ml-5" src="{% static 'img/logo.jpg' %}"/>
+            </a>
+        </li>
+
+        
+
+          <!--Sidebar -->
+{% get_menu "NAV_MENU_LEFT" as left_menu %}
+
+            {% for item in left_menu %}
+        <li class="white">
+          <ul class="collapsible collapsible-accordion">
+            <li>
+                <!-- Links -->
+              <a
+{#                      href="{% url 'website:products_by_group' group=item.name %}"#}
+                      href="#{{ item.id }}"
+                      class="collapsible-header waves-effect waves-blue text-dark">
+                  <i class="material-icons">folder_open</i>
+                  {{ item.name|title }}
+                  <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i>
+              </a>
+
+                <!-- Links -->
+
+                <!-- Sublinks -->
+              <div class="collapsible-body">
+                <ul>
+                    {% for menu in item.submenu %}
+                        <li>
+                            <a href="{% url 'website:products_by_family' family=menu.name %}"
+                               id="submenu" class="waves-effect waves-blue">
+                                  {{ menu.name|lower }}
+                              </a>
+
+
+                        </li>
+                        <!-- Sublinks -->
+
+                        <!-- Divider -->
+                            <li><div class="divider"></div></li>
+                        <!-- Divider -->
+
+                    {% endfor %} <!-- endForSublinks -->
+                     </ul>
+
+
+            {% endfor %} <!-- endForlinks -->
+
+          </div>
+          </li>
+          </ul>
+          </li>
+      </ul>
+  </nav>
+<!--SideNav -->
+
+
+      
+
+
+
+
+
+  <script>
+    $(document).ready(function(){
+      $('.button-collapse').sideNav({
+        
+          menuWidth: 300, // Default is 300
+          edge: 'left', // Choose the horizontal origin
+          closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+          draggable: true // Choose whether you can drag to open on touch screens
+        }
+      );
+      // START OPEN
+      {#$('.button-collapse').sideNav('show');#}
+    });
+  </script>
+
+ 
+  <!--Import materialize.js-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+
+

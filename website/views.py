@@ -70,7 +70,7 @@ def logout_view(request):
 
 
 class ArticleView(LoginRequiredMixin, ListView):
-    template_name = 'website_sidenav/products.html'
+    template_name = 'website/products.html'
     # template_name = 'home.html'
     # queryset = Article.objects.filter(actif=False)
     paginate_by = 50
