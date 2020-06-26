@@ -102,22 +102,22 @@ class ClientViews(object):
             # file = open(zz, 'r')
             # text_lines = file.readlines()
 
-            with open('TART.PLN', encoding='utf-8', errors='ignore') as file:
+            with open('TCLT.PLN', encoding='utf-8', errors='ignore') as file:
                 text_lines = file.readlines()
-
+            # print(text_lines)
             # array of dict
             obj_bdd = [{
-                "nom": val[438:509],
-                "prenom": val[438:509],
-                "email": val[438:509],
-                "tarif": cls.convert_to_int(val[232]),
-                "telephone": val[182:196],
-                "adresse": val[26:171].replace('  ', ' '),
                 "code_client": val[10:16],
-                'mot_de_passe': val[10:16] + val[146:151]
+                'mot_de_passe': val[10:16] + val[146:151],
+                "adresse": val[26:171].replace('  ', ' '),
+                "telephone": val[182:196],
+                "tarif": cls.convert_to_int(val[232]),
+                # "nom": val[438:509],
+                # "prenom": val[438:509],
+                "email": val[438:509],
 
             } for val in text_lines]
-            print([i['tarif'] for i in obj_bdd])
+            # print([val[230:240] for val in text_lines])
 
             # cls.insert_into_db(obj_bdd)  # call method to insert in db
 

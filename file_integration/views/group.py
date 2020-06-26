@@ -143,4 +143,4 @@ class GroupViews(object):
         print('subfamily creation done')
 
         # resp = json.dumps(csv_reader)
-        return HttpResponse(request, content_type='application/json')
+        return HttpResponse(200, content_type='application/json')
