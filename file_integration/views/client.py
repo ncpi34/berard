@@ -1,3 +1,4 @@
+import codecs
 import ftplib
 import re
 from ftplib import FTP
@@ -18,7 +19,6 @@ from website.models import Article, ProfilUtilisateur
 class ClientViews(object):
     @staticmethod
     def concat(val_1, val_2):
-        print(val_2)
         return val_1 + val_2
 
     # to convert to int without errors
@@ -26,7 +26,10 @@ class ClientViews(object):
     def convert_to_int(self):
         try:
             int(self)
-            return self
+            if int(self) > 4:
+                return 0
+            else:
+                return int(self)
         except ValueError:
             return 0
 
@@ -95,7 +98,11 @@ class ClientViews(object):
             ftp.retrbinary('RETR TCLT.PLN', open('TCLT.PLN', 'wb').write)
             ftp.quit()
 
-            with open('TART.PLN', encoding="utf-8", errors='ignore') as file:
+            # zz = codecs.encode('TART.PLN', encoding='utf-8', errors='strict')
+            # file = open(zz, 'r')
+            # text_lines = file.readlines()
+
+            with open('TART.PLN', encoding='utf-8', errors='ignore') as file:
                 text_lines = file.readlines()
 
             # array of dict
