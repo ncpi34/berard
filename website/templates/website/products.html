@@ -36,7 +36,7 @@
               <!--Card image-->
               <div class="view overlay">
 
-               <img  src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/13.jpg"
+               <img  src="/media/img/nophoto.jpg"
                class="img_modal img-fluid img-thumbnail card-img-top "
                data-id="{% url 'website:product_photo' article.id %}"
                />
@@ -94,7 +94,7 @@
                     class="d-flex justify-content-left small">
                      {% csrf_token %}
                             {{ form }}
-                      <input aria-label="Search" value="Ajouter" class="form-control btn-success btn-sm" type="submit"/>
+                      <input  value="Ajouter" class="form-control btn btn-success waves-effect waves-light" type="submit"/>
 {#                              <button type="submit" class="form-control btn btn-success btn-sm">#}
 {#                                <i class="fa fa-cart-plus" aria-hidden="true"></i>#}
 {#                              </button>#}

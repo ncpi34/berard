@@ -157,6 +157,9 @@ class HistoriqueCommande(models.Model):
     def get_total_cost(self):
         return sum(item.get_cost() for item in self.items.all())
 
+    # def get_total_cost_by_article(self):
+    #     return sum(item.get_cost() for item in self.items.all())
+
     def get_articles(self):
         return [item.get_article() for item in self.items.all()]
 

@@ -12,7 +12,7 @@ class ArticleFilter(django_filters.FilterSet):
                                                  'class': 'searchTerm',
                                                  'placeholder': 'code article',
                                                  'style':
-                                                     'border-radius: 4px;color:black;'
+                                                     'border-radius: 4px;color:white;'
                                                      'text:center;'
                                                      'background-color:white;'
                                              })

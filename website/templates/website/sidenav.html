@@ -1,12 +1,13 @@
 {% load static %}
 {% load menu_generator %}
+{% load widget_tweaks %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
 {#<link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">#}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
 
 
   <nav>
-    <div class="nav-wrapper green">
+    <div class="nav-wrapper   green">
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
 
@@ -15,21 +16,21 @@
 
         <div>
                    <!-- Searchform-->
-          <form class="hide-on-med-and-down" id="form1" action="" method="get">
+          <form class="center" id="form1" action="" method="get">
               <div class="wrap">
                <div class="search mt-3">
                    {{ filter.form.as_p }}
-            {#      <input type="text" class="searchTerm" placeholder="What are you looking for?">#}
-                  <button type="submit" class="searchButton">
-                    <i class="fa fa-search"></i>
-                 </button>
+{#                  <input type="text" class="searchTerm" placeholder="What are you looking for?">#}
+{#                  <button type="submit" class="searchButton">#}
+{#                    <i class="fa fa-search"></i>#}
+{#                 </button>#}
                </div>
             </div>
           </form>
             <!-- Searchform-->
 
 
-            <ul class="three_icons hide-on-med-and-down">
+            <ul class="right">
 
                 <li>
                     <a href="{% url 'cart:cart_detail' %}">
@@ -77,7 +78,7 @@
 
         <li class="sidenav-header green">
             <a href="{% url 'website:products' %}">
-                <img class="w-25 circle ml-5" src="{% static 'img/logo.jpg' %}"/>
+                <img class="w-25 ml-5" src="{% static 'img/logo.jpg' %}"/>
             </a>
         </li>
 

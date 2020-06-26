@@ -2,14 +2,14 @@
 
 {% load static %}
 
-{% block navbar %}
-    {% include 'website/topnavbar.html' %}
-{% endblock %}
+{#{% block navbar %}#}
+{#    {% include 'website/topnavbar.html' %}#}
+{#{% endblock %}#}
 
 {% block content %}
     <main>
     <div class="container">
-    <div class="table-responsive text-nowrap" style="min-height: 70vh">
+    <div class="table-responsive text-nowrap" style="min-height: 83vh">
     <h2 class="text-center mt-4 mb-5">Résumé de votre commande du {{ object.date }}</h2>
     <table class="table">
         <thead>
@@ -28,7 +28,7 @@
                 <td>{{ item.article|title }}</td>
                 <td>{{ item.prix }}€</td>
                 <td>{{ item.quantite}}</td>
-                <td>{{ object.get_total_cost}}€</td>
+                <td>{{ item.get_cost}}€</td>
             </tr>
 
      {% endfor %}
@@ -40,7 +40,12 @@
 {#        {% endfor %}#}
         </tbody>
     </table>
-
+{#<p class="text-right">#}
+{##}
+{#            <a href="{% url 'website:products' %}">#}
+{#                <button id="send-order" class="btn btn-success">Retourner aux produits</button>#}
+{#            </a>#}
+{#        </p>#}
 
     </div>
     </div>
