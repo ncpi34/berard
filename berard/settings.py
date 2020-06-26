@@ -156,6 +156,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 STATIC_URL = '/static_root/'  # path admin statics
 MEDIA_URL = '/media/'
 
