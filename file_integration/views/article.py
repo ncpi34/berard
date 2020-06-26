@@ -88,7 +88,7 @@ class ArticleViews(object):
         f = open('resources/erreurs/ERREURS_ARTICLES.txt', 'w')
         for rst in self:
 
-             # Families
+            # Families
             if os.path.isfile('resources/famille/famille_' + str(rst['famille']) + '.txt'):
                 file = open('resources/famille/famille_' + str(rst['famille']) + '.txt', 'a')
                 files = open('resources/famille/famille_' + str(rst['famille']) + '.txt', 'r')
@@ -127,9 +127,20 @@ class ArticleViews(object):
                 print(rst['libelle'])
 
                 # ManyToOne
-                group = Groupe.objects.get(id=rst["groupe"])
-                family = Famille.objects.get(id=rst["famille"])
-                subfamily = SousFamille.objects.get(id=rst["sous_famille"])
+                try:
+                    group = Groupe.objects.get(id=rst["groupe"])
+                except Groupe.DoesNotExist:
+                    group = None
+
+                try:
+                    family = Famille.objects.get(id=rst["famille"])
+                except Famille.DoesNotExist:
+                    family = None
+
+                try:
+                    subfamily = SousFamille.objects.get(id=rst["sous_famille"])
+                except SousFamille.DoesNotExist:
+                    subfamily = None
 
                 try:
 
@@ -180,10 +191,10 @@ class ArticleViews(object):
             ftp.retrbinary('RETR TART.PLN', open('TART.PLN', 'wb').write)
             ftp.quit()
 
-            file = open('TART.PLN', 'r')
-            # ftp.cwd('/Rep/EXPORT')
-            # a = open('TART.PLN', 'r')
-            text_lines = file.readlines()
+            with open('TART.PLN', encoding="utf-8", errors='ignore') as file:
+                # ftp.cwd('/Rep/EXPORT')
+                # a = open('TART.PLN', 'r')
+                text_lines = file.readlines()
 
             # array of dict
             obj_bdd = [{

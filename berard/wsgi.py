@@ -18,7 +18,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'berard.settings')
 application = get_wsgi_application()
 
 path = '/testsite.uno'
-# path = 'D:\Fidji\backDev'
+
 if path not in sys.path:
     sys.path.append(path)
 

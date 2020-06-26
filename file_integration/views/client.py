@@ -21,6 +21,15 @@ class ClientViews(object):
         print(val_2)
         return val_1 + val_2
 
+    # to convert to int without errors
+    @staticmethod
+    def convert_to_int(self):
+        try:
+            int(self)
+            return self
+        except ValueError:
+            return 0
+
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
@@ -85,37 +94,25 @@ class ClientViews(object):
             ftp.cwd('/Rep/EXPORT')
             ftp.retrbinary('RETR TCLT.PLN', open('TCLT.PLN', 'wb').write)
             ftp.quit()
-            file = open('TCLT.PLN', 'r')
-            # file = open('TCLT.PLN', 'wb')
-            # ftp.retrbinary('RETR TCLT', file.write)
-            # file.close()
-            # ftp.close()
 
-            # from urllib2 import urlopen
-            #
-            # u = urlopen("ftp://ftp.ncbi.nlm.nih.gov/pub/pmc/readme.txt")
-            #
-            # for line in u:
-            #     print
-            #     line
-
-            text_lines = file.readlines()
+            with open('TART.PLN', encoding="utf-8", errors='ignore') as file:
+                text_lines = file.readlines()
 
             # array of dict
             obj_bdd = [{
                 "nom": val[438:509],
                 "prenom": val[438:509],
                 "email": val[438:509],
-                "tarif": int(val[232]),
+                "tarif": cls.convert_to_int(val[232]),
                 "telephone": val[182:196],
                 "adresse": val[26:171].replace('  ', ' '),
                 "code_client": val[10:16],
                 'mot_de_passe': val[10:16] + val[146:151]
 
             } for val in text_lines]
-            # print([i['mot_de_passe'] for i in obj_bdd])
+            print([i['tarif'] for i in obj_bdd])
 
-            cls.insert_into_db(obj_bdd)  # call method to insert in db
+            # cls.insert_into_db(obj_bdd)  # call method to insert in db
 
             resp = json.dumps(obj_bdd)
             file.close()
