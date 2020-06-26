@@ -119,7 +119,7 @@ class ClientViews(object):
             } for val in text_lines]
             # print([val[230:240] for val in text_lines])
 
-            # cls.insert_into_db(obj_bdd)  # call method to insert in db
+            cls.insert_into_db(obj_bdd)  # call method to insert in db
 
             resp = json.dumps(obj_bdd)
             file.close()
