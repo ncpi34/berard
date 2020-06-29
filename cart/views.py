@@ -13,6 +13,8 @@ from cart.cart import Cart
 from cart.forms import CartAddProductForm
 from website.models import Article, HistoriqueCommande, ProduitCommande
 from django.contrib import messages
+import datetime
+from datetime import date
 
 """ Cart """
 
@@ -63,21 +65,55 @@ class SendOrderView(LoginRequiredMixin, View):
         try:
             cart = Cart(request)
 
-            user_id = User.objects.get(id=request.user.id)
+            user = User.objects.get(id=request.user.id)
             order = HistoriqueCommande(
-                utilisateur=user_id
+                utilisateur=user
             )
             order.save()
 
+            # to format hour with minute
+            now = datetime.datetime.now()
+            hour = '{:02d}'.format(now.hour)
+            minute = '{:02d}'.format(now.minute)
+            hour_with_minute = '{}{}'.format(hour, minute)
+
+            # file to ftp
+            file = open('test.PLN', 'w')
+            line1 = '!000C$01{code_client}00100{nom}                                                            #\n'
+            line2 = '!000C$01{code_client}00104    Type  facturation:N   Date    livraison:      Date:  {date}  Heure:  {heure}   #\n'
+            context = {
+                "code_client": user.username,
+                "nom": user.last_name,
+                "date": str(date.today()).replace('-', ''),
+                "heure": hour_with_minute,
+            }
+            file.write(line1.format(**context))
+            file.write(line2.format(**context))
+
             for item in cart:
-                article_id = Article.objects.get(id=item['article_id'])
+                article = Article.objects.get(id=item['article_id'])
+
                 item_order = ProduitCommande(
                     commande=order,
-                    article=article_id,
+                    article=article,
                     prix=float(item['prix_achat']),
                     quantite=item['quantity'],
                 )
                 item_order.save()
+
+                # products line to ftp file
+                line3 = """!000C$01{code_client}001{code_article}   {prix_achat}    PC  {prix_achat}   {libelle}   {conditionnement}   {quantite} #\n"""
+                context = {
+                    "code_client": user.username,
+                    "code_article": article.code_article,
+                    "prix_achat": item['prix_achat'],
+                    "libelle": article.libelle,
+                    "conditionnement": '{0:04}'.format(int(article.conditionnement)),
+                    "quantite": '{:10.4f}'.format(item['quantity']),
+                }
+                file.write(line3.format(**context))
+            file.close()
+
             # cart.clear()
             cart.clear_all(cart)
             messages.success(request, 'Votre commande a bien été passée')
@@ -85,7 +121,7 @@ class SendOrderView(LoginRequiredMixin, View):
             # return redirect("website:products")
         except Exception as e:
             print("ERROR champs ", e)
-            messages.error(request, "Votre commande n'a pas être éffectuée")
+            messages.error(request, "Votre commande n'a pas pu être éffectuée")
             return redirect("cart:cart_detail")
 
 

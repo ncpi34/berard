@@ -41,9 +41,9 @@ class ClientViews(object):
             try:
                 print(rst['email'])
                 user, created = User.objects.update_or_create(
-                    # last_name=rst['nom'],
+                    last_name=rst['nom'],
                     # first_name=rst["prenom"],
-                    email=rst["email"].replace(' ', ''),
+                    email=rst["email"],
                     password=rst["mot_de_passe"],
                     username=rst["code_client"]
 
@@ -63,9 +63,9 @@ class ClientViews(object):
                 try:
                     print(rst['email'])
                     user = User.objects.filter(username=rst["code_client"]).update(
-                        # last_name=rst['nom'],
+                        last_name=rst['nom'],
                         # first_name=rst["prenom"],
-                        email=rst["email"].replace(' ', ''),
+                        email=rst["email"],
                         password=rst["mot_de_passe"],
                         username=rst["code_client"]
                     )
@@ -89,8 +89,6 @@ class ClientViews(object):
         passw = "cMp5jU1C"
 
         try:
-            # LOCAL
-            # a = open('tests/file_from_client/TCLT.PLN', 'r')
             # FTP
             ftp = FTP(host)
             ftp.login(user, passw)
@@ -104,17 +102,17 @@ class ClientViews(object):
 
             with open('TCLT.PLN', encoding='utf-8', errors='ignore') as file:
                 text_lines = file.readlines()
-            # print(text_lines)
+
             # array of dict
             obj_bdd = [{
                 "code_client": val[10:16],
+                "nom": val[26:52].strip(),
                 'mot_de_passe': val[10:16] + val[146:151],
-                "adresse": val[26:171].replace('  ', ' '),
+                "adresse": val[26:171].strip(),
                 "telephone": val[182:196],
                 "tarif": cls.convert_to_int(val[232]),
-                # "nom": val[438:509],
                 # "prenom": val[438:509],
-                "email": val[438:509],
+                "email": val[438:509].strip(),
 
             } for val in text_lines]
             # print([val[230:240] for val in text_lines])
