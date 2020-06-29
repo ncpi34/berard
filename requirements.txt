@@ -20,7 +20,6 @@ lml==0.0.9
 numpy==1.18.5
 openpyxl==3.0.3
 Pillow==7.1.2
-psycopg2==2.8.5
 pyexcel-io==0.5.20
 pyexcel-xlsx==0.5.8
 python-dateutil==2.8.1
