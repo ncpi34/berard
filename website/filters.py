@@ -13,8 +13,9 @@ class ArticleFilter(django_filters.FilterSet):
                                                  'placeholder': 'code article',
                                                  'style':
                                                      'border-radius: 4px;color:white;'
-                                                     'text:center;'
+                                                     'text-align:center;'
                                                      'background-color:white;'
+                                                     'color:black;'
                                              })
                                              )
 

@@ -43,17 +43,18 @@
     </table>
         <p class="text-right">
             <a href="{% url 'website:products' %}">
-                <button id="send-order" class="btn btn-success">Retourner aux produits</button>
+                <button class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
 
 {% else %}
-        <div class="container text-center mt-5" style="min-height: 70vh">
-            <h3>Votre historique de commande est vide ...</h3>
+         <div class="container text-center mt-5" style="min-height: 80vh">
+            <h3 style="margin-bottom: 50vh">Votre historique de commande est vide ...</h3>
+
         <p class="text-right">
 
             <a href="{% url 'website:products' %}">
-                <button id="send-order" class="btn btn-success">Retourner aux produits</button>
+                <button  class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
         </div>
