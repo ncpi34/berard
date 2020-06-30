@@ -180,20 +180,19 @@ class ArticleViews(object):
         passw = "cMp5jU1C"
 
         try:
-            # LOCAL
-            # a = open('tests/file_from_client/TART.PLN', 'r')
-            # a = open('TEST.PLN', 'r')
+            # if path not exists
+            path = 'resources/import/'
+            if not os.path.exists(path):
+                os.makedirs(path)
 
             # FTP
             ftp = FTP(host)
             ftp.login(user, passw)
             ftp.cwd('/Rep/EXPORT')
-            ftp.retrbinary('RETR TART.PLN', open('TART.PLN', 'wb').write)
+            ftp.retrbinary('RETR TART.PLN', open(os.path.join(path, 'TART.PLN'), 'wb').write)
             ftp.quit()
 
-            with open('TART.PLN', encoding="utf-8", errors='ignore') as file:
-                # ftp.cwd('/Rep/EXPORT')
-                # a = open('TART.PLN', 'r')
+            with open(os.path.join(path, 'TART.PLN'), encoding="utf-8", errors='ignore') as file:
                 text_lines = file.readlines()
 
             # array of dict

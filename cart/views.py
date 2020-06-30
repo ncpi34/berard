@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -57,6 +59,41 @@ class CartRemoveView(LoginRequiredMixin, View):
 
 # Confirm Cart orders
 class SendOrderView(LoginRequiredMixin, View):
+    @staticmethod
+    def check_unity(self):
+        if self is not None:
+            return '{0:04}'.format(int(self))
+        else:
+            return '0000'
+
+    @staticmethod
+    def format_price(self):
+        x = ' '
+        rst = str(self).split('.')
+        rst_join = rst[0] + rst[1]
+        print(rst_join)
+        if len(rst_join) == 7:
+            return self
+        else:
+            return (x * (6 - len(rst_join))) + str(self)
+
+    @staticmethod
+    def format_name(self):
+        x = ' '
+        if len(self) == 36:
+            return self
+        elif len(self) > 36:
+            return self[0:37]
+        else:
+            return (x * (36 - len(self))) + self
+
+    @staticmethod
+    def format_quantity(self):
+        x = ' '
+        if len(self) == 10:
+            return self
+        else:
+            return self + (x * (10 - len(self)))
 
     def get(self, request, **kwargs):
         return render(request, 'cart/confirm_cart.html')
@@ -71,19 +108,41 @@ class SendOrderView(LoginRequiredMixin, View):
             )
             order.save()
 
+            # dt = datetime.datetime.now()
+            # print("{}.{:03d} {}".format(dt.strftime('%Y-%m-%d %H:%M:%S'), dt.microsecond // 1000, dt.strftime("%A")))
+
             # to format hour with minute
             now = datetime.datetime.now()
             hour = '{:02d}'.format(now.hour)
             minute = '{:02d}'.format(now.minute)
             hour_with_minute = '{}{}'.format(hour, minute)
 
+            # to format second with microsecond
+            now = datetime.datetime.now()
+            second = '{:02d}'.format(now.second)
+            microsecond = str(now.microsecond // 1000)
+            second_with_microsecond = '{}{}'.format(second, microsecond)
+
             # file to ftp
-            file = open('test.PLN', 'w')
-            line1 = '!000C$01{code_client}00100{nom}                                                            #\n'
-            line2 = '!000C$01{code_client}00104    Type  facturation:N   Date    livraison:      Date:  {date}  Heure:  {heure}   #\n'
+            file_name = '{}{}{}{}COMSOC.PLN'.format(
+                str(date.today()).replace('-', ''),
+                hour_with_minute,
+                second_with_microsecond,
+                '_0_')
+
+            # if path not exists
+            path = 'resources/export/'
+            if not os.path.exists(path):
+                os.makedirs(path)
+
+            # create file
+            file = open(os.path.join(path, file_name), 'w')
+            whitespace = ' '
+            line1 = '!000C$01{code_client}00100{nom}#\n'
+            line2 = '!000C$01{code_client}00104 Type facturation:N  Date livraison:         Date:  {date} Heure: {heure}                  #\n'
             context = {
                 "code_client": user.username,
-                "nom": user.last_name,
+                "nom": user.last_name + whitespace * 64,
                 "date": str(date.today()).replace('-', ''),
                 "heure": hour_with_minute,
             }
@@ -102,14 +161,16 @@ class SendOrderView(LoginRequiredMixin, View):
                 item_order.save()
 
                 # products line to ftp file
-                line3 = """!000C$01{code_client}001{code_article}   {prix_achat}    PC  {prix_achat}   {libelle}   {conditionnement}   {quantite} #\n"""
+                line3 = """!000C$01{code_client}0011{code_article}{prix_achat}{filler}{filler}PC{prix_achat}{filler}{libelle}{conditionnement}{quantite}{filler} #\n"""
                 context = {
                     "code_client": user.username,
-                    "code_article": article.code_article,
-                    "prix_achat": item['prix_achat'],
-                    "libelle": article.libelle,
-                    "conditionnement": '{0:04}'.format(int(article.conditionnement)),
-                    "quantite": '{:10.4f}'.format(item['quantity']),
+                    "code_article": article.code_article + whitespace * 2,
+                    "prix_achat": self.format_price(item['prix_achat']),
+                    "libelle": self.format_name(article.libelle),
+                    # "conditionnement": '{0:04}'.format(int(article.conditionnement)),
+                    "conditionnement": self.check_unity(article.conditionnement),
+                    "quantite": self.format_quantity('{:10.4f}'.format(item['quantity'])),
+                    "filler": whitespace * 4
                 }
                 file.write(line3.format(**context))
             file.close()

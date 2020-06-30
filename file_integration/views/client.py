@@ -89,24 +89,29 @@ class ClientViews(object):
         passw = "cMp5jU1C"
 
         try:
+            # if path not exists
+            path = 'resources/import/'
+            if not os.path.exists(path):
+                os.makedirs(path)
+
             # FTP
             ftp = FTP(host)
             ftp.login(user, passw)
             ftp.cwd('/Rep/EXPORT')
-            ftp.retrbinary('RETR TCLT.PLN', open('TCLT.PLN', 'wb').write)
+            ftp.retrbinary('RETR TCLT.PLN', open(os.path.join(path, 'TCLT.PLN'), 'wb').write)
             ftp.quit()
 
             # zz = codecs.encode('TART.PLN', encoding='utf-8', errors='strict')
             # file = open(zz, 'r')
             # text_lines = file.readlines()
 
-            with open('TCLT.PLN', encoding='utf-8', errors='ignore') as file:
+            with open(os.path.join(path, 'TCLT.PLN'), encoding='utf-8', errors='ignore') as file:
                 text_lines = file.readlines()
 
             # array of dict
             obj_bdd = [{
                 "code_client": val[10:16],
-                "nom": val[26:52].strip(),
+                "nom": val[26:52],
                 'mot_de_passe': val[10:16] + val[146:151],
                 "adresse": val[26:171].strip(),
                 "telephone": val[182:196],
