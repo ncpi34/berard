@@ -1,16 +1,13 @@
 import os
-
+from ftplib import FTP
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-
-# Create your views here.
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DeleteView
 from django.views.generic.base import View
-
 from cart.cart import Cart
 from cart.forms import CartAddProductForm
 from website.models import Article, HistoriqueCommande, ProduitCommande
@@ -23,7 +20,7 @@ from datetime import date
 
 @login_required(login_url="")
 @require_POST
-def cart_add(request, product_id):
+def cart_add(request, product_id):  # add method
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
@@ -43,8 +40,8 @@ def cart_add(request, product_id):
 #     cart.remove(product)
 #     return redirect("cart:cart_detail")
 
-# Remove item from cart with modal
-class CartRemoveView(LoginRequiredMixin, View):
+
+class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal
 
     def get(self, request, **kwargs):
         return render(request, 'cart/delete_item.html')
@@ -57,8 +54,7 @@ class CartRemoveView(LoginRequiredMixin, View):
         return redirect("cart:cart_detail")
 
 
-# Confirm Cart orders
-class SendOrderView(LoginRequiredMixin, View):
+class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
     @staticmethod
     def check_unity(self):
         if self is not None:
@@ -71,7 +67,6 @@ class SendOrderView(LoginRequiredMixin, View):
         x = ' '
         rst = str(self).split('.')
         rst_join = rst[0] + rst[1]
-        print(rst_join)
         if len(rst_join) == 7:
             return self
         else:
@@ -94,6 +89,23 @@ class SendOrderView(LoginRequiredMixin, View):
             return self
         else:
             return self + (x * (10 - len(self)))
+
+    @staticmethod
+    def send_file_to_ftp(self):  # FTP
+        host = "213.215.12.22"
+        user = "admin"
+        passw = "cMp5jU1C"
+        try:
+            ftp = FTP(host)
+            ftp.set_debuglevel(2)
+            ftp.login(user, passw)
+            ftp.cwd('/Rep/EXPORT')
+            file = open(self.name, 'rb')
+            ftp.storbinary('STOR %s' % os.path.basename(self.name), file, 1024)
+            file.close()
+
+        except Exception as e:
+            print('FTP ERROR ', e)
 
     def get(self, request, **kwargs):
         return render(request, 'cart/confirm_cart.html')
@@ -174,6 +186,8 @@ class SendOrderView(LoginRequiredMixin, View):
                 }
                 file.write(line3.format(**context))
             file.close()
+
+            self.send_file_to_ftp(file)  # to send order to ftp server
 
             # cart.clear()
             cart.clear_all(cart)

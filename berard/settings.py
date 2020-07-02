@@ -15,6 +15,10 @@ from django.contrib.messages import constants as messages
 import environ
 from django.utils.translation import ugettext_lazy as _
 
+# celery imports
+from celery.schedules import crontab
+import berard.tasks
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,12 +69,15 @@ INSTALLED_APPS = [
     # 'material.admin',
     # 'material.admin.default',
 
+    'django_celery_beat',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_apscheduler',
 
     'bootstrap_modal_forms',
     'crispy_forms',
@@ -169,7 +176,6 @@ STATICFILES_DIRS = (
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
 # Flash messages
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
@@ -191,10 +197,27 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ledain.alexis@gmail.com'
 EMAIL_HOST_PASSWORD = 'Daily365'
 
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'cache_crepes'
     }
 }
+
+# CELERY STUFF
+CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# # functions to call to celery
+# CELERY_BEAT_SCHEDULE = {
+#     "upload_clients": {
+#         "task": "upload_clients_task",
+#         "schedule": crontab(minute="*/1"),
+#     },
+# }
+#

@@ -1,16 +1,10 @@
 ﻿pip install django==2.2 --upgrade
 pip install --upgrade django-extensions
 
-!!! VIRTUAL ENV (win 10)
-pip install virtualenvwrapper-win
-mkvirtualenv resto_env
-deactivate — Permet de sortir de l'environnement virtuel Python actuel
-workon — Lister tous les environnements virtuels disponibles
-workon name_of_environment — Activer l'environnement virtuel spécifié
-rmvirtualenv name_of_environment — Supprimer l'environnement virtuel spécifié
+!!!VIRTUAL ENV
 
+virtualenv --python=`which python` some_env
 
-!!!CREATE VIRTUAL ENV (linux)
 mkvirtualenv --python=python3.8 zendic
 workon myproject -> activate virtualenv
 (myproject)14:51 ~ $ pip install django
@@ -21,7 +15,7 @@ source zendic/bin/activate   -> linux
 OR
 pip install virtualenv
 virtualenv zendic_venv
-.\zendic_venv\Scripts\activate.bat
+zendic_venv\Scripts\activate.bat
 
 !!!DJANGO
 pip install django
@@ -117,3 +111,26 @@ print(g)
 docker-compose up
 docker-compose exec web python manage.py makemigrations
 docker-compose exec web python manage.py migrate
+
+!!!Celery (Task queue)
+pip install celery
+win 10: https://github.com/microsoftarchive/redis/releases/tag/win-3.2.100
+linux: sudo apt install redis-server
+-> test
+redis-server
+redis-cli ping
+pip install redis
+celery -A clery_app_name worker -l info
+celery -A berard worker -l info
+celery -A berard beat -l info
+celery -A berard inspect active
+celery -A berard.celery worker -l DEBUG -E
+celery -A berard worker -l info -B
+
+pip install gevent
+celery -A berard beat -l info
+celery -A berard worker -l info -P gevent
+python -m celery -A berard beat -l info
+python -m celery -A berard -l info -P gevent
+
+pip install rabbitmq

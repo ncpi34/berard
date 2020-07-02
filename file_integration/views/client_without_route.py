@@ -16,7 +16,7 @@ from website.models import Article, ProfilUtilisateur
 """ Client File"""
 
 
-class ClientViews(object):
+class ClientAutomate:
     @staticmethod
     def concat(val_1, val_2):
         return val_1 + val_2
@@ -83,7 +83,7 @@ class ClientViews(object):
 
     # Index_method
     @classmethod
-    def file_treatement(cls, request, **kwargs):
+    def file_treatement(cls, **kwargs):
         host = "213.215.12.22"
         user = "admin"
         passw = "cMp5jU1C"
@@ -126,9 +126,9 @@ class ClientViews(object):
 
             resp = json.dumps(obj_bdd)
             file.close()
-            return HttpResponse(200, content_type='application/json')
+            return True
 
         except Exception as error:
             print("Error: {0}".format(error))
-            raise error
+            return False
             # return HttpResponse(500, content_type="application/json")

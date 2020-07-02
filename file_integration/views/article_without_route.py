@@ -13,7 +13,7 @@ import os.path
 """ Article File"""
 
 
-class ArticleViews(object):
+class ArticleAutomate:
     # Check errors
     @staticmethod
     def get_errors_on_three_values(val_1, val_2, val_3):
@@ -175,7 +175,7 @@ class ArticleViews(object):
 
     # Index_method
     @classmethod
-    def file_treatement(cls, request, **kwargs):
+    def file_treatement(cls, **kwargs):
         host = "213.215.12.22"
         user = "admin"
         passw = "cMp5jU1C"
@@ -227,8 +227,8 @@ class ArticleViews(object):
             cls.insert_into_db(obj_bdd)  # call method to insert in db
             file.close()
             resp = json.dumps(obj_bdd)
-            return HttpResponse(200, content_type='application/json')
+            return True
 
         except OSError as error:
             print("OS error: {0}".format(error))
-            raise error
+            return False
