@@ -85,7 +85,9 @@ class ArticleAutomate:
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
-        f = open('resources/erreurs/ERREURS_ARTICLES.txt', 'w')
+        f = open('resources/erreurs/articles_tri_erreurs.txt', 'w')
+        f_art_err = open('resources/erreurs/articles_non_insérés.txt', 'w')
+
         for rst in self:
 
             # Families
@@ -164,13 +166,14 @@ class ArticleAutomate:
                     print('inserted')
 
                 except Exception as err:
+                    f_art_err.write('not inserted ' + rst['code_article'] + '\n')
                     print('not inserted', rst['code_article'])
                     print(err)
                     raise err
             else:
-
-                # f.write(rst['libelle'] + '\n')
                 f.write(rst['code_article'] + '\n')
+
+        f_art_err.close()
         f.close()
 
     # Index_method

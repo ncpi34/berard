@@ -38,9 +38,9 @@ app.conf.beat_schedule = {
     },
     "every day article update": {
         "task": "file_integration.tasks.upload_articles_task",  # <---- Name of task
-        # 'schedule': 60.0,
-        "schedule": crontab(hour=9,
-                            minute=20)
+        'schedule': 90.0,
+        # "schedule": crontab(hour=9,
+        #                     minute=22)
     },
     # "every minute": {
     #     "task": "berard.tasks.upload_clients_task",

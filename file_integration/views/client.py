@@ -40,34 +40,40 @@ class ClientViews(object):
         for rst in self:
             try:
                 print(rst['email'])
-                user, created = User.objects.update_or_create(
-                    last_name=rst['nom'],
-                    # first_name=rst["prenom"],
+                user = User.objects.update_or_create(
                     email=rst["email"],
-                    password=rst["mot_de_passe"],
-                    username=rst["code_client"]
+                    username=rst["code_client"],
+
+                    defaults=dict(
+                        last_name=rst['nom'],
+                        password=rst["mot_de_passe"],
+                    )
 
                 )
                 # to encrypt Password
                 # user.set_password(rst["mot_de_passe"])
                 # user.save()
-                user_one_to_one = ProfilUtilisateur.objects.update_or_create(
+                print('RESULT', user.qs)
+                ProfilUtilisateur.objects.update_or_create(
                     utilisateur=user,
+
                     adresse=rst["adresse"],
                     telephone=rst["telephone"],
                     tarif=rst["tarif"],
                     code_client=rst["code_client"],
+
+
                 )
                 print('inserted')
             except Exception:
                 try:
                     print(rst['email'])
                     user = User.objects.filter(username=rst["code_client"]).update(
-                        last_name=rst['nom'],
-                        # first_name=rst["prenom"],
                         email=rst["email"],
+                        username=rst["code_client"],
+                        last_name=rst['nom'],
                         password=rst["mot_de_passe"],
-                        username=rst["code_client"]
+
                     )
                     ProfilUtilisateur.objects.filter(utilisateur=user).update(
                         utilisateur=user,
@@ -75,11 +81,16 @@ class ClientViews(object):
                         telephone=rst["telephone"],
                         tarif=rst["tarif"],
                         code_client=rst["code_client"],
+
                     )
                 except Exception as err:
                     print('not inserted', rst['code_client'])
                     print(err)
                     raise err
+            # except Exception as err:
+            #     print('not inserted', rst['code_client'])
+            #     print(err)
+            #     raise err
 
     # Index_method
     @classmethod

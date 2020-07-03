@@ -134,3 +134,7 @@ python -m celery -A berard beat -l info
 python -m celery -A berard -l info -P gevent
 
 pip install rabbitmq
+
+pip install flower
+flower -A berard --port=5555
+

@@ -19,11 +19,8 @@ from django.utils.translation import ugettext_lazy as _
 from celery.schedules import crontab
 import berard.tasks
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 root = environ.Path(__file__) - 3  # three folder back (/a/b/c/ - 3 = /)
 env = environ.Env(DEBUG=(bool, False), )
@@ -69,6 +66,8 @@ INSTALLED_APPS = [
     # 'material.admin',
     # 'material.admin.default',
 
+    'celery',
+    'django_celery_results',
     'django_celery_beat',
 
     'django.contrib.admin',
@@ -77,7 +76,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_apscheduler',
 
     'bootstrap_modal_forms',
     'crispy_forms',
@@ -128,9 +126,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'berard.wsgi.application'
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
-
+"""Password validation"""
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -146,37 +142,29 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
-
+"""Internationalization"""
 LANGUAGE_CODE = 'fr'
-
 TIME_ZONE = 'Europe/Paris'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+""" Crispy """
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+""" StaticFiles """
 STATIC_URL = '/static_root/'  # path admin statics
 MEDIA_URL = '/media/'
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')  # path to save (public)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 STATICFILES_DIRS = (
     # os.path.join(BASE_DIR + 'static_root'),  # path  not admin statics
     os.path.join(BASE_DIR + '/website/staticfiles'),  # path  not admin statics
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Flash messages
+""" FlashMessages """
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
     messages.INFO: 'alert-info',
@@ -184,12 +172,12 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
-# To reset password
+
+""" Email config """
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = False
@@ -197,6 +185,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ledain.alexis@gmail.com'
 EMAIL_HOST_PASSWORD = 'Daily365'
 
+""" Caches """
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -204,20 +193,13 @@ CACHES = {
     }
 }
 
-# CELERY STUFF
-CELERY_BROKER_URL = 'redis://localhost:6379'
+""" Celery """
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
 # CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = 'Europe/Paris'
 
-# # functions to call to celery
-# CELERY_BEAT_SCHEDULE = {
-#     "upload_clients": {
-#         "task": "upload_clients_task",
-#         "schedule": crontab(minute="*/1"),
-#     },
-# }
-#
+

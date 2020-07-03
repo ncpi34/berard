@@ -21,6 +21,7 @@ django-bootstrap-modal-forms==1.5.0
 django-bootstrap4==2.0.0
 django-braces==1.14.0
 django-celery-beat==2.0.0
+django-celery-results==1.2.1
 django-cors-headers==3.2.1
 django-crispy-forms==1.9.0
 django-env==0.2.1
@@ -42,9 +43,11 @@ eventlet==0.25.2
 factory-boy==2.12.0
 Faker==4.1.0
 filelock==3.0.12
+flower==0.9.5
 future==0.18.2
 gevent==20.6.2
 greenlet==0.4.16
+humanize==2.4.1
 idna==2.10
 importlib-metadata==1.6.0
 isort==4.3.21
@@ -59,6 +62,7 @@ numpy==1.18.5
 odfpy==1.4.1
 openpyxl==3.0.3
 Pillow==7.1.1
+prometheus-client==0.8.0
 psycopg2==2.8.5
 pycparser==2.20
 pyexcel-io==0.5.20
@@ -80,6 +84,7 @@ sqlparse==0.3.1
 tablib==1.1.0
 text-unidecode==1.3
 toml==0.10.1
+tornado==6.0.4
 typed-ast==1.4.1
 tzlocal==2.1
 urllib3==1.25.9

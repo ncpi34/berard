@@ -85,7 +85,9 @@ class ArticleViews(object):
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
-        f = open('resources/erreurs/ERREURS_ARTICLES.txt', 'w')
+        f = open('resources/erreurs/articles_tri_erreurs.txt', 'w')
+        f_art_err = open('resources/erreurs/articles_non_insérés.txt', 'w')
+
         for rst in self:
 
             # Families
@@ -143,34 +145,46 @@ class ArticleViews(object):
                     subfamily = None
 
                 try:
-
-
-                    article, created = Article.objects.update_or_create(
+                    article = Article.objects.filter(
                         libelle=rst['libelle'],
-                        # libelle=rst['libelle'].lower(),
                         code_article=rst["code_article"],
-                        prix_vente=rst["prix_vente"],
-                        prix_achat_1=rst["prix_achat_1"],
-                        prix_achat_2=rst["prix_achat_2"],
-                        prix_achat_3=rst["prix_achat_3"],
-                        prix_achat_4=rst["prix_achat_4"],
                         gencode=rst["gencode"],
-                        conditionnement=rst["conditionnement"],
-                        # taux_TVA=rst["taux_TVA"],
-                        groupe=group,
-                        famille=family,
-                        sous_famille=subfamily,
+                    )
+                    print('article found', article)
+
+                    Article.objects.update_or_create(
+
+                        libelle=rst['libelle'],
+                        code_article=rst["code_article"],
+                        gencode=rst["gencode"],
+
+                        defaults=dict(
+                            prix_vente=rst["prix_vente"],
+                            prix_achat_1=rst["prix_achat_1"],
+                            prix_achat_2=rst["prix_achat_2"],
+                            prix_achat_3=rst["prix_achat_3"],
+                            prix_achat_4=rst["prix_achat_4"],
+                            gencode=rst["gencode"],
+                            conditionnement=rst["conditionnement"],
+                            groupe=group,
+                            famille=family,
+                            sous_famille=subfamily,
+                            # taux_TVA=rst["taux_TVA"],
+                        )
+
+
                     )
                     print('inserted')
 
                 except Exception as err:
+                    f_art_err.write('not inserted ' + rst['code_article'] + '\n')
                     print('not inserted', rst['code_article'])
                     print(err)
                     raise err
             else:
-
-                # f.write(rst['libelle'] + '\n')
                 f.write(rst['code_article'] + '\n')
+
+        f_art_err.close()
         f.close()
 
     # Index_method
@@ -227,8 +241,8 @@ class ArticleViews(object):
             cls.insert_into_db(obj_bdd)  # call method to insert in db
             file.close()
             resp = json.dumps(obj_bdd)
-            return HttpResponse(200, content_type='application/json')
+            return HttpResponse(resp, content_type='application/json')
 
         except OSError as error:
             print("OS error: {0}".format(error))
-            raise error
+            return False
