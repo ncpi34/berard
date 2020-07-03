@@ -203,7 +203,7 @@ class ForgotPasswordView(View):
                     send_mail(
                         'Mot de passe oublié',
                         'Votre mot de passe: ' + user.password,
-                        'ledain.alexis@gmail.fr',
+                        'test34980test@gmail.com',
                         # EMAIL_HOST_USER,
                         [user.email],
                         fail_silently=False,
@@ -216,6 +216,5 @@ class ForgotPasswordView(View):
                     return render(request, 'auth/password_forgot.html', locals())
 
                 except User.DoesNotExist:
-                    messages.error(request,
-                                   'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard distribution')
+                    messages.error(request, 'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard distribution')
                     return render(request, 'auth/password_forgot.html', locals())
