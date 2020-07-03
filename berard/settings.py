@@ -66,8 +66,8 @@ INSTALLED_APPS = [
     # 'material.admin',
     # 'material.admin.default',
 
-    'celery',
-    'django_celery_results',
+    # 'celery',
+    # 'django_celery_results',
     'django_celery_beat',
 
     'django.contrib.admin',
