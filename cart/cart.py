@@ -50,7 +50,7 @@ class Cart(object):
         """
         id = str(product.id)
         # newItem = True
-        if product.id not in self.cart.keys():
+        if product.id not in self.cart.keys() and quantity is not 0:
             self.cart[product.id] = {
                 'userid': self.request.user.id,
                 'article_id': id,
@@ -59,7 +59,7 @@ class Cart(object):
                 'prix_achat': str(self.get_price_by_user(product)),
                 'image': product.image,
             }
-            if update_quantity:
+            if update_quantity and quantity is not 0:
                 self.cart[product.id]['quantity'] = quantity
             else:
                 self.cart[product.id]['quantity'] += quantity
