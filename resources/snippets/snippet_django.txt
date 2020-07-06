@@ -27,6 +27,11 @@ python -m pip freeze > requirements.txt
 python manage.py createsuperuser
 python manage.py runserver 
 
+!!!Unit Test
+python manage.py test
+python manage.py test --verbosity 2
+python manage.py test catalog.tests
+python manage.py test catalog.tests.test_models.YourTestClass.test_one_plus_one_equals_two
 
 !!!SHELL
 python manage.py shell
@@ -60,7 +65,7 @@ python manage.py collectstatic
 !!!Factory_boy
 pip install factory_boy
 python manage.py shell
-from tests.factories.groupe import GroupeFactory
+from test.factories.groupe import GroupeFactory
 a = GroupeFactory()
 for i in range(5): obj = GroupeFactory()
 BUILD
@@ -77,10 +82,10 @@ CHECK
 from website.models import Groupe
 g = Groupe.objects.all()
 print(g)
-from tests.factories.groupe import GroupeFactory
+from test.factories.groupe import GroupeFactory
 a = GroupeFactory()
 
-from tests.factories.famille import FamilleFactory
+from test.factories.famille import FamilleFactory
 obj = FamilleFactory()
 for i in range(80): obj = FamilleFactory()
 obj = FamilleFactory.create(nom='Famille 1')
@@ -93,7 +98,7 @@ from website.models import Groupe
 g = Groupe.objects.all()
 print(g)
 
-from tests.factories.article import ArticleFactory
+from test.factories.article import ArticleFactory
 obj = ArticleFactory()
 for i in range(10000): obj = ArticleFactory()
 obj = ArticleFactory.create(nom='Article 1')

@@ -11,7 +11,7 @@
         <!--Grid column-->
         <div class="col-md-6 mb-4">
 
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt="">
+                <img src="/media/img/nophoto.jpg" class="img-fluid" alt="">
 
         </div>
         <!--Grid column-->
@@ -74,22 +74,29 @@
 
           <!--Grid column-->
         <div class="col-md-6 text-center">
-            <span>Prix d'achat:</span>
-          <p>{{ object.prix_achat }}</p>
+            <span>Code article:</span>
+          <p>{{ object.code_article }}</p>
         </div>
         <!--Grid column-->
 
           <!--Grid column-->
         <div class="col-md-6 text-center">
-            <span>Taux TVA:</span>
-          <p>{{ object.taux_TVA }}%</p>
+            <span>Gencode:</span>
+          <p>{{ object.gencode }}</p>
         </div>
         <!--Grid column-->
 
            <!--Grid column-->
         <div class="col-md-6 text-center">
-            <span>Prix de vente:</span>
-          <p>{{ object.prix_vente }}%</p>
+            <span>Prix:</span>
+          <p>
+              {% if request.session.tarif == 1  %} {{ object.prix_achat_1 }}
+                  {% elif request.session.tarif == 2 %} {{ object.prix_achat_2 }}
+                  {% elif request.session.tarif == 3 %} {{ object.prix_achat_3 }}
+                  {% elif request.session.tarif == 4 %} {{ object.prix_achat_4 }}
+                  {% else %} Prix non disponible
+                {% endif %}€
+          </p>
         </div>
         <!--Grid column-->
 

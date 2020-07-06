@@ -139,6 +139,7 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/product.html'
     queryset = Article.objects.all()
     login_url = ''
+
     # context_object_name = 'article'
 
     def get_object(self):
@@ -149,6 +150,24 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
+        context['form'] = CartAddProductForm()
+        return context
+
+
+class ArticlePictureView(LoginRequiredMixin, DetailView):
+    template_name = 'website/modals/display_picture.html'
+    queryset = Article.objects.all()
+    login_url = ''
+
+    def get_object(self):
+        print('ooookkkkkkkk')
+        id_ = self.kwargs.get('pk')
+        # article.nb_vues += 1  # views_numb
+        # article.save()
+        return get_object_or_404(Article, pk=id_)
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticlePictureView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
         return context
 
@@ -172,6 +191,7 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/order_summary/order_detail.html'
     queryset = HistoriqueCommande.objects.all()
     login_url = ''
+
     # context_object_name = 'article'
 
     def get_object(self):
@@ -216,5 +236,6 @@ class ForgotPasswordView(View):
                     return render(request, 'auth/password_forgot.html', locals())
 
                 except User.DoesNotExist:
-                    messages.error(request, 'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard distribution')
+                    messages.error(request,
+                                   'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard distribution')
                     return render(request, 'auth/password_forgot.html', locals())

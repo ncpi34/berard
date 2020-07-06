@@ -19,7 +19,6 @@ from django.utils.translation import ugettext_lazy as _
 from celery.schedules import crontab
 import berard.tasks
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 root = environ.Path(__file__) - 3  # three folder back (/a/b/c/ - 3 = /)
@@ -99,6 +98,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware'  # in case of 404 send email
+    # 'django.middleware.locale.LocaleMiddleware', # i18n
 ]
 
 ROOT_URLCONF = 'berard.urls'
@@ -119,6 +120,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 'cart.context_processors.cart',  # processor
+                # "django.template.context_processors.i18n"  # i18n
             ],
         },
     },
@@ -148,7 +150,6 @@ TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 """ Crispy """
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -202,4 +203,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
 
-
+""" Email in case of problems """
+ADMINS = (
+    ('Le Dain Alexis', 'ledain.alexis@gmail.com'),
+)
+MANAGERS = ADMINS

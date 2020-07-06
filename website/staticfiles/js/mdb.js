@@ -1927,7 +1927,7 @@ var Chart = require(30)();
 
 Chart.helpers = require(46);
 
-// @todo dispatch these helpers into appropriated helpers/helpers.* file and write unit tests!
+// @todo dispatch these helpers into appropriated helpers/helpers.* file and write unit test!
 require(28)(Chart);
 
 Chart.Animation = require(22);
