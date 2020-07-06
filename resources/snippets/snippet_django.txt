@@ -43,6 +43,7 @@ Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date
 !!!SQL
 python manage.py makemigrations
 python manage.py migrate
+python manage.py migrate --fake
 
 
 

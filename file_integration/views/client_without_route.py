@@ -44,12 +44,8 @@ class ClientAutomate:
                 user = User.objects.update_or_create(
                     email=rst["email"],
                     username=rst["code_client"],
-
-                    defaults=dict(
-                        last_name=rst['nom'],
-                        password=rst["mot_de_passe"],
-                    )
-
+                    last_name=rst['nom'],
+                    password=rst["mot_de_passe"],
                 )
                 # to encrypt Password
                 # user.set_password(rst["mot_de_passe"])
