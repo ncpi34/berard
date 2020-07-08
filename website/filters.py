@@ -8,7 +8,7 @@ class ArticleFilter(django_filters.FilterSet):
     code_article = django_filters.CharFilter(label='',
                                              lookup_expr='icontains',
                                              widget=TextInput(attrs={
-                                                 'id': 'search-input',
+                                                 'id': 'search',
                                                  'class': 'searchTerm',
                                                  'placeholder': 'code article',
                                                  'style':

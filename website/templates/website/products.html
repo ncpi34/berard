@@ -31,15 +31,15 @@
 
             <!--Card-->
 
-            <div class="card">
+            <div class="card large" style="margin: -2%">
 
               <!--Card image-->
               <div class="view overlay">
-
-               <img  src="/media/img/nophoto.jpg"
-               class="img_modal img-fluid img-thumbnail card-img-top "
-               data-id="{% url 'website:product_photo' article.id %}"
-               />
+                <a href="#" data-id="{% url 'website:product_photo' article.id %}">
+                   <img  src="/media/img/nophoto.jpg"
+                   class="img_modal img-fluid img-thumbnail card-img-top "
+                   />
+                </a>
 
 {#                <img src="{% if article.image %}#}
 {#                            {{ article.image.url }}#}
@@ -158,9 +158,6 @@
 
 
   </main>
-    </div>
-
-
 
 
 {% endblock content %}

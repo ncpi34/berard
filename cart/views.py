@@ -44,7 +44,8 @@ def cart_add(request, product_id):  # add method
 class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal
 
     def get(self, request, **kwargs):
-        return render(request, 'cart/delete_item.html')
+        print(kwargs)
+        return render(request, 'cart/suppress_modal_mat.html')
 
     def post(self, request, **kwargs):
         cart = Cart(request)
@@ -108,7 +109,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
             print('FTP ERROR ', e)
 
     def get(self, request, **kwargs):
-        return render(request, 'cart/confirm_cart.html')
+        return render(request, 'cart/confirm_modal_mat.html')
 
     def post(self, request, **kwargs):
         try:

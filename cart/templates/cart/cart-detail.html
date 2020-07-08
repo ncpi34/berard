@@ -5,7 +5,13 @@
 {#{% endblock %}#}
 
 {% block content %}
-    {% include "cart/_modal.html" %}
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{#    {% include "cart/_modal.html" %}#}
+    {% include 'cart/modal_mat.html' %}
+    {% include 'cart/suppress_modal_mat.html' %}
     <main>
     <div class="container">
     <div class="table-responsive text-nowrap">
@@ -38,21 +44,27 @@
             <td>{{ order_item.libelle }}</td>
             <td class="num">
                 <div class="mb-5">{{ order_item.prix_achat }}€</div>
-                <div><button type="button"
-                             class="delete-article btn btn-danger btn-sm"
-                             data-id="{% url 'cart:cart_remove' product.id %}"
+                <div><a href="#menu-modal1"
+                        class="btn btn-danger waves-effect waves-light modal-trigger"
+{#                        class="delete-article btn btn-danger btn-small"#}
+{#                             id="{% url 'cart:cart_remove' product.id %}"#}
     {#                        href="{% url 'cart:cart_remove' product.id %}"#}
+{#                             onclick="DeleteConfirm(this)"#}
 
-                ><i class="far fa-trash-alt"></i></button>
+
+                ><i class="far fa-trash-alt"></i></a>
                 </div>
             </td>
             <td class="num">{{ order_item.total_price }}€</td>
                 <td>
                     <form action="{% url 'cart:cart_update' product.id %}" method="post">
-                        {{ order_item.update_quantity_form.quantity }}
-                        {{ order_item.update_quantity_form.update }}
+                        <div class="mb-2">
+                                {{ order_item.update_quantity_form.quantity }}
+                                {{ order_item.update_quantity_form.update }}
+                        <div>
+                            <button type="submit" class="btn btn-warning btn-small"><i class="fas fa-edit"></i></button>
+                        </div>
 {#                        <input type="submit" class="btn btn-success btn-sm" value="Ok"/>#}
-                        <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></button>
                         {% csrf_token %}
                     </form>
 
@@ -76,7 +88,9 @@
         </tbody>
     </table>
          <p class="text-right">
-            <button id="send-order" class="btn btn-success">Commander</button>
+            <a href="#menu-modal"
+               class="btn btn-success waves-effect waves-light modal-trigger">Commander</a>
+{#            <button id="send-order" class="btn btn-success">Commander</button>#}
             <a href="{% url 'website:products' %}">
                 <button class="btn btn-success">Retourner aux produits</button>
             </a>
@@ -103,20 +117,51 @@
 {% block extrascripts %}
 
 
+
     <script>
 
+    let result = document.addEventListener('DOMContentLoaded', function() {
+         //floating
+         const elemsBtns = document.querySelectorAll('.fixed-action-btn');
+         const floatingBtn = M.FloatingActionButton.init(elemsBtns, {
+             direction: 'left',
+             hoverEnabled: false
+         });
+         console.log(elemsBtns)
 
-    $(document).ready(function() {
-       // send_order button
-        $("#send-order").modalForm({formURL: "{% url 'cart:send_order' %}"});
 
-        // Delete article buttons
+         //Modal to confirm orders
+        async function getData(){
+            let result =  await fetch("{% url 'cart:send_order' %}", {method: 'GET'});
+            let html = document.getElementById("modal-content").innerHTML += `${await result.text()}`;
+            return html
 
-        $(".delete-article").each(function () {
-          $(this).modalForm({formURL: $(this).data('id')});
+        }
+        getData().then(
+            dt => {
+                const elemsModal = document.querySelectorAll('.modal');
+                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
+            });
 
-        });
-    });
+    }); 
+
+    function DeleteConfirm(button) {
+         let getProduct = async () => {
+             let response = await fetch(button.id, {method: 'GET'})
+             let html = document.getElementById("modal1").innerHTML += `${await response.text()}`;
+             return html
+         };
+        getProduct().then(
+            rst => {
+                console.log(rst)
+                const elemsModal = document.querySelectorAll('.modal1');
+                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
+                instance.open()
+            }
+        )
+
+    }
+
 
     </script>
 
