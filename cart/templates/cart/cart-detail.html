@@ -1,19 +1,16 @@
 {% extends 'website/base.html' %}
 {% load static %}
-{#{% block navbar %}#}
-{#    {% include 'website/topnavbar.html' %}#}
-{#{% endblock %}#}
+{% block navbar %}
+    {% include 'website/sidenav.html' %}
+{% endblock %}
 
 {% block content %}
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 {#    {% include "cart/_modal.html" %}#}
-    {% include 'cart/modal_mat.html' %}
+{#    {% include 'cart/modal_mat.html' %}#}
+    {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
     <main>
-    <div class="container">
+    <div class="container" style="min-height: 80vh">
     <div class="table-responsive text-nowrap">
     <h2 class="text-center mb-5">Votre Panier</h2>
     <!-- {% if cart %} -->
@@ -44,15 +41,23 @@
             <td>{{ order_item.libelle }}</td>
             <td class="num">
                 <div class="mb-5">{{ order_item.prix_achat }}€</div>
-                <div><a href="#menu-modal1"
-                        class="btn btn-danger waves-effect waves-light modal-trigger"
-{#                        class="delete-article btn btn-danger btn-small"#}
+                <div>
+                    <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                         {% csrf_token %}
+                        <button type="submit"
+                                 class="delete-article btn btn-danger"
+                                 data-id="{% url 'cart:cart_remove' product.id %}">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </form>
+{#                    <a#}
+{#                        href="#menu-modal1"#}
+{#                        class="btn btn-danger waves-effect waves-light modal-trigger"#}
 {#                             id="{% url 'cart:cart_remove' product.id %}"#}
-    {#                        href="{% url 'cart:cart_remove' product.id %}"#}
-{#                             onclick="DeleteConfirm(this)"#}
-
-
-                ><i class="far fa-trash-alt"></i></a>
+{#                             onclick="deleteConfirm(this)"#}
+{#                    >#}
+{#                        <i class="far fa-trash-alt"></i>#}
+{#                    </a>#}
                 </div>
             </td>
             <td class="num">{{ order_item.total_price }}€</td>
@@ -64,16 +69,12 @@
                         <div>
                             <button type="submit" class="btn btn-warning btn-small"><i class="fas fa-edit"></i></button>
                         </div>
-{#                        <input type="submit" class="btn btn-success btn-sm" value="Ok"/>#}
                         {% csrf_token %}
+                        </div>
                     </form>
 
             </td>
 
-
-{#                <a href="{% url 'cart:cart_remove' product.id %}"><i class="fas fa-minus mr-2"></i></a>#}
-{#                {{ order_item.quantity }}#}
-{#                <a href="{% url 'cart:cart_add' product.id %}"><i class="fas fa-plus ml-2"></i></a>#}
 
             {% endwith %}
             {% endfor %}
@@ -89,7 +90,8 @@
     </table>
          <p class="text-right">
             <a href="#menu-modal"
-               class="btn btn-success waves-effect waves-light modal-trigger">Commander</a>
+               class="btn btn-success waves-effect waves-light modal-trigger"
+                >Commander</a>
 {#            <button id="send-order" class="btn btn-success">Commander</button>#}
             <a href="{% url 'website:products' %}">
                 <button class="btn btn-success">Retourner aux produits</button>
@@ -120,47 +122,49 @@
 
     <script>
 
-    let result = document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
          //floating
          const elemsBtns = document.querySelectorAll('.fixed-action-btn');
          const floatingBtn = M.FloatingActionButton.init(elemsBtns, {
              direction: 'left',
              hoverEnabled: false
          });
-         console.log(elemsBtns)
+
 
 
          //Modal to confirm orders
-        async function getData(){
-            let result =  await fetch("{% url 'cart:send_order' %}", {method: 'GET'});
-            let html = document.getElementById("modal-content").innerHTML += `${await result.text()}`;
-            return html
+        // confirm modal order
+        let getData = async() => {
+                    let result =  await fetch("{% url 'cart:send_order' %}", {method: 'GET'});
+                    let html = document.getElementById("modal-content").innerHTML += `${await result.text()}`;
+                    return html
 
-        }
+                };
+
         getData().then(
             dt => {
                 const elemsModal = document.querySelectorAll('.modal');
                 const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
-            });
+                    });
 
-    }); 
 
-    function DeleteConfirm(button) {
-         let getProduct = async () => {
-             let response = await fetch(button.id, {method: 'GET'})
+
+    });
+    let deleteConfirm = async (button) => {
+             let response = await fetch(button.id, {method: 'GET'});
              let html = document.getElementById("modal1").innerHTML += `${await response.text()}`;
              return html
          };
-        getProduct().then(
+        deleteConfirm().then(
             rst => {
-                console.log(rst)
                 const elemsModal = document.querySelectorAll('.modal1');
-                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
+                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true});
                 instance.open()
             }
-        )
+        );
 
-    }
+
+
 
 
     </script>

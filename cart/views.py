@@ -44,10 +44,17 @@ def cart_add(request, product_id):  # add method
 class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal
 
     def get(self, request, **kwargs):
-        print(kwargs)
-        return render(request, 'cart/suppress_modal_mat.html')
+        print(kwargs['product_id'])
+        context = {
+            'id': kwargs['product_id'],
+            'test': 'aaaaaaa'
+        }
+
+        return render(request, 'cart/suppress_modal_mat.html', context)
 
     def post(self, request, **kwargs):
+        print(request)
+        print(kwargs)
         cart = Cart(request)
         _pk = kwargs.get("product_id")
         product = get_object_or_404(Article, id=_pk)

@@ -1,5 +1,6 @@
 {% load widget_tweaks %}
-
+<div class="modal" id="menu-modal">
+    <div class="modal-content" id="modal-content">
 <form method="post" action="{% url 'cart:send_order' %}">
   {% csrf_token %}
 
@@ -22,3 +23,5 @@
 
 
 </form>
+    </div>
+</div>

@@ -1,17 +1,17 @@
 {% load widget_tweaks %}
 <div class="modal" id="menu-modal1">
     <div class="modal-content" id="modal-content1">
-<form method="post" action="{% url 'cart:send_order' %}">
+<form method="post" action="">
   {% csrf_token %}
 
 <div class="modal-header">
-    <h3 class="modal-title">Suppression article</h3>
+    <h3 class="modal-title">{{ id }}{{ test }}</h3>
     <a href="#" class="modal-close waves-effect btn-flat waves-light">X</a>
   </div>
 
   <div class="modal-body">
     <p>Êtes vous sûr de supprimer l'article
-      <strong>{{ object.libelle }}</strong> ?</p>
+      <strong>{{ id }}</strong> ?</p>
   </div>
 
   <div class="modal-footer">
