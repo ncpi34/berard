@@ -12,7 +12,7 @@
     <main>
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
-    <h3 class="text-center mb-5">Votre Panier</h3>
+    <h2 class="text-center mb-5">Votre Panier</h2>
     <!-- {% if cart %} -->
     <table class="table">
         <thead>
@@ -42,15 +42,15 @@
             <td class="num">
                 <div class="mb-5">{{ order_item.prix_achat }}€</div>
                 <div>
-                    <form action="{% url 'cart:cart_remove' product.id %}" method="post">
+                    <form name="myform" action="{% url 'cart:cart_remove' product.id %}" method="post">
                          {% csrf_token %}
-                        <button type="submit"
-{#
+                        <a href="javascript: submitform()"
+                                type="submit"
                                 id="delete_btn"
                                  class="delete-article btn btn-danger"
                                  data-id="{% url 'cart:cart_remove' product.id %}">
-                            <i class="far fa-trash-alt"></i>
-                        </button>
+                            <i class="material-icons">delete</i>
+                        </a>
                     </form>
 {#                    <a#}
 {#                        href="#menu-modal1"#}
@@ -64,15 +64,19 @@
             </td>
             <td class="num">{{ order_item.total_price }}€</td>
                 <td>
-                    <form action="{% url 'cart:cart_update' product.id %}" method="post">
-                        <div class="mb-2">
-                                {{ order_item.update_quantity_form.quantity }}
-                                {{ order_item.update_quantity_form.update }}
-                        <div>
-                            <button type="submit" class="btn btn-warning btn-small"><i class="fas fa-edit"></i></button>
+                    <form name="myform1" action="{% url 'cart:cart_update' product.id %}" method="post">
+                        <div class="mr-1">
+                            {{ order_item.update_quantity_form.quantity }}
+                            {{ order_item.update_quantity_form.update }}
                         </div>
+
+                            <a      href="javascript: submitform1()"
+                                    type="submit" class="btn btn-warning">
+                                <i class="material-icons">build</i>
+                            </a>
+
                         {% csrf_token %}
-                        </div>
+
                     </form>
 
             </td>
@@ -96,13 +100,13 @@
                 >Commander</a>
 {#            <button id="send-order" class="btn btn-success">Commander</button>#}
             <a href="{% url 'website:products' %}">
-                <button class="btn btn-success">Retourner aux produits</button>
+                <button id="btn_return" class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
 
     <!-- {% else %} -->
-        <div class="container text-center mt-5" style="min-height: 80vh">
-            <h4 style="margin-bottom: 50vh">est vide ...</h4>
+        <div class="container text-center mt-5" style="min-height: 60vh">
+            <h4 class="mb-5">est vide ...</h4>
 
         <p class="text-right">
 
@@ -125,22 +129,22 @@
 
     <script>
     let widthScreenStart = window.innerWidth;
-    const btn = document.querySelector('#btn_return')
-    const delete_btn = document.querySelector('#delete_btn')
-    if (btn) {
+
+    if (document.querySelector('#btn_return')) {
+        const btn = document.querySelector('#btn_return')
             if (widthScreenStart < 445) {
                 btn.innerHTML = 'RETOUR'
-                delete_btn.style.width = "20%"
             } else {
                 btn.innerHTML = 'RETOUR AUX PRODUITS'
-                 delete_btn.style.width = "100%"
             }
         }
+
+
     // calculate screen windows in real time and change html
     function resize() {
         let widthScreenReload = window.innerWidth;
-        console.log(widthScreenReload)
-        if (btn) {
+        if (document.querySelector('#btn_return')) {
+            const btn = document.querySelector('#btn_return')
             if (widthScreenReload < 445) {
             btn.innerHTML = 'RETOUR'
             } else {
@@ -179,6 +183,10 @@
 
 
     });
+
+    function submitform() {   document.myform.submit(); }
+    function submitform1() {   document.myform1.submit(); }
+
     {#let deleteConfirm = async (button) => {#}
     {#         let response = await fetch(button.id, {method: 'GET'});#}
     {#         let html = document.getElementById("modal1").innerHTML += `${await response.text()}`;#}

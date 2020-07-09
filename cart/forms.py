@@ -10,7 +10,10 @@ class CartAddProductForm(forms.Form):
     quantity = forms.IntegerField(label='',
                                   min_value=0,
                                   widget=forms.NumberInput(
-                                      attrs={'style': 'max-width:30%; max-height:60%',
+                                      attrs={'style': ''
+                                                      'max-width:50%;'
+                                                      'min-width:30%;'
+                                                      'max-height:60%',
                                              'placeholder': '0'}))
     update = forms.BooleanField(required=False,
                                 initial=False,

@@ -11,7 +11,7 @@
     <main>
     <div class="container" >
     <div class="table-responsive text-center" style="min-height: 83vh">
-    <h2 id="title_page" class="text-center mt-4 mb-5">Historique commandes</h2>
+    <h2 id="title_page" class="text-center mt-4 mb-5">Votre historique de commandes</h2>
     {% if histories %}
     <table class="table">
         <thead>
@@ -48,8 +48,8 @@
         </p>
 
 {% else %}
-         <div class="container text-center mt-5" style="min-height: 80vh">
-            <h3 style="margin-bottom: 50vh">Votre historique de commande est vide ...</h3>
+         <div class="container text-center mt-5" style="min-height: 50vh">
+            <h3 class="mb-5">est vide ...</h3>
 
         <p class="text-right">
             <a href="{% url 'website:products' %}">
@@ -70,11 +70,12 @@
     <script>
     let widthScreenStart = window.innerWidth;
     const btn = document.querySelector('#btn_return')
+    const title = document.querySelector('#title_page')
 
     if (widthScreenStart < 752) {
-                title.innerHTML = 'Historique'
+                title.innerHTML = 'Votre historique'
             } else {
-                title.innerHTML = 'Historique commandes'
+                title.innerHTML = 'Votre historique de commandes'
             }
     if (btn) {
             if (widthScreenStart < 445) {
@@ -88,9 +89,9 @@
         let widthScreenReload = window.innerWidth;
         const title = document.querySelector('#title_page')
         if (widthScreenReload < 752) {
-                title.innerHTML = 'Historique'
+                title.innerHTML = 'Votre historique'
             } else {
-                title.innerHTML = 'Historique commandes'
+                title.innerHTML = 'Votre historique de commandes'
             }
 
 

@@ -1,4 +1,3 @@
-# from bootstrap_modal_forms.generic import BSModalReadView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -18,7 +17,6 @@ from website.models import Article, Groupe, ProfilUtilisateur, HistoriqueCommand
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
 from django.views.decorators.cache import cache_page
-
 import time
 
 """ login"""
@@ -71,8 +69,6 @@ def logout_view(request):
 
 class ArticleView(LoginRequiredMixin, ListView):
     template_name = 'website/products.html'
-    # template_name = 'home.html'
-    # queryset = Article.objects.filter(actif=False)
     paginate_by = 50
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -222,13 +218,12 @@ class ForgotPasswordView(View):
                     user = User.objects.get(email=mail)
                     send_mail(
                         'Mot de passe oublié',
-                        'Votre mot de passe: ' + user.password,
+                        'Votre mot de passe:  ' + user.password,
                         'test34980test@gmail.com',
                         # EMAIL_HOST_USER,
                         [user.email],
                         fail_silently=False,
                     )
-                    print('reset password work!!!')
                     messages.success(request, 'Vous allez recevoir un email contenant les instructions à suivre')
                     # messages.add_message(request, messages.SUCCESS, 'Vous allez recevoir un email contenant les instructions à suivre')
                     # time.sleep(5)

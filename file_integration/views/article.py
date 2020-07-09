@@ -241,7 +241,8 @@ class ArticleViews(object):
             cls.insert_into_db(obj_bdd)  # call method to insert in db
             file.close()
             resp = json.dumps(obj_bdd)
-            return HttpResponse(resp, content_type='application/json')
+            return HttpResponse(200, content_type='application/json')
+            # return HttpResponse(resp, content_type='application/json')
 
         except OSError as error:
             print("OS error: {0}".format(error))

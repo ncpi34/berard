@@ -3,7 +3,6 @@ website/__pycache__
 berard/__pycache__
 website/migrations
 /test
-media/img
 celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir

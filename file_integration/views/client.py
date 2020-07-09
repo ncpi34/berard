@@ -45,21 +45,42 @@ class ClientViews(object):
                     username=rst["code_client"],
                     last_name=rst['nom'],
                     password=rst["mot_de_passe"],
-
-
                 )
                 # to encrypt Password
                 # user.set_password(rst["mot_de_passe"])
                 # user.save()
                 # print('RESULT', user.qs)
                 # user = User.objects.get(email=rst['email']).id
-                user_one_to_one = ProfilUtilisateur.objects.update_or_create(
-                    utilisateur=user,
-                    adresse=rst["adresse"],
-                    telephone=rst["telephone"],
-                    tarif=rst["tarif"],
-                    code_client=rst["code_client"],
-                )
+
+                # user_one_to_one = ProfilUtilisateur.objects.update_or_create(
+                #     utilisateur=user,
+                #     defaults=dict(
+                #         adresse=rst["adresse"],
+                #         telephone=rst["telephone"],
+                #         tarif=rst["tarif"],
+                #         code_client=rst["code_client"],)
+                #
+                # )
+                try:
+                    ProfilUtilisateur.objects.create(
+                        utilisateur=user,
+                        adresse=rst["adresse"],
+                        telephone=rst["telephone"],
+                        tarif=rst["tarif"],
+                        code_client=rst["code_client"],
+                    )
+                    print('created')
+
+
+                except Exception:
+                    ProfilUtilisateur.objects.filter(utilisateur=user).update(
+                        adresse=rst["adresse"],
+                        telephone=rst["telephone"],
+                        tarif=rst["tarif"],
+                        code_client=rst["code_client"],
+                    )
+                    print('updated')
+
                 print('inserted')
             # except Exception:
             #     try:

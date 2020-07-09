@@ -12,6 +12,10 @@ SECRET_KEY='kr10r4_n87g+t57b&n#x-^7c+yh!%%+94g0(^_*8&gbwe(+91_'
 CELERY_BROKER_URL='redis://localhost:6379'
 CELERY_RESULT_BACKEND='redis://localhost:6379'
 
+python manage.py makemigrations
+python manage.py makemigrations website
+python manage.py migrate
+
 python manage.py runserver
 
 créer un dossier
@@ -19,3 +23,8 @@ créer un dossier
 /resources/export
 
 ajouter nophoto.jpg dans media
+ajouter favicon.ico dans media
+
+https://testsite.uno/file/group/
+https://testsite.uno/file/article/
+https://testsite.uno/file/client/
