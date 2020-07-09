@@ -10,8 +10,8 @@
 {% block content %}
     <main>
     <div class="container" >
-    <div class="table-responsive text-nowrap" style="min-height: 83vh">
-    <h2 class="text-center mt-4 mb-5">Historique commandes</h2>
+    <div class="table-responsive text-center" style="min-height: 83vh">
+    <h2 id="title_page" class="text-center mt-4 mb-5">Historique commandes</h2>
     {% if histories %}
     <table class="table">
         <thead>
@@ -52,9 +52,8 @@
             <h3 style="margin-bottom: 50vh">Votre historique de commande est vide ...</h3>
 
         <p class="text-right">
-
             <a href="{% url 'website:products' %}">
-                <button  class="btn btn-success">Retourner aux produits</button>
+                <button  id="btn_return" class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
         </div>
@@ -63,4 +62,47 @@
     </div>
     </div>
   </main>
+{% endblock %}
+
+{% block extrascripts %}
+
+
+    <script>
+    let widthScreenStart = window.innerWidth;
+    const btn = document.querySelector('#btn_return')
+
+    if (widthScreenStart < 752) {
+                title.innerHTML = 'Historique'
+            } else {
+                title.innerHTML = 'Historique commandes'
+            }
+    if (btn) {
+            if (widthScreenStart < 445) {
+                btn.innerHTML = 'RETOUR'
+            } else {
+                btn.innerHTML = 'RETOUR AUX PRODUITS'
+            }
+        }
+    // calculate screen windows in real time and change html
+    function resize() {
+        let widthScreenReload = window.innerWidth;
+        const title = document.querySelector('#title_page')
+        if (widthScreenReload < 752) {
+                title.innerHTML = 'Historique'
+            } else {
+                title.innerHTML = 'Historique commandes'
+            }
+
+
+        if (btn) {
+            if (widthScreenReload < 445) {
+                btn.innerHTML = 'RETOUR'
+            } else {
+                btn.innerHTML = 'RETOUR AUX PRODUITS'
+            }
+        }
+
+    }
+    window.onresize = resize;
+    </script>
 {% endblock %}

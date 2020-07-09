@@ -11,8 +11,8 @@
     {% include 'cart/suppress_modal_mat.html' %}
     <main>
     <div class="container" style="min-height: 80vh">
-    <div class="table-responsive text-nowrap">
-    <h2 class="text-center mb-5">Votre Panier</h2>
+    <div class="table-responsive">
+    <h3 class="text-center mb-5">Votre Panier</h3>
     <!-- {% if cart %} -->
     <table class="table">
         <thead>
@@ -38,13 +38,15 @@
                              src="/media/img/nophoto.jpg"/>
                     </a>
                 </td>
-            <td>{{ order_item.libelle }}</td>
+            <td>{{ order_item.libelle|title }}</td>
             <td class="num">
                 <div class="mb-5">{{ order_item.prix_achat }}€</div>
                 <div>
                     <form action="{% url 'cart:cart_remove' product.id %}" method="post">
                          {% csrf_token %}
                         <button type="submit"
+{#
+                                id="delete_btn"
                                  class="delete-article btn btn-danger"
                                  data-id="{% url 'cart:cart_remove' product.id %}">
                             <i class="far fa-trash-alt"></i>
@@ -100,12 +102,12 @@
 
     <!-- {% else %} -->
         <div class="container text-center mt-5" style="min-height: 80vh">
-            <h3 style="margin-bottom: 50vh">Votre panier est vide ...</h3>
+            <h4 style="margin-bottom: 50vh">est vide ...</h4>
 
         <p class="text-right">
 
             <a href="{% url 'website:products' %}">
-                <button  class="btn btn-success">Retourner aux produits</button>
+                <button id="btn_return" class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
         </div>
@@ -116,11 +118,38 @@
   </main>
 
 {% endblock %}
+
 {% block extrascripts %}
 
 
 
     <script>
+    let widthScreenStart = window.innerWidth;
+    const btn = document.querySelector('#btn_return')
+    const delete_btn = document.querySelector('#delete_btn')
+    if (btn) {
+            if (widthScreenStart < 445) {
+                btn.innerHTML = 'RETOUR'
+                delete_btn.style.width = "20%"
+            } else {
+                btn.innerHTML = 'RETOUR AUX PRODUITS'
+                 delete_btn.style.width = "100%"
+            }
+        }
+    // calculate screen windows in real time and change html
+    function resize() {
+        let widthScreenReload = window.innerWidth;
+        console.log(widthScreenReload)
+        if (btn) {
+            if (widthScreenReload < 445) {
+            btn.innerHTML = 'RETOUR'
+            } else {
+            btn.innerHTML = 'RETOUR AUX PRODUITS'
+            }
+        }
+
+    }
+    window.onresize = resize;
 
     document.addEventListener('DOMContentLoaded', function() {
          //floating
@@ -150,18 +179,18 @@
 
 
     });
-    let deleteConfirm = async (button) => {
-             let response = await fetch(button.id, {method: 'GET'});
-             let html = document.getElementById("modal1").innerHTML += `${await response.text()}`;
-             return html
-         };
-        deleteConfirm().then(
-            rst => {
-                const elemsModal = document.querySelectorAll('.modal1');
-                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true});
-                instance.open()
-            }
-        );
+    {#let deleteConfirm = async (button) => {#}
+    {#         let response = await fetch(button.id, {method: 'GET'});#}
+    {#         let html = document.getElementById("modal1").innerHTML += `${await response.text()}`;#}
+    {#         return html#}
+    {#     };#}
+    {#    deleteConfirm().then(#}
+    {#        rst => {#}
+    {#            const elemsModal = document.querySelectorAll('.modal1');#}
+    {#            const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true});#}
+    {#            instance.open()#}
+    {#        }#}
+    {#    );#}
 
 
 
