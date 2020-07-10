@@ -14,8 +14,6 @@
   <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
   <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
 
-      <link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">
-
 
 
   <title>{% block head_title %}Berard{% endblock %}</title>
@@ -23,27 +21,25 @@
 
       <!-- Custom CSS -->
       <style type="text/css">
-    html,
-    body,
-    header,
-    .carousel {
-      height: 60vh;
+    body, html {
+      height: 100%;
+      margin: 0;
     }
 
-    @media (max-width: 740px) {
+    .bg {
+      /* The image used */
+      background-image: url(../../../media/img/berard-distribution-camions-entrepots.jpg);
 
-      html,
-      body,
-      header
+      /* Full height */
+      height: 100%;
 
+      /* Center and scale the image nicely */
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
 
-    @media (min-width: 800px) and (max-width: 850px) {
 
-      html,
-      body,
-      header
-    }
 
   </style>
 
@@ -54,11 +50,10 @@
 
   <body>
 
-
-    {% include 'helpers/messages.html' %}
-
+    <div class="bg">
+        {% include 'helpers/messages.html' %}
         {% block content %} {% endblock %}
-
+    </div>
 
   </body>
 </html>

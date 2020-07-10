@@ -29,7 +29,6 @@
     <div class="nav-wrapper   green">
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
-
     <!--Top menu -->
         <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
 
@@ -94,10 +93,11 @@
       <!--Top menu -->
 
 <!--SideNav -->
-      <ul class="side-nav grey darken-2" id="mobile-demo">
+      <ul class="side-nav darken-2" id="mobile-demo">
 
         <li class="sidenav-header green">
             <a href="{% url 'website:products' %}">
+{#                <img class="w-25 ml-5" src="{% static 'img/logo.jpg' %}"/>#}
                 <img class="w-25 ml-5" src="{% static 'img/logo.jpg' %}"/>
             </a>
         </li>
@@ -175,6 +175,19 @@
       // START OPEN
       {#$('.button-collapse').sideNav('show');#}
     });
+
+
+    // When the user scrolls down 20px from the top of the document, slide down the navbar
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("navbar").style.top = "0";
+      } else {
+        document.getElementById("navbar").style.top = "-50px";
+      }
+    }
+
   </script>
 
  

@@ -60,8 +60,10 @@
                   <a href="{{article.get_absolute_url}} ">
                     <h5>{{ article.libelle|title }}</h5>
                   </a>
-                <h5>
 
+                  <p>{{ article.code_article }}</p>
+
+                  <h5>
                   <strong>
                       <p class="dark-grey-text">
                           {% if article.conditionnement is None%}

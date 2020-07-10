@@ -53,7 +53,24 @@
       body,
       header
     }
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
 
+    .bg {
+      /* The image used */
+      background-image: url(../../../media/img/berard-distribution-camions-entrepots.jpg);
+
+      /* Full height */
+      {#height: 100%;#}
+
+      /* Center and scale the image nicely */
+        background-attachment: fixed !important;
+        background-position: center top !important;
+        background-repeat: no-repeat;
+        background-size: 100% !important;
+    }
   </style>
 
 
@@ -62,10 +79,10 @@
 
 
   <body>
-  {% block navbar %}{% endblock %}
-
+{#  {% block navbar %}{% endblock %}#}
+    <div class="bg">
     <!-- Navbar -->
-{#      {% include "website/sidenav.html" %}#}
+      {% include "website/sidenav.html" %}
       <!-- Navbar -->
 
       <!-- flashmessages -->
@@ -90,7 +107,7 @@
     <!-- Includes -->
     {% include "website/footer.html" %}
 {#    {% include "website/scripts.html" %}#}
-
+ </div>
     <!-- JavaScript -->
     {% block scripts %}
 
