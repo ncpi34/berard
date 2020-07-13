@@ -36,9 +36,27 @@
               <!--Card image-->
               <div class="view overlay">
                 <a href="#" data-id="{% url 'website:product_photo' article.id %}">
-                   <img  src="/media/img/nophoto.jpg"
-                   class="img_modal img-fluid img-thumbnail card-img-top "
-                   />
+
+                    {% if "/media/img/product/{{ object.code_article }}.png" %}
+                        <img class="img_modal img-fluid img-thumbnail card-img-top" alt=""
+                        src="/media/img/product/{{ article.code_article }}.png"/>
+
+                    {% elif "/media/img/product/{{ object.code_article }}.jpg" %}
+                        <img class="img_modal img-fluid img-thumbnail card-img-top" alt="photo"
+                         src="/media/img/product/{{ article.code_article }}.jpg"/>
+
+                    {% elif "/media/img/product/{{ object.code_article }}.jpeg" %}
+                        <img class="img_modal img-fluid img-thumbnail card-img-top" alt="photo"
+                         src="/media/img/product/{{ article.code_article }}.jpeg"/>
+
+                    {% endif %}
+
+                {% if "/media/img/nophoto.jpg"%}
+                    <img class="img-fluid" alt=" no photo"
+                         src="/media/img/nophoto.jpg"/>
+            {% endif %}
+
+
                 </a>
 
 {#                <img src="{% if article.image %}#}

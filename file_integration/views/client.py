@@ -52,63 +52,19 @@ class ClientViews(object):
                 # print('RESULT', user.qs)
                 # user = User.objects.get(email=rst['email']).id
 
-                # user_one_to_one = ProfilUtilisateur.objects.update_or_create(
-                #     utilisateur=user,
-                #     defaults=dict(
-                #         adresse=rst["adresse"],
-                #         telephone=rst["telephone"],
-                #         tarif=rst["tarif"],
-                #         code_client=rst["code_client"],)
-                #
-                # )
-                try:
-                    ProfilUtilisateur.objects.create(
-                        utilisateur=user,
+                user_one_to_one = ProfilUtilisateur.objects.update_or_create(
+                    utilisateur=user,
+                    defaults=dict(
                         adresse=rst["adresse"],
                         telephone=rst["telephone"],
                         tarif=rst["tarif"],
-                        code_client=rst["code_client"],
-                    )
-                    print('created')
+                        code_client=rst["code_client"],)
 
-
-                except Exception:
-                    ProfilUtilisateur.objects.filter(utilisateur=user).update(
-                        adresse=rst["adresse"],
-                        telephone=rst["telephone"],
-                        tarif=rst["tarif"],
-                        code_client=rst["code_client"],
-                    )
-                    print('updated')
-
-                print('inserted')
-            # except Exception:
-            #     try:
-            #         print(rst['email'])
-            #         user = User.objects.filter(username=rst["code_client"]).update(
-            #             email=rst["email"],
-            #             username=rst["code_client"],
-            #             last_name=rst['nom'],
-            #             password=rst["mot_de_passe"],
-            #
-            #         )
-            #         user = User.objects.get(email=rst['email']).id
-            #         ProfilUtilisateur.objects.filter(utilisateur=user).update(
-            #             utilisateur=user,
-            #             adresse=rst["adresse"],
-            #             telephone=rst["telephone"],
-            #             tarif=rst["tarif"],
-            #             code_client=rst["code_client"],
-            #
-            #         )
-            #     except Exception as err:
-            #         print('not inserted', rst['code_client'])
-            #         print(err)
-            #         raise err
+                )
             except Exception as err:
                 print('not inserted', rst['code_client'])
                 print(err)
-                raise err
+                # raise err
 
     # Index_method
     @classmethod

@@ -44,7 +44,6 @@
       html,
       body,
       header
-
     }
 
     @media (min-width: 800px) and (max-width: 850px) {
@@ -60,7 +59,7 @@
 
     .bg {
       /* The image used */
-      background-image: url(../../../media/img/berard-distribution-camions-entrepots.jpg);
+      background-image: url(../../../media/img/background.jpeg);
 
       /* Full height */
       {#height: 100%;#}
@@ -71,6 +70,22 @@
         background-repeat: no-repeat;
         background-size: 100% !important;
     }
+    #navbar{
+        {#min-height: 100px;#}
+        {#line-height: 30px;#}
+    }
+    @media screen  and (min-width: 581px){
+            #signout_link{
+              display: none;
+          }
+    }
+    @media screen  and (max-width: 580px){
+            #signout_link{
+              display: block;
+          }
+    }
+
+
   </style>
 
 
@@ -120,7 +135,16 @@
     {% endblock scripts %}
 
 
-    {% block extrascripts %}{% endblock extrascripts %}
+    {% block extrascripts %}
+{#        <script>#}
+{#        function resize() {#}
+{#        let widthScreenReload = window.innerWidth;#}
+{#        console.log(widthScreenReload)#}
+{##}
+{#    }#}
+{#    window.onresize = resize;#}
+{#        </script>#}
+    {% endblock extrascripts %}
 
   </body>
 

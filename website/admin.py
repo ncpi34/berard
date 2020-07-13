@@ -44,6 +44,7 @@ class HistoriqueViews(admin.ModelAdmin):
     date_hierarchy = 'date'
     inlines = [ArticlesInLine]
 
+
     # def show_content_part(self, article):
     #     """
     #     Retourne les 40 premiers caractères du contenu de l'article,
@@ -84,6 +85,8 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+
+admin.site.unregister(HistoriqueCommande)
 
 """ Site visual """
 

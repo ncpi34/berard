@@ -76,16 +76,24 @@ class ArticleView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
 
-        if self.kwargs.get('group'):
+        if self.kwargs.get('group') and self.kwargs.get('family'):
+            print('INNNN')
+            _family = self.kwargs.get("family")
+            _group = self.kwargs.get("group")
+            article = Article.objects.filter(
+                Q(actif=True)
+                & Q(groupe__nom=_group)
+                & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00)
+                                                   )
+            # article = ArticleFilter(queryset=_name)
+            return article
+        elif self.kwargs.get('group'):
+            print('INNNN GROUP')
             _name = self.kwargs.get("group")
             article = Article.objects.filter(Q(actif=True) & Q(groupe__nom=_name)).exclude(Q(prix_achat_1=0.00))
             # article = ArticleFilter(queryset=_name)
             return article
-        elif self.kwargs.get('family'):
-            _name = self.kwargs.get("family")
-            article = Article.objects.filter(Q(actif=True) & Q(famille__nom=_name)).exclude(Q(prix_achat_1=0.00))
-            # article = ArticleFilter(queryset=_name)
-            return article
+
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
             article = Article.objects.filter(Q(actif=True) & Q(sous_famille__nom=_name)).exclude(Q(prix_achat_1=0.00))

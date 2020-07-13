@@ -25,8 +25,8 @@
 
 </style>
 
-  <nav>
-    <div class="nav-wrapper   green">
+  <nav id="navbar">
+    <div id="mynavbar" class="nav-wrapper   green">
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
     <!--Top menu -->
@@ -70,15 +70,14 @@
                 </li>
 
                 <li>
+                    <a href="{% url 'website:order_summary' %}" ><i class="fas fa-user"></i></a>
+                </li>
+
+                <li>
                     <a href="{% url 'website:logout' %}" >
                         <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
                     </a>
                 </li>
-
-                <li>
-                    <a href="{% url 'website:order_summary' %}" ><i class="fas fa-user"></i></a>
-                </li>
-
 
             </ul>
 
@@ -95,14 +94,18 @@
 <!--SideNav -->
       <ul class="side-nav darken-2" id="mobile-demo">
 
-        <li class="sidenav-header green">
-            <a href="{% url 'website:products' %}">
-{#                <img class="w-25 ml-5" src="{% static 'img/logo.jpg' %}"/>#}
-                <img class="w-25 ml-5" src="{% static 'img/logo.jpg' %}"/>
-            </a>
-        </li>
+            <li class="sidenav-header green">
+                <a href="{% url 'website:products' %}">
+                    <img class="w-25 ml-5" src="/media/img/logo.jpg"/>
+                </a>
+            </li>
+          <li id="signout_link">
+              <a href="{% url 'website:logout' %}">
+              <i class="fas fa-sign-out-alt"></i>
+                  <p>Déconnexion</p>
+              </a>
+          </li>
 
-        
 
           <!--Sidebar -->
 {% get_menu "NAV_MENU_LEFT" as left_menu %}
@@ -110,13 +113,14 @@
             {% for item in left_menu %}
         <li class="white">
           <ul class="collapsible collapsible-accordion">
+
             <li>
                 <!-- Links -->
               <a
 {#                      href="{% url 'website:products_by_group' group=item.name %}"#}
                       href="#{{ item.id }}"
                       class="collapsible-header waves-effect waves-blue text-dark">
-                  <i class="material-icons">folder_open</i>
+                  <i class="material-icons">data_usage</i>
                   {{ item.name|title }}
                   <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i>
               </a>
@@ -128,8 +132,9 @@
                 <ul>
                     {% for menu in item.submenu %}
                         <li>
-                            <a href="{% url 'website:products_by_family' family=menu.name %}"
+                            <a href="{% url 'website:products_by_family' group=item.name family=menu.name %}"
                                id="submenu" class="waves-effect waves-blue">
+                                <i class="material-icons">remove</i>
                                   {{ menu.name|lower }}
                               </a>
 
@@ -177,16 +182,17 @@
     });
 
 
-    // When the user scrolls down 20px from the top of the document, slide down the navbar
-    window.onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        document.getElementById("navbar").style.top = "0";
-      } else {
-        document.getElementById("navbar").style.top = "-50px";
-      }
-    }
+    {#// When the user scrolls down 20px from the top of the document, slide down the navbar#}
+    {#window.onscroll = function() {scrollFunction()};#}
+    {##}
+    {#function scrollFunction() {#}
+    {#    console.log('scroll')#}
+    {#  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {#}
+    {#    document.getElementById("mynavbar").style.top = "0";#}
+    {#  } else {#}
+    {#    document.getElementById("mynavbar").style.top = "-50px";#}
+    {#  }#}
+    {#}#}
 
   </script>
 
