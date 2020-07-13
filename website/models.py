@@ -4,6 +4,8 @@ from django.db import models
 # Create your models here.
 from django.urls import reverse
 from django.utils.html import format_html
+from pathlib import Path
+
 
 from website.helpers import RandomFileName
 
@@ -113,16 +115,16 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('website:product_detail',
                        args=[self.id])
-    # def get_img(self):
-    #     if self.image:
-    #         return format_html('<img src="{url}" width="50" height="50" />'.format(
-    #             url=self.image
-    #         ))
-    #     else:
-    #         return format_html('<img src="{url}" width="50" height="50" />'.format(
-    #             url='/media/img/nophoto.png'
-    #         ))
-    #
+
+    def get_img(self):
+        if Path("media/img/product/"+self.code_article+".png").is_file():
+            return Path("/media/img/product/"+self.code_article+".png")
+        elif Path("media/img/product/"+self.code_article+".jpg").is_file():
+            return Path("/media/img/product/"+self.code_article+".jpg")
+        elif Path("media/img/product/"+self.code_article+".jpeg").is_file():
+            return Path("/media/img/product/"+self.code_article+".jpeg")
+        else:
+            return '/media/img/nophoto.jpg'
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
 

@@ -14,23 +14,9 @@
 
         <!--Grid column-->
         <div class="col-md-6 mb-4">
-            {% if "/media/img/product/{{ object.code_article }}.png" %}
-                <img class="img-fluid" alt=""
-                     src="/media/img/product/{{ object.code_article }}.png"/>
 
-                {% elif "/media/img/product/{{ object.code_article }}.jpg" %}
-                    <img class="img-fluid" alt="photo"
-                     src="/media/img/product/{{ object.code_article }}.jpg"/>
-
-                {% elif "/media/img/product/{{ object.code_article }}.jpeg" %}
-                    <img class="img-fluid" alt="photo"
-                     src="/media/img/product/{{ object.code_article }}.jpeg"/>
-
-                {% elif "/media/img/nophoto.jpg"%}
-                    <img class="img-fluid" alt=" no photo"
-                         src="/media/img/nophoto.jpg"/>
-            {% endif %}
-
+                <img class="img-fluid" alt="photo"
+                     src="{{ object.get_img }}">
 
         </div>
         <!--Grid column-->
