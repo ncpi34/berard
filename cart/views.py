@@ -30,6 +30,8 @@ def cart_add(request, product_id):  # add method
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
     # return redirect("cart:cart_detail")
+    # print(request.path_info)
+    # print(request.build_absolute_uri())
     return redirect("website:products")
 
 

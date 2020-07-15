@@ -117,6 +117,19 @@ class Article(models.Model):
                        args=[self.id])
 
     def get_img(self):
+
+        # try:
+        #     open("media/img/product/"+self.code_article+".png")
+        #     return "media/img/product/"+self.code_article+".png"
+        # except FileNotFoundError:
+        #     open("media/img/product/"+self.code_article+".jpg")
+        #     return "media/img/product/"+self.code_article+".jpg"
+        # except FileNotFoundError:
+        #     open("media/img/product/"+self.code_article+".jpeg")
+        #     return "media/img/product/"+self.code_article+".jpeg"
+        # except FileNotFoundError:
+        #     return '/media/img/nophoto.jpg'
+
         if Path("media/img/product/"+self.code_article+".png").is_file():
             return Path("/media/img/product/"+self.code_article+".png")
         elif Path("media/img/product/"+self.code_article+".jpg").is_file():
