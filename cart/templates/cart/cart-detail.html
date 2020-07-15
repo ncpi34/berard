@@ -35,7 +35,7 @@
                 <td>
                     <a href="{{ product.get_absolute_url }}">
                         <img class="img-fluid img-thumbnail w-60"
-                             src="/media/img/nophoto.jpg"/>
+                             src="{{ product.get_img }}"/>
                     </a>
                 </td>
             <td>{{ order_item.libelle|title }}</td>
