@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DeleteView
 from django.views.generic.base import View
 from cart.cart import Cart
-from cart.forms import CartAddProductForm
+from cart.forms import CartAddProductForm, CartCheckAllProductsForm
 from website.models import Article, HistoriqueCommande, ProduitCommande
 from django.contrib import messages
 import datetime
@@ -49,7 +49,6 @@ class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with mo
         print(kwargs['product_id'])
         context = {
             'id': kwargs['product_id'],
-            'test': 'aaaaaaa'
         }
 
         return render(request, 'cart/suppress_modal_mat.html', context)
@@ -214,11 +213,12 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
 @login_required(login_url="")
 def cart_detail(request):
     cart = Cart(request)
+    quantity = CartCheckAllProductsForm
     for item in cart:
         item['update_quantity_form'] = CartAddProductForm(
             initial={'quantity': item['quantity'],
                      'update': True})
-    return render(request, 'cart/cart-detail.html', {'cart': cart})
+    return render(request, 'cart/cart-detail.html', {'cart': cart, 'quantity': quantity})
 
 
 # modify quantity from cart
@@ -227,10 +227,30 @@ def cart_update(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
+    print('FORM: ', form)
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
     # return redirect("cart:cart_detail")
+    return redirect("cart:cart_detail")
+
+
+# modify quantity from cart
+@require_POST
+def update_all_cart(request):
+    cart = Cart(request)
+    form = CartCheckAllProductsForm(request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        tab_join = cd['quantity'].split(',')
+
+        for i in tab_join:
+            rst = i.split('/')
+            product = get_object_or_404(Article, id=int(rst[0]))
+            cart.add(product=product,
+                     quantity=int(rst[1]),
+                     update_quantity=True)
+
     return redirect("cart:cart_detail")

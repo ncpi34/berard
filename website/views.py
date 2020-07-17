@@ -69,7 +69,7 @@ def logout_view(request):
 
 class ArticleView(LoginRequiredMixin, ListView):
     template_name = 'website/products.html'
-    paginate_by = 50
+    paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
     login_url = ''
@@ -98,11 +98,10 @@ class ArticleView(LoginRequiredMixin, ListView):
             # article = ArticleFilter(queryset=_name)
             return article
         elif self.request.GET.get('code_article'):
-            print(self.request.GET.get('code_article'))
             query = self.request.GET.get('code_article')
-            postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query))
-            result = postresult
-            return result
+            postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
+                                                | Q(actif=True) & Q(libelle__contains=query.upper()))
+            return postresult
         # else:
         #     result = None
         # return result

@@ -10,7 +10,7 @@
     <main>
     <div class="container">
     <div class="table-responsive text-center" style="min-height: 83vh">
-    <h2 class="text-center mt-4 mb-5" id="title_page" >Résumé de votre commande du {{ object.date }}</h2>
+    <h4 class="text-center mb-5" id="title_page" >Commande du {{ object.date }}</h4>
     <table class="table">
         <thead>
         <tr>
@@ -40,6 +40,11 @@
 {#        {% endfor %}#}
         </tbody>
     </table>
+    <p class="text-right">
+            <a href="{% url 'website:order_summary' %}">
+                <button  id="btn_return" class="btn btn-success">Retour</button>
+            </a>
+        </p>
 {#<p class="text-right">#}
 {##}
 {#            <a href="{% url 'website:products' %}">#}
@@ -60,9 +65,9 @@
     const title = document.querySelector('#title_page')
 
      if (widthScreenStart < 1001) {
-                title.innerHTML = 'Résumé de votre commande'
+                title.innerHTML = 'Résumé de la commande'
         } else {
-                title.innerHTML = 'Résumé de votre commande du {{ object.date }}'
+                title.innerHTML = 'Commande du {{ object.date }}'
         }
     // calculate screen windows in real time and change html
     function resize() {
@@ -71,9 +76,9 @@
         if(widthScreenReload < 440) {
                 title.innerHTML = 'Résumé'
         } else if (widthScreenReload < 1001) {
-                title.innerHTML = 'Résumé de votre commande'
+                title.innerHTML = 'Résumé de la commande'
         } else {
-                title.innerHTML = 'Résumé de votre commande du {{ object.date }}'
+                title.innerHTML = 'Commande du {{ object.date }}'
         }
 
     }

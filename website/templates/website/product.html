@@ -6,8 +6,58 @@
 
 {% block content %}
 
-  <main class="mt-5 pt-4">
-    <div class="container dark-grey-text mt-5">
+  <main class=" pt-4 mb-5">
+  <h6 class="text-center mb-1">{{ object.libelle }}</h6>
+    <div class="container dark-grey-text">
+
+{#        <h4 class="my-4 h4 text-center">{{ object.code_article }}</h4>#}
+
+      <!--Grid row-->
+      <div class="row d-flex justify-content-center wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Cdt:</span>
+          <p>
+              {% if object.conditionnement is None%}
+                indéfini
+              {% else %}
+                {{ object.conditionnement }}
+              {% endif %}
+          </p>
+        </div>
+        <!--Grid column-->
+
+          <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Code article:</span>
+          <p>{{ object.code_article }}</p>
+        </div>
+        <!--Grid column-->
+
+          <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Gencod:</span>
+          <p>{{ object.gencode }}</p>
+        </div>
+        <!--Grid column-->
+
+           <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Prix:</span>
+          <p>
+              {% if request.session.tarif == 1  %} {{ object.prix_achat_1 }}
+                  {% elif request.session.tarif == 2 %} {{ object.prix_achat_2 }}
+                  {% elif request.session.tarif == 3 %} {{ object.prix_achat_3 }}
+                  {% elif request.session.tarif == 4 %} {{ object.prix_achat_4 }}
+                  {% else %} Prix non disponible
+                {% endif %}€
+          </p>
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
 
       <!--Grid row-->
       <div class="row wow fadeIn">
@@ -34,9 +84,6 @@
             </div>
 
 
-            <p class="lead font-weight-bold">Libellé</p>
-
-            <p>{{ object.libelle }}</p>
 
             {% comment %} <form class="d-flex justify-content-left">
               <!-- Default input -->
@@ -54,6 +101,12 @@
               <input aria-label="Search" value="Ajouter au panier" class="form-control btn-success" type="submit"/>
           </form>
 
+              <p class="text-right">
+                <a href="{% url 'website:products' %}">
+                    <button  id="btn_return" class="btn btn-success">Retourner aux produits</button>
+                </a>
+              </p>
+
           </div>
           <!--Content-->
 
@@ -65,48 +118,7 @@
 
       <hr>
 
- <h4 class="my-4 h4 text-center">Informations additionnelles</h4>
 
-      <!--Grid row-->
-      <div class="row d-flex justify-content-center wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Conditionnement:</span>
-          <p>{{ object.conditionnement }}</p>
-        </div>
-        <!--Grid column-->
-
-          <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Code article:</span>
-          <p>{{ object.code_article }}</p>
-        </div>
-        <!--Grid column-->
-
-          <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Gencode:</span>
-          <p>{{ object.gencode }}</p>
-        </div>
-        <!--Grid column-->
-
-           <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Prix:</span>
-          <p>
-              {% if request.session.tarif == 1  %} {{ object.prix_achat_1 }}
-                  {% elif request.session.tarif == 2 %} {{ object.prix_achat_2 }}
-                  {% elif request.session.tarif == 3 %} {{ object.prix_achat_3 }}
-                  {% elif request.session.tarif == 4 %} {{ object.prix_achat_4 }}
-                  {% else %} Prix non disponible
-                {% endif %}€
-          </p>
-        </div>
-        <!--Grid column-->
-
-      </div>
-      <!--Grid row-->
 
 {#      <!--Grid row-->#}
 {#      <div class="row wow fadeIn">#}

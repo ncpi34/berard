@@ -58,6 +58,7 @@ class Cart(object):
                 'quantity': 0,
                 'prix_achat': str(self.get_price_by_user(product)),
                 'image': product.image,
+                'code_article': product.code_article,
             }
             if update_quantity and quantity is not 0:
                 self.cart[product.id]['quantity'] = quantity

@@ -10,8 +10,8 @@
 {% block content %}
     <main>
     <div class="container" >
-    <div class="table-responsive text-center" style="min-height: 83vh">
-    <h2 id="title_page" class="text-center mt-4 mb-5">Votre historique de commandes</h2>
+    <div class="table-responsive" style="min-height: 83vh">
+    <h3 id="title_page" class="mt-4 mb-5">Votre historique de commandes</h3>
     {% if histories %}
     <table class="table">
         <thead>
@@ -73,9 +73,9 @@
     const title = document.querySelector('#title_page')
 
     if (widthScreenStart < 752) {
-                title.innerHTML = 'Votre historique'
+                title.innerHTML = 'Historique'
             } else {
-                title.innerHTML = 'Votre historique de commandes'
+                title.innerHTML = 'Historique de commandes'
             }
     if (btn) {
             if (widthScreenStart < 445) {
@@ -89,9 +89,9 @@
         let widthScreenReload = window.innerWidth;
         const title = document.querySelector('#title_page')
         if (widthScreenReload < 752) {
-                title.innerHTML = 'Votre historique'
+                title.innerHTML = 'Historique'
             } else {
-                title.innerHTML = 'Votre historique de commandes'
+                title.innerHTML = 'Historique de commandes'
             }
 
 

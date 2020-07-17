@@ -52,11 +52,13 @@
             <ul class="right">
 
                 <li>
-                    <a href="{% url 'cart:cart_detail' %}">
+                    <a href="{% url 'cart:cart_detail' %}" title="Panier">
                         {% with total_items=cart|length %}
                       {% if cart|length > 0 %}
                           <span class="badge green z-depth-1 position-absolute rounded-circle">
-                          {{ total_items }}
+{#                          {{ total_items }}#}
+                          ++
+
                           </span>
                       {% else %}
                           <span class="badge red z-depth-1  position-absolute rounded-circle">
@@ -70,11 +72,11 @@
                 </li>
 
                 <li>
-                    <a href="{% url 'website:order_summary' %}" ><i class="fas fa-user"></i></a>
+                    <a href="{% url 'website:order_summary' %}" title="Historique" ><i class="fa fa-history"></i></a>
                 </li>
 
                 <li>
-                    <a href="{% url 'website:logout' %}" >
+                    <a href="{% url 'website:logout' %}" title="Déconnexion" >
                         <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
                     </a>
                 </li>

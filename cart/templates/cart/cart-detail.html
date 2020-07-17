@@ -12,17 +12,46 @@
     <main>
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
-    <h2 class="text-center mb-5">Votre Panier</h2>
-    <!-- {% if cart %} -->
+
+    {% if cart %}
+        <div class="row">
+            <div class="col ml-2">
+                <h4>Votre Panier</h4>
+            </div>
+
+            <div class="col mt-5">
+                <p>Total: {{ cart.get_total_price}} €</p>
+            </div>
+        </div>
+
+        <form  name="myform2"
+              action="{% url 'cart:update_all_cart' %}" method="post"
+        >
+            <div class="text-right">
+                {{ quantity.quantity }}
+                <label for="test"></label>
+                <input id="test" type="text"/>
+            <a
+               onclick="getValue()"
+               href="javascript: submitform2()"
+               type="submit" class="btn btn-warning">
+                MAJ Panier
+            </a>
+                        {% csrf_token %}
+            </div>
+
+        </form>
+
     <table class="table">
         <thead>
         <tr>
+
             <th scope="col">Image</th>
 {#            <th scope="col">Price</th>#}
-            <th scope="col">Libellé</th>
-            <th scope="col">Prix Unitaire</th>
+            <th scope="col">Infos</th>
+            <th scope="col">PU</th>
             <th scope="col">Total</th>
-            <th scope="col">Quantité</th>
+{#            <th scope="col">Quantité</th>#}
         </tr>
         </thead>
         <tbody>
@@ -33,65 +62,53 @@
         <tr>
 {#            <th scope="row">{{ forloop.counter }}</th>#}
                 <td>
-                    <a href="{{ product.get_absolute_url }}">
-                        <img class="img-fluid img-thumbnail w-60"
-                             src="{{ product.get_img }}"/>
+                    <a href="{{ product.get_absolute_url }}" class="product_url">
+                        <img class="img-fluid img-thumbnail"
+                             src="{{ product.get_img }}"
+                             style="max-height: 80px;"
+                        />
                     </a>
                 </td>
-            <td>{{ order_item.libelle|title }}</td>
-            <td class="num">
-                <div class="mb-5">{{ order_item.prix_achat }}€</div>
-                <div>
-                    <form name="myform" action="{% url 'cart:cart_remove' product.id %}" method="post">
-                         {% csrf_token %}
-                        <a href="javascript: submitform()"
-                                type="submit"
-                                id="delete_btn"
-                                 class="delete-article btn btn-danger"
-                                 data-id="{% url 'cart:cart_remove' product.id %}">
-                            <i class="material-icons">delete</i>
-                        </a>
-                    </form>
-{#                    <a#}
-{#                        href="#menu-modal1"#}
-{#                        class="btn btn-danger waves-effect waves-light modal-trigger"#}
-{#                             id="{% url 'cart:cart_remove' product.id %}"#}
-{#                             onclick="deleteConfirm(this)"#}
-{#                    >#}
-{#                        <i class="far fa-trash-alt"></i>#}
-{#                    </a>#}
-                </div>
+            <td>
+                <div>{{ order_item.libelle|title }}</div>
+                {{ order_item.code_article }}
             </td>
-            <td class="num">{{ order_item.total_price }}€</td>
-                <td>
-                    <form name="myform1" action="{% url 'cart:cart_update' product.id %}" method="post">
+            <td class="num mb-1">
+                {{ order_item.prix_achat }}€
+                <form name="myform1" action="{% url 'cart:cart_update' product.id %}" method="post">
                         <div class="mr-1">
                             {{ order_item.update_quantity_form.quantity }}
                             {{ order_item.update_quantity_form.update }}
                         </div>
-
-                            <a      href="javascript: submitform1()"
-                                    type="submit" class="btn btn-warning">
-                                <i class="material-icons">build</i>
-                            </a>
-
                         {% csrf_token %}
-
-                    </form>
-
+                </form>
             </td>
+            <td class="num">
+            <div class="mb-2">
+                {{ order_item.total_price }}€
+            </div>
 
-
+                <div>
+                    <form name="myform" action="{% url 'cart:cart_remove' product.id %}" method="post">
+                         {% csrf_token %}
+                        <a href="javascript: submitform()"
+                           type="submit"
+                           id="delete_btn"
+                           class="delete-article btn btn-danger"
+                           data-id="{% url 'cart:cart_remove' product.id %}">
+{#                            <i class="material-icons">delete</i>#}
+                            <i class="far fa-trash-alt"></i>
+{#                            X#}
+                        </a>
+                    </form>
+                </div>
+            </td>
             {% endwith %}
             {% endfor %}
 
         </tr>
 
-        <tr class="total">
-            <td>Total</td>
-            <td colspan='1'></td>
-            <td class="num">{{ cart.get_total_price}}€</td>
-        </tr>
+
         </tbody>
     </table>
          <p class="text-right">
@@ -104,9 +121,9 @@
             </a>
         </p>
 
-    <!-- {% else %} -->
+    {% else %}
         <div class="container text-center mt-5" style="min-height: 60vh">
-            <h4 class="mb-5">est vide ...</h4>
+            <h4 class="text-left">est vide ...</h4>
 
         <p class="text-right">
 
@@ -116,7 +133,7 @@
         </p>
         </div>
 
-    <!-- {% endif %} -->
+   {% endif %}
     </div>
     </div>
   </main>
@@ -186,6 +203,7 @@
 
     function submitform() {   document.myform.submit(); }
     function submitform1() {   document.myform1.submit(); }
+    function submitform2() {   document.myform2.submit(); }
 
     {#let deleteConfirm = async (button) => {#}
     {#         let response = await fetch(button.id, {method: 'GET'});#}
@@ -200,8 +218,40 @@
     {#        }#}
     {#    );#}
 
+    const call = async (obj) =>{
+        console.log(obj)
+        let query = await fetch('/cart/update_all_cart')
+        return query
+    }
 
+    const getValue = () => {
 
+            let quant_val = document.querySelectorAll('.quantity_val')
+            let prod_url = document.querySelectorAll('.product_url')
+            let ids = []
+            prod_url.forEach((val, index) => {
+                const quantity = quant_val[index];
+
+                let obj = {'id':0, 'quantity':0}
+                obj['id'] = val.href.split('/').slice(-1)[0]
+                obj['quantity'] = quantity.value
+                ids.push(parseInt(val.href.split('/').slice(-1)[0]) + '/' + parseInt(quantity.value))
+            })
+
+        document.querySelector('#hidden_values').value=ids
+        console.log(ids)
+
+        {#call(ids).then(#}
+        {#    rst => {#}
+        {#    console.log(rst)#}
+        {#    })#}
+
+        return ids
+    }
+    const checkChange = (but) => {
+        console.log('BUTTon', but)
+    }
+    let test = document.querySelectorAll('.quantity_val')
 
 
     </script>

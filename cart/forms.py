@@ -10,11 +10,29 @@ class CartAddProductForm(forms.Form):
     quantity = forms.IntegerField(label='',
                                   min_value=0,
                                   widget=forms.NumberInput(
-                                      attrs={'style': ''
-                                                      'max-width:50%;'
-                                                      'min-width:30%;'
-                                                      'max-height:60%',
-                                             'placeholder': '0'}))
+                                      attrs={
+                                          'class': 'quantity_val',
+                                          'style': ''
+                                                   'width:40px;'
+                                          # 'max-width:50%;'
+                                          # 'min-width:30%;'
+                                                   'max-height:60%',
+                                          'placeholder': '0'})
+                                  )
     update = forms.BooleanField(required=False,
                                 initial=False,
-                                widget=forms.HiddenInput)
+                                widget=forms.HiddenInput(
+                                    attrs={
+                                        'class': 'hidden_value'
+                                    }
+                                ))
+
+
+class CartCheckAllProductsForm(forms.Form):
+    quantity = forms.CharField(required=False,
+                               widget=forms.HiddenInput(
+                                   attrs={
+                                       'id': 'hidden_values',
+                                      })
+                               )
+
