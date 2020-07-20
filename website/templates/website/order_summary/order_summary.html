@@ -3,15 +3,14 @@
 {% load static %}
 
 {% block navbar %}
-    {% include 'website/sidenav.html' %}
+    {% include 'website/sidenav.html' with title_pager="Historique"  %}
 {% endblock %}
 
 
 {% block content %}
     <main>
     <div class="container" >
-    <div class="table-responsive" style="min-height: 83vh">
-    <h3 id="title_page" class="mt-4 mb-5">Votre historique de commandes</h3>
+    <div class="table-responsive mt-2" style="min-height: 83vh">
     {% if histories %}
     <table class="table">
         <thead>
@@ -49,7 +48,7 @@
 
 {% else %}
          <div class="container text-center mt-5" style="min-height: 50vh">
-            <h3 class="mb-5">est vide ...</h3>
+             <h4 class="mt-4 mb-5">Pas d'historique ...</h4>
 
         <p class="text-right">
             <a href="{% url 'website:products' %}">

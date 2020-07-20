@@ -10,7 +10,14 @@
      {% include "website/modals/_modal.html" %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-
+<style>
+    a{
+        color: black;
+    }
+    a:hover{
+        color:green;
+    }
+</style>
     <!--Main layout-->
   <main>
 
@@ -28,34 +35,34 @@
           <!--Grid column-->
           <div class="articles col-lg-2 col-md-3  col-sm-6 mb-3">
 
-        <!-- Test -->
-{#          <div class="card">#}
-{#              <img class="card-img"#}
-{#                   alt="photo" src="{{ article.get_img }}"#}
-{#              style="opacity: 0.2"/>#}
-{##}
-{#            <div class="card-img-overlay">#}
-{#                <a href="{{article.get_absolute_url}} ">#}
-{#                  <h6 class="text-stroke">{{ article.code_article }}</h6>#}
-{##}
-{#                </a>#}
-{#                 <div class="card-block">#}
-{#                    <p class="card-text">{{ article.libelle|title|truncatechars:20 }}</p>#}
-{#                 </div>#}
-{##}
-{#                 <div class="card-footer">#}
-{#                    <form action="{% url 'cart:cart_add' article.id %}" method="post"#}
-{#                    class="d-flex justify-content-left small">#}
-{#                     {% csrf_token %}#}
-{#                            {{ form }}#}
-{#                      <button class="form-control btn btn-success waves-effect waves-light" type="submit">#}
-{#                          <i class="fas fa-cart-plus"></i>#}
-{#                      </button>#}
-{#                  </form>#}
-{#                 </div>#}
-{#            </div>#}
-{#          </div>#}
-              <!-- Test -->
+<!--        &lt;!&ndash; Test &ndash;&gt;-->
+<!--{#          <div class="card">#}-->
+<!--{#              <img class="card-img"#}-->
+<!--{#                   alt="photo" src="{{ article.get_img }}"#}-->
+<!--{#              style="opacity: 0.2"/>#}-->
+<!--{##}-->
+<!--{#            <div class="card-img-overlay">#}-->
+<!--{#                <a href="{{article.get_absolute_url}} ">#}-->
+<!--{#                  <h6 class="text-stroke">{{ article.code_article }}</h6>#}-->
+<!--{##}-->
+<!--{#                </a>#}-->
+<!--{#                 <div class="card-block">#}-->
+<!--{#                    <p class="card-text">{{ article.libelle|title|truncatechars:20 }}</p>#}-->
+<!--{#                 </div>#}-->
+<!--{##}-->
+<!--{#                 <div class="card-footer">#}-->
+<!--{#                    <form action="{% url 'cart:cart_add' article.id %}" method="post"#}-->
+<!--{#                    class="d-flex justify-content-left small">#}-->
+<!--{#                     {% csrf_token %}#}-->
+<!--{#                            {{ form }}#}-->
+<!--{#                      <button class="form-control btn btn-success waves-effect waves-light" type="submit">#}-->
+<!--{#                          <i class="fas fa-cart-plus"></i>#}-->
+<!--{#                      </button>#}-->
+<!--{#                  </form>#}-->
+<!--{#                 </div>#}-->
+<!--{#            </div>#}-->
+<!--{#          </div>#}-->
+<!--              &lt;!&ndash; Test &ndash;&gt;-->
 
             <!--Card-->
 
@@ -78,9 +85,9 @@
               <!--Card content-->
               <div class="card-body text-center">
                 <!--Category & Title-->
-                  <a href="{{article.get_absolute_url}} ">
+                  <a href="{{article.get_absolute_url}}">
                     <h6>{{ article.code_article }}</h6>
-                    <p>{{ article.libelle|title }}</p>
+                    <p style="font-size: 12px">{{ article.libelle|title }}</p>
                     <p style="font-size: 12px">{{ article.gencode }}</p>
                   </a>
 
@@ -89,7 +96,7 @@
                       <h6 class="mr-auto">
                             <label>Cdt: </label>
                             <strong>{% if article.conditionnement is None%}
-                               indéfini
+                               /
                               {% else %}
                               {{ article.conditionnement }}
                           {% endif %}

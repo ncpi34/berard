@@ -2,15 +2,15 @@
 
 {% load static %}
 
-{#{% block navbar %}#}
-{#    {% include 'website/topnavbar.html' %}#}
-{#{% endblock %}#}
+{% block navbar %}
+    {% include 'website/sidenav.html' with title_pager="Résumé"  %}
+{% endblock %}
 
 {% block content %}
     <main>
     <div class="container">
     <div class="table-responsive text-center" style="min-height: 83vh">
-    <h4 class="text-center mb-5" id="title_page" >Commande du {{ object.date }}</h4>
+    <h4 class="text-center mb-5" id="title_page" >{{ object.date }}</h4>
     <table class="table">
         <thead>
         <tr>
@@ -30,14 +30,8 @@
                 <td>{{ item.quantite}}</td>
                 <td>{{ item.get_cost}}€</td>
             </tr>
-
      {% endfor %}
-{#        {% for item in object.get_unit_price %}#}
-{#            <tr>#}
-{#                <td class="num">{{ item}}€</td>#}
-{#            </tr>#}
-{#            #}
-{#        {% endfor %}#}
+              <td class="right">Total: {{ object.get_total_price}}€</td>
         </tbody>
     </table>
     <p class="text-right">
@@ -45,43 +39,10 @@
                 <button  id="btn_return" class="btn btn-success">Retour</button>
             </a>
         </p>
-{#<p class="text-right">#}
-{##}
-{#            <a href="{% url 'website:products' %}">#}
-{#                <button id="send-order" class="btn btn-success">Retourner aux produits</button>#}
-{#            </a>#}
-{#        </p>#}
+
 
     </div>
     </div>
   </main>
 {% endblock %}
 
-{% block extrascripts %}
-
-
-    <script>
-    let widthScreenStart = window.innerWidth;
-    const title = document.querySelector('#title_page')
-
-     if (widthScreenStart < 1001) {
-                title.innerHTML = 'Résumé de la commande'
-        } else {
-                title.innerHTML = 'Commande du {{ object.date }}'
-        }
-    // calculate screen windows in real time and change html
-    function resize() {
-        let widthScreenReload = window.innerWidth;
-
-        if(widthScreenReload < 440) {
-                title.innerHTML = 'Résumé'
-        } else if (widthScreenReload < 1001) {
-                title.innerHTML = 'Résumé de la commande'
-        } else {
-                title.innerHTML = 'Commande du {{ object.date }}'
-        }
-
-    }
-    window.onresize = resize;
-    </script>
-{% endblock %}

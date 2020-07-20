@@ -1,7 +1,8 @@
 {% extends 'website/base.html' %}
 {% load static %}
+
 {% block navbar %}
-    {% include 'website/sidenav.html' %}
+    {% include 'website/sidenav.html' with title_pager='Panier'  %}
 {% endblock %}
 
 {% block content %}
@@ -15,13 +16,12 @@
 
     {% if cart %}
         <div class="row">
-            <div class="col ml-2">
-                <h4>Votre Panier</h4>
-            </div>
-            <div class="col mt-5">
+            <div class="col mb-5">
+                <h5 class="alert alert-success position-fixed" style="right: 0">
+                    Total: {{ cart.get_total_price}} €</h5>
                 <form  name="myform2"
               action="{% url 'cart:update_all_cart' %}" method="post">
-                    <div class="text-right">
+                    <div class="text-left">
                         {{ quantity.quantity }}
                     <button
                        onclick="getValue()"
@@ -34,10 +34,8 @@
                     </div>
 
                 </form>
-            </div>
 
-            <div class="col mt-4">
-                <h5 class="alert alert-success position-fixed">Total: {{ cart.get_total_price}} €</h5>
+
             </div>
 
 
@@ -116,6 +114,7 @@
 
         </tbody>
     </table>
+        <h5 >Total: {{ cart.get_total_price}} €</h5>
          <p class="text-right">
             <a href="#menu-modal"
                class="btn btn-success waves-effect waves-light modal-trigger"
@@ -128,7 +127,7 @@
 
     {% else %}
         <div class="container text-center mt-5" style="min-height: 60vh">
-            <h4 class="text-left">Votre panier est vide ...</h4>
+            <h4 class="text-left mb-5">Votre panier est vide ...</h4>
 
         <p class="text-right">
 

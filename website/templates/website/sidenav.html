@@ -45,24 +45,29 @@
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
     <!--Top menu -->
+        <h5 class="brand-logo"> {{ title_pager }} </h5>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
             <i class="material-icons">menu</i></a>
 
         <div>
+
 
             <!-- Searchform-->
           <form class="center" id="form1" action="" method="get">
               <div class="wrap">
                <div class="search mt-3">
                    {{ filter.form.as_p }}
-{#                    <label class="label-icon" for="search"#}
-{#                           style="color: white">#}
-{#                        <i class="material-icons">search</i>#}
-{#                    </label>#}
+<!--{#                    <label class="label-icon" for="search"#}-->
+<!--{#                           style="color: white">#}-->
+<!--{#                        <i class="material-icons">search</i>#}-->
+<!--{#                    </label>#}-->
                </div>
             </div>
           </form>
             <!-- Searchform-->
+            <ul>
+
+            </ul>
 
 
             <ul class="right">

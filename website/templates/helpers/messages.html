@@ -1,9 +1,12 @@
 {% for message in messages %}
     <div id="msg" class="alert {{ message.tags }} alert-dismissible" role="alert">
-{#        <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}
-{#            <span aria-hidden="true">&times;</span>#}
-{#        </button>#}
-        {{ message | safe }}
+<!--        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
+<!--{#        <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}-->
+<!--{#            <span aria-hidden="true">&times;</span>#}-->
+<!--{#        </button>#}-->
+        <div id="msg_text">
+            <strong>{{ message | safe }}</strong>
+        </div>
     </div>
 {% endfor %}
 {% load static %}
@@ -11,5 +14,17 @@
     let msg = document.getElementById('msg')
     setTimeout(() => {
         msg.remove();
-}, 3000);
+}, 5000);
 </script>
+<style>
+    #msg{
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+
+}
+    #msg_text{
+        text-align: center;
+        font-size: 16px;
+    }
+</style>
