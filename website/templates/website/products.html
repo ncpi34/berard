@@ -11,7 +11,6 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 
-
     <!--Main layout-->
   <main>
 
@@ -27,11 +26,40 @@
 
               {% for article in articles %}
           <!--Grid column-->
-          <div class="articles col-lg-2 col-md-5 mb-3">
+          <div class="articles col-lg-2 col-md-3  col-sm-6 mb-3">
+
+        <!-- Test -->
+{#          <div class="card">#}
+{#              <img class="card-img"#}
+{#                   alt="photo" src="{{ article.get_img }}"#}
+{#              style="opacity: 0.2"/>#}
+{##}
+{#            <div class="card-img-overlay">#}
+{#                <a href="{{article.get_absolute_url}} ">#}
+{#                  <h6 class="text-stroke">{{ article.code_article }}</h6>#}
+{##}
+{#                </a>#}
+{#                 <div class="card-block">#}
+{#                    <p class="card-text">{{ article.libelle|title|truncatechars:20 }}</p>#}
+{#                 </div>#}
+{##}
+{#                 <div class="card-footer">#}
+{#                    <form action="{% url 'cart:cart_add' article.id %}" method="post"#}
+{#                    class="d-flex justify-content-left small">#}
+{#                     {% csrf_token %}#}
+{#                            {{ form }}#}
+{#                      <button class="form-control btn btn-success waves-effect waves-light" type="submit">#}
+{#                          <i class="fas fa-cart-plus"></i>#}
+{#                      </button>#}
+{#                  </form>#}
+{#                 </div>#}
+{#            </div>#}
+{#          </div>#}
+              <!-- Test -->
 
             <!--Card-->
 
-            <div class="card large" style="margin: -2%">
+            <div class="card medium" style="margin: -2%">
 
               <!--Card image-->
               <div class="view overlay">
@@ -51,29 +79,26 @@
               <div class="card-body text-center">
                 <!--Category & Title-->
                   <a href="{{article.get_absolute_url}} ">
-                    <h5>{{ article.code_article }}</h5>
+                    <h6>{{ article.code_article }}</h6>
                     <p>{{ article.libelle|title }}</p>
-                    <p>{{ article.gencode }}</p>
+                    <p style="font-size: 12px">{{ article.gencode }}</p>
                   </a>
 
-
-                  <strong>
-                      <p class="dark-grey-text">
-                          {% if article.conditionnement is None%}
-                              cdt indéfini
+              <div class="row">
+                  <div class="col">
+                      <h6>
+                            <label>Cdt: </label>
+                            <strong>{% if article.conditionnement is None%}
+                               indéfini
                               {% else %}
-                               cdt: {{ article.conditionnement }}
+                              {{ article.conditionnement }}
                           {% endif %}
-                      </p>
-                  </strong>
-
-
-{#                <h6 class="font-weight-bold blue-text">#}
-{#                    <label>Prix Achat</label>#}
-{#                  <strong>{{ article.prix_achat}} €</strong>#}
-{#                </h6>#}
-                  <h6 class="font-weight-bold blue-text">
-{#                    <label>Prix de vente</label>#}
+                            </strong>
+                        </h6>
+                  </div>
+                  <div class="col">
+                      <h6>
+                    <label>P.U HT: </label>
                   <strong>
                           {% if request.session.tarif == 1  %} {{ article.prix_achat_1 }}
                               {% elif request.session.tarif == 2 %} {{ article.prix_achat_2 }}
@@ -84,7 +109,10 @@
 
                   </strong>
                 </h6>
-                  <h4 class="font-weight-bold blue-text">
+                  </div>
+              </div>
+
+
                   <form action="{% url 'cart:cart_add' article.id %}" method="post"
                     class="d-flex justify-content-left small">
                      {% csrf_token %}
@@ -93,8 +121,6 @@
                           <i class="fas fa-cart-plus"></i>
                       </button>
                   </form>
-                </h4>
-
               </div>
               <!--Card content-->
 

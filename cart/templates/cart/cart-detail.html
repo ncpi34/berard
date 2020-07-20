@@ -19,28 +19,31 @@
                 <h4>Votre Panier</h4>
             </div>
 
-            <div class="col mt-5">
+            <div class="col mt-4">
                 <p>Total: {{ cart.get_total_price}} €</p>
             </div>
-        </div>
 
-        <form  name="myform2"
-              action="{% url 'cart:update_all_cart' %}" method="post"
-        >
-            <div class="text-right">
-                {{ quantity.quantity }}
-                <label for="test"></label>
-                <input id="test" type="text"/>
-            <a
-               onclick="getValue()"
-               href="javascript: submitform2()"
-               type="submit" class="btn btn-warning">
-                MAJ Panier
-            </a>
-                        {% csrf_token %}
+            <div class="col mt-5">
+                <form  name="myform2"
+              action="{% url 'cart:update_all_cart' %}" method="post">
+                    <div class="text-right">
+                        {{ quantity.quantity }}
+                    <button
+                       onclick="getValue()"
+{#                       href="javascript: submitform2()"#}
+                       type="submit" class="btn btn-warning"
+                       id="basket_update">
+                        MAJ Panier
+                    </button>
+                                {% csrf_token %}
+                    </div>
+
+                </form>
             </div>
 
-        </form>
+        </div>
+
+
 
     <table class="table">
         <thead>
@@ -91,7 +94,7 @@
                 <div>
                     <form name="myform" action="{% url 'cart:cart_remove' product.id %}" method="post">
                          {% csrf_token %}
-                        <a href="javascript: submitform()"
+                        <button
                            type="submit"
                            id="delete_btn"
                            class="delete-article btn btn-danger"
@@ -99,7 +102,7 @@
 {#                            <i class="material-icons">delete</i>#}
                             <i class="far fa-trash-alt"></i>
 {#                            X#}
-                        </a>
+                        </button>
                     </form>
                 </div>
             </td>
@@ -147,12 +150,18 @@
     <script>
     let widthScreenStart = window.innerWidth;
 
-    if (document.querySelector('#btn_return')) {
+    if (document.querySelector('#btn_return')
+        && document.querySelector('#basket_update')) {
         const btn = document.querySelector('#btn_return')
+        const btn2 = document.querySelector('#basket_update')
             if (widthScreenStart < 445) {
                 btn.innerHTML = 'RETOUR'
+                btn2.innerHTML = 'MAJ'
+            } else if(widthScreenStart > 445 && widthScreenStart < 675) {
+                btn2.innerHTML = 'MAJ'
             } else {
                 btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn2.innerHTML = 'MAJ PANIER'
             }
         }
 
@@ -160,12 +169,19 @@
     // calculate screen windows in real time and change html
     function resize() {
         let widthScreenReload = window.innerWidth;
-        if (document.querySelector('#btn_return')) {
+        {#console.log(widthScreenReload)#}
+        if (document.querySelector('#btn_return')
+            && document.querySelector('#basket_update')) {
             const btn = document.querySelector('#btn_return')
+            const btn2 = document.querySelector('#basket_update')
             if (widthScreenReload < 445) {
-            btn.innerHTML = 'RETOUR'
-            } else {
-            btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn.innerHTML = 'RETOUR'
+                btn2.innerHTML = 'MAJ'
+            } else if(widthScreenReload > 445 && widthScreenReload < 675) {
+                btn2.innerHTML = 'MAJ'
+            }else {
+                btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn2.innerHTML = 'MAJ PANIER'
             }
         }
 
@@ -239,7 +255,6 @@
             })
 
         document.querySelector('#hidden_values').value=ids
-        console.log(ids)
 
         {#call(ids).then(#}
         {#    rst => {#}

@@ -7,6 +7,21 @@
 
 <!-- For placeholder -->
 <style>
+
+
+{##navbar {#}
+{#  background-color: #333;#}
+{#  position: fixed;#}
+{#  top: 0;#}
+{#  width: 100%;#}
+{#  display: block;#}
+{#  transition: top 0.3s;#}
+{#    z-index: 1;#}
+{#}#}
+
+
+
+
     ::-webkit-input-placeholder {
    color: black;
 }
@@ -25,12 +40,13 @@
 
 </style>
 
-  <nav id="navbar">
+  <nav id="navbar" >
     <div id="mynavbar" class="nav-wrapper   green">
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
     <!--Top menu -->
-        <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
+            <i class="material-icons">menu</i></a>
 
         <div>
 
@@ -57,7 +73,7 @@
                       {% if cart|length > 0 %}
                           <span class="badge green z-depth-1 position-absolute rounded-circle">
 {#                          {{ total_items }}#}
-                          ++
+                          1
 
                           </span>
                       {% else %}
@@ -94,7 +110,7 @@
       <!--Top menu -->
 
 <!--SideNav -->
-      <ul class="side-nav darken-2" id="mobile-demo">
+      <ul class="sidenav darken-2" id="mobile-demo">
 
             <li class="sidenav-header green">
                 <a href="{% url 'website:products' %}">
@@ -166,35 +182,29 @@
       
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let elem = document.querySelector('.sidenav');
+        let instance = M.Sidenav.init(elem, {
+            menuWidth: 300, // Default is 300
+            edge: 'left', // Choose the horizontal origin
+            closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+            draggable: true // Choose whether you can drag to open on touch screens
+        });
+
+  });
 
 
-
-  <script>
-    $(document).ready(function(){
-      $('.button-collapse').sideNav({
-        
-          menuWidth: 300, // Default is 300
-          edge: 'left', // Choose the horizontal origin
-          closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-          draggable: true // Choose whether you can drag to open on touch screens
-        }
-      );
-      // START OPEN
-      {#$('.button-collapse').sideNav('show');#}
-    });
-
-
-    {#// When the user scrolls down 20px from the top of the document, slide down the navbar#}
-    {#window.onscroll = function() {scrollFunction()};#}
-    {##}
-    {#function scrollFunction() {#}
-    {#    console.log('scroll')#}
-    {#  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {#}
-    {#    document.getElementById("mynavbar").style.top = "0";#}
-    {#  } else {#}
-    {#    document.getElementById("mynavbar").style.top = "-50px";#}
-    {#  }#}
-    {#}#}
+    let prevScrollpos = window.pageYOffset;
+    window.onscroll = function() {
+    let currentScrollPos = window.pageYOffset;
+      if (prevScrollpos > currentScrollPos) {
+        document.getElementById("navbar").style.top = "0";
+      } else {
+        document.getElementById("navbar").style.top = "-60px";
+      }
+      prevScrollpos = currentScrollPos;
+    }
 
   </script>
 

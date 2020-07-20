@@ -98,7 +98,10 @@
                 class="d-flex justify-content-left">
               {{ form }}
               {% csrf_token %}
-              <input aria-label="Search" value="Ajouter au panier" class="form-control btn-success" type="submit"/>
+              <button id="add_basket" class="form-control btn-success mt-2" type="submit">
+{#                  <i class="fas fa-cart-plus"></i>#}
+                  Ajouter au panier
+              </button>
           </form>
 
               <p class="text-right">
@@ -138,3 +141,42 @@
   </main>
 
 {% endblock content %}
+{% block extrascripts %}
+    <script>
+    let widthScreenStart = window.innerWidth;
+
+    if (document.querySelector('#btn_return') && document.querySelector('#add_basket')) {
+        const btn = document.querySelector('#btn_return')
+        const btn2 = document.querySelector('#add_basket')
+            if (widthScreenStart < 445) {
+                btn.innerHTML = 'RETOUR'
+                btn2.innerHTML = '<i class="fas fa-cart-plus"></i>'
+
+            } else {
+                btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn2.innerHTML = 'Ajout au panier'
+            }
+        }
+
+
+    // calculate screen windows in real time and change html
+    function resize() {
+        let widthScreenReload = window.innerWidth;
+        {#console.log(widthScreenReload)#}
+        if (document.querySelector('#btn_return')
+        && document.querySelector('#add_basket')) {
+            const btn = document.querySelector('#btn_return')
+            const btn2 = document.querySelector('#add_basket')
+            if (widthScreenReload < 445) {
+                btn.innerHTML = 'RETOUR'
+                btn2.innerHTML = '<i class="fas fa-cart-plus"></i>'
+            } else {
+                btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn2.innerHTML = 'Ajout au panier'
+            }
+        }
+
+    }
+    window.onresize = resize;
+    </script>
+{% endblock %}
