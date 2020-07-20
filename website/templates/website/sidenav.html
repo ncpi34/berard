@@ -113,10 +113,14 @@
       <ul class="sidenav darken-2" id="mobile-demo">
 
             <li class="sidenav-header green">
-                <a href="{% url 'website:products' %}">
-                    <img class="w-25 ml-5" src="/media/img/logo.jpg"/>
-                </a>
+                    <img class="w-25 ml-5 circle" src="/media/img/logo.jpg"/>
             </li>
+          <li>
+              <a href="{% url 'website:products' %}">
+              <i class="fas fa-home"></i>
+                  <p>Accueil</p>
+              </a>
+          </li>
           <li id="signout_link">
               <a href="{% url 'website:logout' %}">
               <i class="fas fa-sign-out-alt"></i>

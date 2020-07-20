@@ -18,11 +18,6 @@
             <div class="col ml-2">
                 <h4>Votre Panier</h4>
             </div>
-
-            <div class="col mt-4">
-                <p>Total: {{ cart.get_total_price}} €</p>
-            </div>
-
             <div class="col mt-5">
                 <form  name="myform2"
               action="{% url 'cart:update_all_cart' %}" method="post">
@@ -40,6 +35,13 @@
 
                 </form>
             </div>
+
+            <div class="col mt-4">
+                <h5 class="alert alert-success position-fixed">Total: {{ cart.get_total_price}} €</h5>
+            </div>
+
+
+
 
         </div>
 
@@ -120,18 +122,18 @@
                 >Commander</a>
 {#            <button id="send-order" class="btn btn-success">Commander</button>#}
             <a href="{% url 'website:products' %}">
-                <button id="btn_return" class="btn btn-success">Retourner aux produits</button>
+                <button  class="btn_return btn btn-success">Retourner aux produits</button>
             </a>
         </p>
 
     {% else %}
         <div class="container text-center mt-5" style="min-height: 60vh">
-            <h4 class="text-left">est vide ...</h4>
+            <h4 class="text-left">Votre panier est vide ...</h4>
 
         <p class="text-right">
 
             <a href="{% url 'website:products' %}">
-                <button id="btn_return" class="btn btn-success">Retourner aux produits</button>
+                <button  class="btn_return btn btn-success">Retourner aux produits</button>
             </a>
         </p>
         </div>
@@ -150,9 +152,9 @@
     <script>
     let widthScreenStart = window.innerWidth;
 
-    if (document.querySelector('#btn_return')
+    if (document.querySelector('.btn_return')
         && document.querySelector('#basket_update')) {
-        const btn = document.querySelector('#btn_return')
+        const btn = document.querySelector('.btn_return')
         const btn2 = document.querySelector('#basket_update')
             if (widthScreenStart < 445) {
                 btn.innerHTML = 'RETOUR'
@@ -169,10 +171,9 @@
     // calculate screen windows in real time and change html
     function resize() {
         let widthScreenReload = window.innerWidth;
-        {#console.log(widthScreenReload)#}
-        if (document.querySelector('#btn_return')
+        if (document.querySelector('.btn_return')
             && document.querySelector('#basket_update')) {
-            const btn = document.querySelector('#btn_return')
+            const btn = document.querySelector('.btn_return')
             const btn2 = document.querySelector('#basket_update')
             if (widthScreenReload < 445) {
                 btn.innerHTML = 'RETOUR'
