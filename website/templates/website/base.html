@@ -85,6 +85,14 @@
           }
     }
 
+    a{
+        color: black;
+    }
+    a:hover{
+        color:green;
+    }
+
+
 
   </style>
 
@@ -108,12 +116,12 @@
 
     <!-- Includes -->
 {#    {% include "_header.html" %}#}
-
+<div class="mt-5">
     {% block content %}
 
     {% endblock content %}
 
-
+</div>
 
     {% block extra_body %}
     {% endblock %}

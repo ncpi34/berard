@@ -10,13 +10,15 @@ class ArticleFilter(django_filters.FilterSet):
                                              widget=TextInput(attrs={
                                                  'id': 'search',
                                                  'class': 'searchTerm',
-                                                 'placeholder': 'Rechercher',
+                                                 # 'placeholder': 'Rechercher',
                                                  'style':
                                                      'border-radius: 4px;color:white;'
                                                      'text-align:center;'
                                                      'background-color:white;'
                                                      'color:black;'
-                                                     'top:1px'
+                                                     'top:1px;'
+                                                     'display:none;'
+                                                     'width:100%'
                                              })
                                              )
 

@@ -2,14 +2,17 @@
 {% load static %}
 
 {% block navbar %}
-    {% include 'website/sidenav.html' with title_pager='Panier'  %}
+    {% include 'website/sidenav.html' with title_pager=cart.get_total_price price='€' %}
 {% endblock %}
 
 {% block content %}
-{#    {% include "cart/_modal.html" %}#}
-{#    {% include 'cart/modal_mat.html' %}#}
     {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
+<style>
+    .label-icon{
+        display: none;
+    }
+</style>
     <main>
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
@@ -17,8 +20,9 @@
     {% if cart %}
         <div class="row">
             <div class="col mb-5">
-                <h5 class="alert alert-success position-fixed" style="right: 0">
-                    Total: {{ cart.get_total_price}} €</h5>
+<!--                <h5 class="alert alert-success position-fixed" style="right: 0">-->
+<!--                    Total: {{ cart.get_total_price}} €-->
+<!--                </h5>-->
                 <form  name="myform2"
               action="{% url 'cart:update_all_cart' %}" method="post">
                     <div class="text-left">
@@ -114,10 +118,10 @@
 
         </tbody>
     </table>
-        <h5 >Total: {{ cart.get_total_price}} €</h5>
+        <h5 >Total: {{ cart.get_total_price }} €</h5>
          <p class="text-right">
             <a href="#menu-modal"
-               class="btn btn-success waves-effect waves-light modal-trigger"
+               class="btn btn-success waves-effect modal-trigger"
                 >Commander</a>
 {#            <button id="send-order" class="btn btn-success">Commander</button>#}
             <a href="{% url 'website:products' %}">
@@ -221,25 +225,8 @@
     function submitform1() {   document.myform1.submit(); }
     function submitform2() {   document.myform2.submit(); }
 
-    {#let deleteConfirm = async (button) => {#}
-    {#         let response = await fetch(button.id, {method: 'GET'});#}
-    {#         let html = document.getElementById("modal1").innerHTML += `${await response.text()}`;#}
-    {#         return html#}
-    {#     };#}
-    {#    deleteConfirm().then(#}
-    {#        rst => {#}
-    {#            const elemsModal = document.querySelectorAll('.modal1');#}
-    {#            const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true});#}
-    {#            instance.open()#}
-    {#        }#}
-    {#    );#}
 
-    const call = async (obj) =>{
-        console.log(obj)
-        let query = await fetch('/cart/update_all_cart')
-        return query
-    }
-
+    // to get values from all the basket and use it in django views
     const getValue = () => {
 
             let quant_val = document.querySelectorAll('.quantity_val')
@@ -256,17 +243,8 @@
 
         document.querySelector('#hidden_values').value=ids
 
-        {#call(ids).then(#}
-        {#    rst => {#}
-        {#    console.log(rst)#}
-        {#    })#}
+    }
 
-        return ids
-    }
-    const checkChange = (but) => {
-        console.log('BUTTon', but)
-    }
-    let test = document.querySelectorAll('.quantity_val')
 
 
     </script>

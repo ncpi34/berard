@@ -9,15 +9,16 @@
 <style>
 
 
-{##navbar {#}
-{#  background-color: #333;#}
-{#  position: fixed;#}
-{#  top: 0;#}
-{#  width: 100%;#}
-{#  display: block;#}
-{#  transition: top 0.3s;#}
-{#    z-index: 1;#}
-{#}#}
+#navbar{
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: block;
+  transition: top 0.3s;
+    z-index: 1;
+
+}
 
 
 
@@ -37,17 +38,40 @@
 :-ms-input-placeholder {
    color: black;
 }
+#close_icon{
+    display:none;
+}
+
+    .mystyle{
+        display: block!important;
+        margin-top: 20px!important;
+    }
+    .mystyle2{
+            display:none!important;
+    }
+    .mystyle3{
+        display:block!important;
+        margin-top: 10px!important;
+    }
 
 </style>
 
-  <nav id="navbar" >
-    <div id="mynavbar" class="nav-wrapper   green">
+  <nav  class="nav-extended">
+    <div id="navbar" class="nav-wrapper   green">
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
     <!--Top menu -->
-        <h5 class="brand-logo"> {{ title_pager }} </h5>
+        <h5 class="brand-logo"> {{ title_pager }} {{ price }} </h5>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
-            <i class="material-icons">menu</i></a>
+            <i class="material-icons">menu</i>
+        </a>
+
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger right">
+            <i class="material-icons">menu</i>
+        </a>
+<!--         <a href="#" data-target="nav-mobile" class="sidenav-trigger">-->
+<!--            <i class="material-icons">menu</i>-->
+<!--        </a>-->
 
         <div>
 
@@ -57,10 +81,15 @@
               <div class="wrap">
                <div class="search mt-3">
                    {{ filter.form.as_p }}
-<!--{#                    <label class="label-icon" for="search"#}-->
-<!--{#                           style="color: white">#}-->
-<!--{#                        <i class="material-icons">search</i>#}-->
-<!--{#                    </label>#}-->
+                        <label class="label-icon" for="search"
+                           style="color: white">
+                            <a href="javascript:void(0);">
+                                <i id="search_icon" class="material-icons right">search</i>
+                            </a>
+                        </label>
+                   <a href="javascript:void(0);">
+                        <i id="close_icon" class="material-icons ">close</i>
+                   </a>
                </div>
             </div>
           </form>
@@ -69,8 +98,14 @@
 
             </ul>
 
+            <!-- Navbar -->
+            <ul  class="right hide-on-med-and-down">
 
-            <ul class="right">
+                <li>
+                  <a href="{% url 'website:products' %}">
+                  <i class="fas fa-home"></i>
+                  </a>
+                </li>
 
                 <li>
                     <a href="{% url 'cart:cart_detail' %}" title="Panier">
@@ -103,35 +138,80 @@
                 </li>
 
             </ul>
-
-
-
-
-
+            <!-- Navbar -->
 
         </div>
       </div>
 
       <!--Top menu -->
+      <!-- Navbar to sidenav -->
+      <ul class="sidenav" id="nav-mobile">
+            <li class="sidenav-header green">
+                    <img class="w-25 ml-5 circle" src="/media/img/logo.jpg"/>
+            </li>
+          <!-- Divider -->
+            <li><div class="divider"></div></li>
+          <!-- Divider -->
+            <li>
+              <a href="{% url 'website:products' %}">
+              <i class="fas fa-home"></i>
+                  <p>Accueil</p>
+              </a>
+            </li>
+            <li>
+                    <a href="{% url 'cart:cart_detail' %}" title="Panier">
+<!--                        {% with total_items=cart|length %}-->
+<!--                      {% if cart|length > 0 %}-->
+<!--                          <span class="badge green z-depth-1  position-absolute rounded-circle">-->
+<!--{#                          {{ total_items }}#}-->
+<!--                          1-->
+
+<!--                          </span>-->
+<!--                      {% else %}-->
+<!--                          <span class="badge red z-depth-1  position-absolute rounded-circle">-->
+<!--                          0-->
+<!--                          </span>-->
+<!--                      {% endif %}-->
+<!--                  {% endwith %}-->
+                    <i class="fas fa-shopping-cart"></i>
+                        <p>Panier</p>
+
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'website:order_summary' %}" title="Historique" >
+                        <i class="fa fa-history"></i>
+                        <p>Historique</p>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'website:logout' %}" title="Déconnexion" >
+<!--                        <span class="clearfix d-none d-sm-inline-block">-->
+                            <i class="fas fa-sign-out-alt"></i>
+                            <p>Déconnexion</p>
+<!--                        </span>-->
+                    </a>
+                </li>
+      </ul>
+
+      <!-- Navbar to sidenav -->
+
 
 <!--SideNav -->
+
       <ul class="sidenav darken-2" id="mobile-demo">
 
             <li class="sidenav-header green">
                     <img class="w-25 ml-5 circle" src="/media/img/logo.jpg"/>
             </li>
-          <li>
-              <a href="{% url 'website:products' %}">
-              <i class="fas fa-home"></i>
-                  <p>Accueil</p>
-              </a>
-          </li>
-          <li id="signout_link">
-              <a href="{% url 'website:logout' %}">
-              <i class="fas fa-sign-out-alt"></i>
-                  <p>Déconnexion</p>
-              </a>
-          </li>
+<!--          <li id="signout_link">-->
+<!--              <a href="{% url 'website:logout' %}">-->
+<!--              <i class="fas fa-sign-out-alt"></i>-->
+<!--                  <p>Déconnexion</p>-->
+<!--              </a>-->
+<!--          </li>-->
 
 
           <!--Sidebar -->
@@ -192,28 +272,63 @@
 
 
 <script>
+    // sideNavs animation
     document.addEventListener('DOMContentLoaded', function() {
-        let elem = document.querySelector('.sidenav');
+        let elem = document.querySelector('#nav-mobile');
         let instance = M.Sidenav.init(elem, {
+            menuWidth: 300, // Default is 300
+            edge: 'right', // Choose the horizontal origin
+            closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+            draggable: true // Choose whether you can drag to open on touch screens
+        });
+
+        let elems = document.querySelector('#mobile-demo');
+        let instances = M.Sidenav.init(elems, {
             menuWidth: 300, // Default is 300
             edge: 'left', // Choose the horizontal origin
             closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
             draggable: true // Choose whether you can drag to open on touch screens
         });
-
   });
 
-
+    //navBar animation
     let prevScrollpos = window.pageYOffset;
     window.onscroll = function() {
     let currentScrollPos = window.pageYOffset;
+    let navbar = document.getElementById("navbar")
       if (prevScrollpos > currentScrollPos) {
-        document.getElementById("navbar").style.top = "0";
+        navbar.style.top = "0";
+
       } else {
-        document.getElementById("navbar").style.top = "-60px";
+        navbar.style.top = "-60px";
       }
       prevScrollpos = currentScrollPos;
     }
+
+    // animation searchbar
+     let iconclose = document.querySelector('#close_icon')
+    const searchBar = document.querySelector('#search_icon');
+    searchBar.addEventListener('click', () => {
+       let searchbar = document.querySelector('#search')
+        searchbar.classList.toggle("mystyle");
+
+       let iconsearch = document.querySelector('#search_icon')
+        iconsearch.classList.toggle("mystyle2");
+
+
+        iconclose.classList.toggle("mystyle3");
+
+    })
+    iconclose.addEventListener('click', ()=> {
+        let searchbar = document.querySelector('#search')
+        searchbar.classList.toggle("mystyle");
+
+       let iconsearch = document.querySelector('#search_icon')
+        iconsearch.classList.toggle("mystyle2");
+
+
+        iconclose.classList.toggle("mystyle3");
+    })
 
   </script>
 

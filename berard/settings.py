@@ -37,6 +37,8 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ['*']
+
+CONNECTED_OR_NOT = False
 # MATERIAL_ADMIN_SITE = {
 #     'HEADER':  _('Demo'),
 #     'TITLE':  _('Demo'),
@@ -67,7 +69,7 @@ INSTALLED_APPS = [
 
     # 'celery',
     # 'django_celery_results',
-    'django_celery_beat',
+    # 'django_celery_beat',
 
     'django.contrib.admin',
     'django.contrib.auth',

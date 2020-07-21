@@ -18,6 +18,8 @@ from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
 from django.views.decorators.cache import cache_page
 import time
+from django.contrib.messages.views import SuccessMessageMixin
+from django.conf import settings
 
 """ login"""
 
@@ -67,15 +69,15 @@ def logout_view(request):
 """ Products views"""
 
 
-class ArticleView(LoginRequiredMixin, ListView):
+class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
     template_name = 'website/products.html'
     paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
     login_url = ''
+    success_message = 'List successfully saved!!!!'
 
     def get_queryset(self):
-
         if self.kwargs.get('group') and self.kwargs.get('family'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
@@ -102,10 +104,10 @@ class ArticleView(LoginRequiredMixin, ListView):
             postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
                                                 | Q(actif=True) & Q(libelle__contains=query.upper()))
             return postresult
-        # else:
-        #     result = None
-        # return result
         else:
+            if not settings.CONNECTED_OR_NOT:
+                messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
+                settings.CONNECTED_OR_NOT = True
             article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
             # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
@@ -115,6 +117,10 @@ class ArticleView(LoginRequiredMixin, ListView):
         context['form'] = CartAddProductForm()
         context['filter'] = ArticleFilter()
         return context
+
+    # def get_success_url(self):
+    #     messages.success(self.request, "deleted successfully")
+    #     return reverse("/")
 
 
 class ArticleByFamillyView(LoginRequiredMixin, ListView):

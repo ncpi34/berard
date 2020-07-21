@@ -1,31 +1,17 @@
 {% load widget_tweaks %}
+<div class="modal" id="menu-modal">
+    <div class="modal-content" id="modal-content">
 
-<div class="modal-header">
-  <h3 class="modal-title">Book details</h3>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
+  {% csrf_token %}
 
-<div class="modal-body">
-    <h2>Modal</h2>
+    <div class="modal-header">
+        <a href="#" class="modal-close waves-effect btn-flat right">
+            <i class="material-icons">close</i>
+        </a>
+    </div>
+    <div class="modal-body">
+      <img class="justify-content-center" id="test" src=""/>
+    </div>
 
-  <div class="">
-    Title:
-    {{ book.title }}
-  </div>
-  <div class="">
-    Author:
-    {{ book.author }}
-  </div>
-  <div class="">
-    Price:
-    {{ book.price }}
-    €
-  </div>
-
-</div>
-
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
 </div>

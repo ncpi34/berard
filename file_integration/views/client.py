@@ -64,7 +64,7 @@ class ClientViews(object):
             except Exception as err:
                 print('not inserted', rst['code_client'])
                 print(err)
-                # raise err
+                raise err
 
     # Index_method
     @classmethod

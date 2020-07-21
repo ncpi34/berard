@@ -6,18 +6,9 @@
 {% endblock %}
 
 {% block content %}
-
-     {% include "website/modals/_modal.html" %}
+    {% include 'website/modals/display_picture.html' %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<style>
-    a{
-        color: black;
-    }
-    a:hover{
-        color:green;
-    }
-</style>
     <!--Main layout-->
   <main>
 
@@ -30,54 +21,24 @@
 
         <!--Grid row-->
         <div class="row wow fadeIn">
+<!--            <div class="row wow fadeIn no-gutters">-->
 
               {% for article in articles %}
           <!--Grid column-->
           <div class="articles col-lg-2 col-md-3  col-sm-6 mb-3">
 
-<!--        &lt;!&ndash; Test &ndash;&gt;-->
-<!--{#          <div class="card">#}-->
-<!--{#              <img class="card-img"#}-->
-<!--{#                   alt="photo" src="{{ article.get_img }}"#}-->
-<!--{#              style="opacity: 0.2"/>#}-->
-<!--{##}-->
-<!--{#            <div class="card-img-overlay">#}-->
-<!--{#                <a href="{{article.get_absolute_url}} ">#}-->
-<!--{#                  <h6 class="text-stroke">{{ article.code_article }}</h6>#}-->
-<!--{##}-->
-<!--{#                </a>#}-->
-<!--{#                 <div class="card-block">#}-->
-<!--{#                    <p class="card-text">{{ article.libelle|title|truncatechars:20 }}</p>#}-->
-<!--{#                 </div>#}-->
-<!--{##}-->
-<!--{#                 <div class="card-footer">#}-->
-<!--{#                    <form action="{% url 'cart:cart_add' article.id %}" method="post"#}-->
-<!--{#                    class="d-flex justify-content-left small">#}-->
-<!--{#                     {% csrf_token %}#}-->
-<!--{#                            {{ form }}#}-->
-<!--{#                      <button class="form-control btn btn-success waves-effect waves-light" type="submit">#}-->
-<!--{#                          <i class="fas fa-cart-plus"></i>#}-->
-<!--{#                      </button>#}-->
-<!--{#                  </form>#}-->
-<!--{#                 </div>#}-->
-<!--{#            </div>#}-->
-<!--{#          </div>#}-->
-<!--              &lt;!&ndash; Test &ndash;&gt;-->
-
             <!--Card-->
 
             <div class="card medium" style="margin: -2%">
-
               <!--Card image-->
               <div class="view overlay">
-                <a href="#" data-id="{% url 'website:product_photo' article.id %}">
+                <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}" >
                         <img class="img_modal img-fluid img-thumbnail card-img-top"
                              alt="photo"
                         src="{{ article.get_img }}"/>
                 </a>
 
 
-                  <div class="mask rgba-white-slight"></div>
 
               </div>
               <!--Card image-->
@@ -123,7 +84,7 @@
                     class="d-flex justify-content-left small" style="margin-bottom: -20px">
                      {% csrf_token %}
                             {{ form }}
-                      <button class="form-control btn btn-success waves-effect waves-light" type="submit">
+                      <button class="form-control btn btn-success" type="submit">
                           <i class="fas fa-cart-plus"></i>
                       </button>
                   </form>
@@ -146,23 +107,23 @@
         {# Mise en forme de la pagination ici #}
 
         <!-- Pagination-->
-{#        {% if page_obj.has_previous %}#}
-{#        <div class="pagination">#}
-{#            <span class="step-links">#}
-{#                <a href="?page=1">début</a>#}
-{#                <a href="?page={{ page_obj.previous_page_number }}">précédente</a>#}
-{#        {% endif %}#}
-{##}
-{#            <span class="current">#}
-{#                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}#}
-{#            </span>#}
-{##}
-{#            {% if page_obj.has_next %}#}
-{#                <a href="?page={{ page_obj.paginator.num_pages }}">dernière</a>#}
-{#                <a href="?page={{ page_obj.next_page_number }}">suivante</a>#}
-{#            {% endif %}#}
-{#        </span>#}
-{#        </div>#}
+<!--{#        {% if page_obj.has_previous %}#}-->
+<!--{#        <div class="pagination">#}-->
+<!--{#            <span class="step-links">#}-->
+<!--{#                <a href="?page=1">début</a>#}-->
+<!--{#                <a href="?page={{ page_obj.previous_page_number }}">précédente</a>#}-->
+<!--{#        {% endif %}#}-->
+<!--{##}-->
+<!--{#            <span class="current">#}-->
+<!--{#                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}#}-->
+<!--{#            </span>#}-->
+<!--{##}-->
+<!--{#            {% if page_obj.has_next %}#}-->
+<!--{#                <a href="?page={{ page_obj.paginator.num_pages }}">dernière</a>#}-->
+<!--{#                <a href="?page={{ page_obj.next_page_number }}">suivante</a>#}-->
+<!--{#            {% endif %}#}-->
+<!--{#        </span>#}-->
+<!--{#        </div>#}-->
 
         {% else %}
             <div class="container text-center mt-5" style="min-height: 80vh">
@@ -197,4 +158,37 @@
 
 {% endblock content %}
 
+{% block extrascripts %}
 
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+             //floating
+             const elemsBtns = document.querySelectorAll('.modal');
+             const floatingBtn = M.FloatingActionButton.init(elemsBtns, {
+                 direction: 'left',
+                 hoverEnabled: false
+             });
+
+            // onclick event
+            document.querySelectorAll(".pic_button").forEach(box =>
+            box.addEventListener("click", () =>{
+                let modal = document.getElementById("test");
+                modal.src= box.id
+                console.log(box.id)
+
+                const elemsModal = document.querySelectorAll('.modal');
+                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
+            }
+            ))
+        })
+
+
+
+
+
+    </script>
+
+{% endblock extrascripts %}
