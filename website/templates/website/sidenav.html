@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
 {#<link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">#}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/hamburgers.css' %}">
 
 <!-- For placeholder -->
 <style>
@@ -61,7 +62,7 @@
 
       {% get_menu "NAV_MENU_TOP" as top_menu %}
     <!--Top menu -->
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
+        <a id="nav-icon1" href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
             <i class="material-icons">menu</i>
         </a>
         <h5 class="brand-logo ml-4"> {{ title_pager }} {{ price }} </h5>
@@ -103,7 +104,7 @@
 
                 <li>
                   <a href="{% url 'website:products' %}">
-                  <i class="fas fa-home"></i>
+                  <i class="fas fa-home" title="Accueil"></i>
                   </a>
                 </li>
 
@@ -147,7 +148,18 @@
       <!-- Navbar to sidenav -->
       <ul class="sidenav" id="nav-mobile">
             <li class="sidenav-header green">
-                    <img class="w-25 ml-5 circle" src="/media/img/logo.jpg"/>
+                <div class="row">
+                    <div class="col">
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-times left sidenav-close"
+                               aria-hidden="true">
+                            </i>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <img class="w-50 ml-5 circle" src="/media/img/logo.jpg"/>
+                    </div>
+                </div>
             </li>
           <!-- Divider -->
             <li><div class="divider"></div></li>
@@ -199,12 +211,23 @@
       <!-- Navbar to sidenav -->
 
 
-<!--SideNav -->
+<!--SideNav Left -->
 
       <ul class="sidenav darken-2" id="mobile-demo">
 
             <li class="sidenav-header green">
-                    <img class="w-25 ml-5 circle" src="/media/img/logo.jpg"/>
+                <div class="row">
+                    <div class="col">
+                        <img class="w-50 ml-5 circle" src="/media/img/logo.jpg"/>
+                    </div>
+                    <div class="col">
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-times right sidenav-close"
+                               aria-hidden="true">
+                            </i>
+                        </a>
+                    </div>
+                </div>
             </li>
 <!--          <li id="signout_link">-->
 <!--              <a href="{% url 'website:logout' %}">-->
@@ -265,7 +288,7 @@
           </li>
       </ul>
   </nav>
-<!--SideNav -->
+<!--SideNav Left -->
 
 
       
@@ -308,9 +331,10 @@
     // animation searchbar
      let iconclose = document.querySelector('#close_icon')
     const searchBar = document.querySelector('#search_icon');
-    searchBar.addEventListener('click', () => {
-       let searchbar = document.querySelector('#search')
+    searchBar.addEventListener('click',  () => {
+        let searchbar = document.querySelector('#search')
         searchbar.classList.toggle("mystyle");
+
 
        let iconsearch = document.querySelector('#search_icon')
         iconsearch.classList.toggle("mystyle2");

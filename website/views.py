@@ -78,7 +78,12 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
     success_message = 'List successfully saved!!!!'
 
     def get_queryset(self):
-        if self.kwargs.get('group') and self.kwargs.get('family'):
+        if self.request.GET.get('code_article'):
+            query = self.request.GET.get('code_article')
+            postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
+                                                | Q(actif=True) & Q(libelle__contains=query.upper()))
+            return postresult
+        elif self.kwargs.get('group') and self.kwargs.get('family') and not self.request.GET.get('code_article'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
             article = Article.objects.filter(
@@ -86,30 +91,22 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
                 & Q(groupe__nom=_group)
                 & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00)
                                                    )
-            # article = ArticleFilter(queryset=_name)
             return article
         elif self.kwargs.get('group'):
             _name = self.kwargs.get("group")
             article = Article.objects.filter(Q(actif=True) & Q(groupe__nom=_name)).exclude(Q(prix_achat_1=0.00))
-            # article = ArticleFilter(queryset=_name)
             return article
 
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
             article = Article.objects.filter(Q(actif=True) & Q(sous_famille__nom=_name)).exclude(Q(prix_achat_1=0.00))
-            # article = ArticleFilter(queryset=_name)
             return article
-        elif self.request.GET.get('code_article'):
-            query = self.request.GET.get('code_article')
-            postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
-                                                | Q(actif=True) & Q(libelle__contains=query.upper()))
-            return postresult
+
         else:
             if not settings.CONNECTED_OR_NOT:
                 messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
                 settings.CONNECTED_OR_NOT = True
             article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
-            # article = Article.objects.filter(actif=True).order_by('libelle')[0:50]
             return article
 
     def get_context_data(self, **kwargs):
@@ -125,13 +122,14 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
 
 class ArticleByFamillyView(LoginRequiredMixin, ListView):
     template_name = 'website/products.html'
-    paginate_by = 50
+    paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
     login_url = ''
 
     def get_queryset(self):
-        print(self.kwargs.get('nom'))
+        print('FAMILYYYYYY')
+        print(self.request.GET.get('code_article'))
         _name = self.kwargs.get("nom")
         article = Article.objects.filter(Q(famille__nom=_name))
         return article
@@ -147,8 +145,6 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     queryset = Article.objects.all()
     login_url = ''
 
-    # context_object_name = 'article'
-
     def get_object(self):
         id_ = self.kwargs.get('pk')
         # article.nb_vues += 1  # views_numb
@@ -157,24 +153,6 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['form'] = CartAddProductForm()
-        return context
-
-
-class ArticlePictureView(LoginRequiredMixin, DetailView):
-    template_name = 'website/modals/display_picture.html'
-    queryset = Article.objects.all()
-    login_url = ''
-
-    def get_object(self):
-        print('ooookkkkkkkk')
-        id_ = self.kwargs.get('pk')
-        # article.nb_vues += 1  # views_numb
-        # article.save()
-        return get_object_or_404(Article, pk=id_)
-
-    def get_context_data(self, **kwargs):
-        context = super(ArticlePictureView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
         return context
 

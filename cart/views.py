@@ -14,13 +14,14 @@ from website.models import Article, HistoriqueCommande, ProduitCommande
 from django.contrib import messages
 import datetime
 from datetime import date
+from django.http import HttpResponseRedirect
 
 """ Cart """
 
 
 @login_required(login_url="")
 @require_POST
-def cart_add(request, product_id):  # add method
+def cart_add(request, product_id, encoded_url):  # add method
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
@@ -29,10 +30,14 @@ def cart_add(request, product_id):  # add method
         cart.add(product=product,
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
-    # return redirect("cart:cart_detail")
-    # print(request.path_info)
-    # print(request.build_absolute_uri())
-    return redirect("website:products")
+
+    str_split = encoded_url.split('/')
+    if str_split[1] == 'detail':
+        return HttpResponseRedirect(encoded_url)
+    elif str_split[1] == 'groupe':
+        return HttpResponseRedirect(encoded_url)
+    elif str_split[1] == 'accueil':
+        return HttpResponseRedirect(encoded_url)
 
 
 # @login_required(login_url="")
