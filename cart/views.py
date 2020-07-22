@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect
 
 @login_required(login_url="")
 @require_POST
-def cart_add(request, product_id, encoded_url):  # add method
+def cart_add(request, product_id):  # add method
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
@@ -30,6 +30,7 @@ def cart_add(request, product_id, encoded_url):  # add method
         cart.add(product=product,
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
+    return redirect('website:products')
 
     str_split = encoded_url.split('/')
     if str_split[1] == 'detail':

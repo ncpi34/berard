@@ -99,7 +99,7 @@
               </button>
 
             </form> {% endcomment %}
-          <form action="{% url 'cart:cart_add' product_id=article.id encoded_url=request.path %}" method="post"
+          <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                 class="d-flex justify-content-left">
               {{ form }}
               {% csrf_token %}
