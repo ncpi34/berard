@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.utils.text import Truncator
 
-from website.models import ProfilUtilisateur, Article, HistoriqueCommande, ProduitCommande
+from website.models import ProfilUtilisateur, Article, HistoriqueCommande, ProduitCommande, Favori
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
 
@@ -12,7 +12,7 @@ admin.site.unregister(Group)
 
 """Register part"""
 
-
+""" Article """
 @admin.register(Article)
 class ArticleViews(admin.ModelAdmin):
     list_display = ('code_article', 'libelle',
@@ -36,7 +36,7 @@ class ArticlesInLine(admin.TabularInline):
     model = ProduitCommande
     raw_id_fields = ['article']
 
-
+""" Order Summary """
 @admin.register(HistoriqueCommande)
 class HistoriqueViews(admin.ModelAdmin):
     list_display = ['date', 'get_articles', 'utilisateur']
@@ -59,7 +59,7 @@ class HistoriqueViews(admin.ModelAdmin):
 # admin.site.register(Historique, HistoriqueViews)
 
 
-# CustomUser
+""" CustomUser """
 class CustomUserAdmin(UserAdmin):
     # exclude = ('username',)
     list_display = ('username', 'last_name', 'first_name', 'email', 'is_active',)
@@ -86,8 +86,26 @@ class CustomUserAdmin(UserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
+
+""" Favorite"""
+# @admin.register(Favoris)
+# class ArticleViews(admin.ModelAdmin):
+#     list_display = ('code_article', 'libelle',
+#                     'conditionnement', 'prix_vente',
+#                     'gencode', 'image', 'actif')
+#     list_filter = ['code_article', 'libelle']
+#     ordering = ('libelle',)
+#     search_fields = ('libelle', 'code_article', 'gencode',)
+#     fieldsets = (
+#         ('Choisir sa visibilité',
+#          # 'description': 'une description',
+#          # 'classes': 'wide' or 'extrapretty' or 'collapse',
+#          {'fields': ('actif',)}),
+#
+#     )
+admin.site.register(Favori)
+"""Unregister part"""
 admin.site.unregister(HistoriqueCommande)
 
 """ Site visual """
-
 admin.site.site_header = 'Administration Berard Distribution'

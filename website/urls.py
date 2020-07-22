@@ -12,6 +12,7 @@ urlpatterns = [
     # path('', login_view, name='login'),
     path('deconnexion/', logout_view, name='logout'),
 
+    path('favoris/', OffersView.as_view(), name='offers'),
     url(r'accueil/$', ArticleView.as_view(), name='products'),
     path('groupe/<str:group>/', ArticleView.as_view(model=Article), name='products_by_group'),
     path('groupe/<str:group>/famille/<str:family>/', ArticleView.as_view(model=Article), name='products_by_family'),

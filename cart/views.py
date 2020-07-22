@@ -36,7 +36,9 @@ def cart_add(request, product_id, encoded_url):  # add method
         return HttpResponseRedirect(encoded_url)
     elif str_split[1] == 'groupe':
         return HttpResponseRedirect(encoded_url)
-    elif str_split[1] == 'accueil':
+    elif str_split[1] == 'favoris':
+        return HttpResponseRedirect(encoded_url)
+    else:
         return HttpResponseRedirect(encoded_url)
 
 

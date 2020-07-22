@@ -13,7 +13,7 @@ from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
-from website.models import Article, Groupe, ProfilUtilisateur, HistoriqueCommande
+from website.models import Article, Groupe, ProfilUtilisateur, HistoriqueCommande, Favori
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
 from django.views.decorators.cache import cache_page
@@ -46,7 +46,7 @@ class LoginView(View):
                                 # messages.success(request, 'Vous êtes bien connecté')
                                 login(request, user)
                                 request.session['tarif'] = int(user.profilutilisateur.tarif)
-                                return redirect('website:products')
+                                return redirect('website:offers')
                                 # return HttpResponse("Vous avez été redirigé.")
                         else:
                             messages.error(request, 'Vos identifiants sont erronés')
@@ -66,7 +66,31 @@ def logout_view(request):
     return redirect('website:login')
 
 
-""" Products views"""
+"""Offers View"""
+class OffersView(LoginRequiredMixin, ListView):
+    template_name = 'website/offers.html'
+    # paginate_by = 60
+    ordering = ['libelle']
+    context_object_name = 'articles'
+    login_url = ''
+
+    def get_queryset(self):
+        # flash message on connection
+        if not settings.CONNECTED_OR_NOT:
+            messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
+            settings.CONNECTED_OR_NOT = True
+
+        article = Favori.objects.all().iterator()
+        art = []
+        for ex in article:
+            art+=Article.objects.filter(libelle=ex)
+        return art
+    def get_context_data(self, **kwargs):
+        context = super(OffersView, self).get_context_data(**kwargs)
+        context['form'] = CartAddProductForm()
+        return context
+
+    """ Products views"""
 
 
 class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
@@ -82,6 +106,7 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
             query = self.request.GET.get('code_article')
             postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
                                                 | Q(actif=True) & Q(libelle__contains=query.upper()))
+
             return postresult
         elif self.kwargs.get('group') and self.kwargs.get('family') and not self.request.GET.get('code_article'):
             _family = self.kwargs.get("family")
@@ -103,9 +128,6 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
             return article
 
         else:
-            if not settings.CONNECTED_OR_NOT:
-                messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
-                settings.CONNECTED_OR_NOT = True
             article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
             return article
 
@@ -128,8 +150,6 @@ class ArticleByFamillyView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        print('FAMILYYYYYY')
-        print(self.request.GET.get('code_article'))
         _name = self.kwargs.get("nom")
         article = Article.objects.filter(Q(famille__nom=_name))
         return article

@@ -43,14 +43,15 @@
     display:none;
 }
 
-    .mystyle{
+    .searchbar{
         display: block!important;
         margin-top: 20px!important;
+
     }
-    .mystyle2{
+    .search_icon{
             display:none!important;
     }
-    .mystyle3{
+    .close_icon{
         display:block!important;
         margin-top: 10px!important;
     }
@@ -59,21 +60,21 @@
 
   <nav  class="nav-extended">
     <div id="navbar" class="nav-wrapper   green">
-
       {% get_menu "NAV_MENU_TOP" as top_menu %}
     <!--Top menu -->
+        <!-- Hamburger -->
+        <!-- NavBar Title -->
         <a id="nav-icon1" href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
-            <i class="material-icons">menu</i>
+            <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
+        <!-- NavBar Title -->
+        <!-- Hamburger -->
         <h5 class="brand-logo ml-4"> {{ title_pager }} {{ price }} </h5>
-
+        <!-- Hamburger -->
         <a href="#" data-target="nav-mobile" class="sidenav-trigger right">
-            <i class="material-icons">menu</i>
+            <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
-<!--         <a href="#" data-target="nav-mobile" class="sidenav-trigger">-->
-<!--            <i class="material-icons">menu</i>-->
-<!--        </a>-->
-
+        <!-- Hamburger -->
         <div>
 
 
@@ -85,7 +86,7 @@
                         <label class="label-icon" for="search"
                            style="color: white">
                             <a href="javascript:void(0);">
-                                <i id="search_icon" class="material-icons right">search</i>
+                                <i id="search_icon" class="material-icons">search</i>
                             </a>
                         </label>
                    <a href="javascript:void(0);">
@@ -95,19 +96,24 @@
             </div>
           </form>
             <!-- Searchform-->
-            <ul>
-
-            </ul>
 
             <!-- Navbar -->
             <ul  class="right hide-on-med-and-down">
-
+                <!-- Home -->
                 <li>
                   <a href="{% url 'website:products' %}">
                   <i class="fas fa-home" title="Accueil"></i>
                   </a>
                 </li>
-
+                <!-- Home -->
+                <!-- Favorite -->
+                <li>
+                  <a href="{% url 'website:offers' %}">
+                      <i class="fas fa-heart" title="Offres"></i>
+                  </a>
+                </li>
+                <!-- Favorite -->
+                <!-- Basket -->
                 <li>
                     <a href="{% url 'cart:cart_detail' %}" title="Panier">
                         {% with total_items=cart|length %}
@@ -125,19 +131,21 @@
                   {% endwith %}
                     <i class="fas fa-shopping-cart"></i>
 
-            </a>
+                    </a>
                 </li>
-
+                <!-- Basket -->
+                <!-- Order Summary -->
                 <li>
                     <a href="{% url 'website:order_summary' %}" title="Historique" ><i class="fa fa-history"></i></a>
                 </li>
-
+                <!-- Order Summary -->
+                <!-- Logout -->
                 <li>
                     <a href="{% url 'website:logout' %}" title="Déconnexion" >
                         <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
                     </a>
                 </li>
-
+                <!-- Logout -->
             </ul>
             <!-- Navbar -->
 
@@ -164,48 +172,46 @@
           <!-- Divider -->
             <li><div class="divider"></div></li>
           <!-- Divider -->
+          <!-- Home -->
             <li>
               <a href="{% url 'website:products' %}">
               <i class="fas fa-home"></i>
                   <p>Accueil</p>
               </a>
             </li>
+          <!-- Home -->
+          <!-- Favorite -->
+                <li>
+                  <a href="{% url 'website:offers' %}">
+                      <i class="fas fa-heart" title="Offres"></i>
+                      <p>Favoris</p>
+                  </a>
+                </li>
+                <!-- Favorite -->
+          <!-- Basket -->
             <li>
                     <a href="{% url 'cart:cart_detail' %}" title="Panier">
-<!--                        {% with total_items=cart|length %}-->
-<!--                      {% if cart|length > 0 %}-->
-<!--                          <span class="badge green z-depth-1  position-absolute rounded-circle">-->
-<!--{#                          {{ total_items }}#}-->
-<!--                          1-->
-
-<!--                          </span>-->
-<!--                      {% else %}-->
-<!--                          <span class="badge red z-depth-1  position-absolute rounded-circle">-->
-<!--                          0-->
-<!--                          </span>-->
-<!--                      {% endif %}-->
-<!--                  {% endwith %}-->
                     <i class="fas fa-shopping-cart"></i>
                         <p>Panier</p>
 
                     </a>
-                </li>
-
+            </li>
+          <!-- Basket -->
                 <li>
                     <a href="{% url 'website:order_summary' %}" title="Historique" >
                         <i class="fa fa-history"></i>
                         <p>Historique</p>
                     </a>
                 </li>
-
+          <!-- Order Summary -->
                 <li>
                     <a href="{% url 'website:logout' %}" title="Déconnexion" >
 <!--                        <span class="clearfix d-none d-sm-inline-block">-->
                             <i class="fas fa-sign-out-alt"></i>
                             <p>Déconnexion</p>
-<!--                        </span>-->
                     </a>
                 </li>
+          <!-- Order Summary -->
       </ul>
 
       <!-- Navbar to sidenav -->
@@ -291,8 +297,6 @@
 <!--SideNav Left -->
 
 
-      
-
 
 <script>
     // sideNavs animation
@@ -333,25 +337,26 @@
     const searchBar = document.querySelector('#search_icon');
     searchBar.addEventListener('click',  () => {
         let searchbar = document.querySelector('#search')
-        searchbar.classList.toggle("mystyle");
+        searchbar.classList.toggle("searchbar");
+        searchbar.focus();
 
 
        let iconsearch = document.querySelector('#search_icon')
-        iconsearch.classList.toggle("mystyle2");
+        iconsearch.classList.toggle("search_icon");
 
 
-        iconclose.classList.toggle("mystyle3");
+        iconclose.classList.toggle("close_icon");
 
     })
     iconclose.addEventListener('click', ()=> {
         let searchbar = document.querySelector('#search')
-        searchbar.classList.toggle("mystyle");
+        searchbar.classList.toggle("searchbar");
 
        let iconsearch = document.querySelector('#search_icon')
-        iconsearch.classList.toggle("mystyle2");
+        iconsearch.classList.toggle("search_icon");
 
 
-        iconclose.classList.toggle("mystyle3");
+        iconclose.classList.toggle("close_icon");
     })
 
   </script>

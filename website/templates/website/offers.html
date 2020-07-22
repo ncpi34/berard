@@ -2,12 +2,17 @@
 
 
 {% block navbar %}
-{% include "website/sidenav.html" %}
+{% include "website/sidenav.html" with title_pager='Offres' %}
 {% endblock %}
 
 {% block content %}
     {% include 'website/modals/display_picture.html' %}
     {% load static %}
+<style>
+    .label-icon{
+        display: none;
+    }
+</style>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <!--Main layout-->
   <main>
@@ -126,7 +131,7 @@
 
         {% else %}
             <div class="container text-center mt-5" style="min-height: 80vh">
-            <h3>Pas d'articles pour le moment ...</h3>
+            <h3>Pas d'offres promotionnelles pour le moment ...</h3>
             </div>
         {% endif %}
     </div>
