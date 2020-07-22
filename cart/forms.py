@@ -26,6 +26,12 @@ class CartAddProductForm(forms.Form):
                                         'class': 'hidden_value'
                                     }
                                 ))
+    url = forms.CharField(required=False,
+                          widget=forms.HiddenInput(
+                              attrs={
+                                  'id': 'hidden_url',
+                              })
+                          )
 
 
 class CartCheckAllProductsForm(forms.Form):
@@ -33,6 +39,5 @@ class CartCheckAllProductsForm(forms.Form):
                                widget=forms.HiddenInput(
                                    attrs={
                                        'id': 'hidden_values',
-                                      })
+                                   })
                                )
-

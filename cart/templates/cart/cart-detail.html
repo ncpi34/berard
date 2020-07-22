@@ -29,7 +29,6 @@
                         {{ quantity.quantity }}
                     <button
                        onclick="getValue()"
-{#                       href="javascript: submitform2()"#}
                        type="submit" class="btn btn-warning"
                        id="basket_update">
                         MAJ Panier
@@ -157,15 +156,15 @@
 
     if (document.querySelector('.btn_return')
         && document.querySelector('#basket_update')) {
-        const btn = document.querySelector('.btn_return')
-        const btn2 = document.querySelector('#basket_update')
+        const btn = document.querySelector('.btn_return');
+        const btn2 = document.querySelector('#basket_update');
             if (widthScreenStart < 445) {
-                btn.innerHTML = 'RETOUR'
+                btn.innerHTML = 'RETOUR';
                 btn2.innerHTML = 'MAJ'
             } else if(widthScreenStart > 445 && widthScreenStart < 675) {
                 btn2.innerHTML = 'MAJ'
             } else {
-                btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn.innerHTML = 'RETOUR AUX PRODUITS';
                 btn2.innerHTML = 'MAJ PANIER'
             }
         }
@@ -176,15 +175,15 @@
         let widthScreenReload = window.innerWidth;
         if (document.querySelector('.btn_return')
             && document.querySelector('#basket_update')) {
-            const btn = document.querySelector('.btn_return')
-            const btn2 = document.querySelector('#basket_update')
+            const btn = document.querySelector('.btn_return');
+            const btn2 = document.querySelector('#basket_update');
             if (widthScreenReload < 445) {
-                btn.innerHTML = 'RETOUR'
+                btn.innerHTML = 'RETOUR';
                 btn2.innerHTML = 'MAJ'
             } else if(widthScreenReload > 445 && widthScreenReload < 675) {
                 btn2.innerHTML = 'MAJ'
             }else {
-                btn.innerHTML = 'RETOUR AUX PRODUITS'
+                btn.innerHTML = 'RETOUR AUX PRODUITS';
                 btn2.innerHTML = 'MAJ PANIER'
             }
         }
@@ -229,17 +228,17 @@
     // to get values from all the basket and use it in django views
     const getValue = () => {
 
-            let quant_val = document.querySelectorAll('.quantity_val')
-            let prod_url = document.querySelectorAll('.product_url')
-            let ids = []
+            let quant_val = document.querySelectorAll('.quantity_val');
+            let prod_url = document.querySelectorAll('.product_url');
+            let ids = [];
             prod_url.forEach((val, index) => {
                 const quantity = quant_val[index];
 
-                let obj = {'id':0, 'quantity':0}
-                obj['id'] = val.href.split('/').slice(-1)[0]
-                obj['quantity'] = quantity.value
+                let obj = {'id':0, 'quantity':0};
+                obj['id'] = val.href.split('/').slice(-1)[0];
+                obj['quantity'] = quantity.value;
                 ids.push(parseInt(val.href.split('/').slice(-1)[0]) + '/' + parseInt(quantity.value))
-            })
+            });
 
         document.querySelector('#hidden_values').value=ids
 

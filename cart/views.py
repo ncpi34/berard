@@ -25,21 +25,24 @@ def cart_add(request, product_id):  # add method
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
+    str_split = []
+    encoded_url = ''
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
-    return redirect('website:products')
+        encoded_url = cd['url']
+        str_split = cd['url'].split('/')
 
-    str_split = encoded_url.split('/')
+    # redirect with hidden form
     if str_split[1] == 'detail':
         return HttpResponseRedirect(encoded_url)
     elif str_split[1] == 'groupe':
         return HttpResponseRedirect(encoded_url)
     elif str_split[1] == 'favoris':
         return HttpResponseRedirect(encoded_url)
-    else:
+    elif str_split[1] == 'accueil':
         return HttpResponseRedirect(encoded_url)
 
 

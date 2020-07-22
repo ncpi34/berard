@@ -9,6 +9,8 @@ from django.db.models import Count
 from django.core.exceptions import ValidationError
 
 """ Profil """
+
+
 class ProfilUtilisateur(models.Model):
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, )
     telephone = models.CharField(max_length=20)
@@ -21,6 +23,8 @@ class ProfilUtilisateur(models.Model):
 
 
 """ Group """
+
+
 class Groupe(models.Model):
     nom = models.CharField(max_length=100,
                            unique=True)
@@ -28,7 +32,10 @@ class Groupe(models.Model):
     def __str__(self):
         return self.nom
 
+
 """ Family """
+
+
 class Famille(models.Model):
     nom = models.CharField(max_length=100)
     groupe = models.ManyToManyField(Groupe,
@@ -46,7 +53,10 @@ class Famille(models.Model):
         return reverse('website:products_by_family',
                        args=[self.nom])
 
+
 """ SubFamily """
+
+
 class SousFamille(models.Model):
     nom = models.CharField(max_length=100)
     # famille = models.ForeignKey(Famille,
@@ -68,7 +78,10 @@ class SousFamille(models.Model):
         return reverse('website:products_by_sub_family',
                        args=[self.nom])
 
+
 """ Article """
+
+
 class Article(models.Model):
     code_article = models.CharField(max_length=25, null=True)
     # slug = models.SlugField(max_length=200, db_index=True)
@@ -83,7 +96,6 @@ class Article(models.Model):
     gencode = models.CharField(max_length=40, null=True)
     taux_TVA = models.IntegerField(null=True)
     actif = models.BooleanField(default=True)
-    max_favorite = models.IntegerField(default=6)
     groupe = models.ForeignKey(Groupe,
                                on_delete=models.CASCADE,
                                related_name='article_by_group',
@@ -111,24 +123,28 @@ class Article(models.Model):
                        args=[self.id])
 
     def get_img(self):
-        if Path("media/img/product/"+self.code_article+".png").is_file():
-            return Path("/media/img/product/"+self.code_article+".png")
-        elif Path("media/img/product/"+self.code_article+".jpg").is_file():
-            return Path("/media/img/product/"+self.code_article+".jpg")
-        elif Path("media/img/product/"+self.code_article+".jpeg").is_file():
-            return Path("/media/img/product/"+self.code_article+".jpeg")
+        if Path("media/img/product/" + self.code_article + ".png").is_file():
+            return Path("/media/img/product/" + self.code_article + ".png")
+        elif Path("media/img/product/" + self.code_article + ".jpg").is_file():
+            return Path("/media/img/product/" + self.code_article + ".jpg")
+        elif Path("media/img/product/" + self.code_article + ".jpeg").is_file():
+            return Path("/media/img/product/" + self.code_article + ".jpeg")
         else:
             return '/media/img/nophoto.jpg'
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
 
+
 """ Order Summary """
+
+
 class HistoriqueCommande(models.Model):
     date = models.DateTimeField(auto_now=True)
     utilisateur = models.ForeignKey(User,
                                     related_name='user',
                                     on_delete=models.CASCADE,
                                     null=True)
+
     class Meta:
         ordering = ('-date',)
 
@@ -154,7 +170,10 @@ class HistoriqueCommande(models.Model):
     def get_articles(self):
         return [item.get_article() for item in self.items.all()]
 
+
 """ Order """
+
+
 class ProduitCommande(models.Model):
     commande = models.ForeignKey(HistoriqueCommande,
                                  related_name='items',
@@ -176,7 +195,10 @@ class ProduitCommande(models.Model):
     def get_article(self):
         return self
 
+
 """ Favorite"""
+
+
 class Favori(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE, primary_key=True, )
 
@@ -188,5 +210,5 @@ class Favori(models.Model):
 
     def clean(self):
         numFavorites = Favori.objects.all().count()
-        if numFavorites > (self.article.max_favorite - 1):
+        if numFavorites > 5:
             raise ValidationError("Vous ne pouvez pas créer plus de  {} favoris".format(numFavorites))

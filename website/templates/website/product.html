@@ -103,7 +103,7 @@
                 class="d-flex justify-content-left">
               {{ form }}
               {% csrf_token %}
-              <button id="add_basket" class="form-control btn-success mt-2" type="submit">
+              <button id="add_basket" class="form-control btn-success mt-2 btn_send" type="submit">
 {#                  <i class="fas fa-cart-plus"></i>#}
                   Ajouter au panier
               </button>
@@ -183,5 +183,17 @@
 
     }
     window.onresize = resize;
+
+    // to insert path in hidden form
+        let btn_send = document.querySelectorAll('.btn_send');
+        let hidd_url = document.querySelectorAll('#hidden_url');
+        for (const button of btn_send) {
+          button.addEventListener('click', (event)=> {
+              hidd_url.forEach(val => {
+                  val.value=window.location.pathname;
+              })
+          })
+
+        }
     </script>
 {% endblock %}
