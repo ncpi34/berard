@@ -137,10 +137,6 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
         context['filter'] = ArticleFilter()
         return context
 
-    # def get_success_url(self):
-    #     messages.success(self.request, "deleted successfully")
-    #     return reverse("/")
-
 
 class ArticleByFamillyView(LoginRequiredMixin, ListView):
     template_name = 'website/products.html'
