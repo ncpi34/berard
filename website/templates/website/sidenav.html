@@ -189,13 +189,13 @@
                 </li>
                 <!-- Favorite -->
           <!-- Basket -->
-            <li>
-                    <a href="{% url 'cart:cart_detail' %}" title="Panier">
-                    <i class="fas fa-shopping-cart"></i>
-                        <p>Panier</p>
+<!--            <li>-->
+<!--                    <a href="{% url 'cart:cart_detail' %}" title="Panier">-->
+<!--                    <i class="fas fa-shopping-cart"></i>-->
+<!--                        <p>Panier</p>-->
 
-                    </a>
-            </li>
+<!--                    </a>-->
+<!--            </li>-->
           <!-- Basket -->
                 <li>
                     <a href="{% url 'website:order_summary' %}" title="Historique" >
@@ -350,6 +350,7 @@
     })
     iconclose.addEventListener('click', ()=> {
         let searchbar = document.querySelector('#search')
+        searchbar.value = ''
         searchbar.classList.toggle("searchbar");
 
        let iconsearch = document.querySelector('#search_icon')

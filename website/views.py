@@ -129,6 +129,7 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
 
         else:
             article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
+            print(article)
             return article
 
     def get_context_data(self, **kwargs):

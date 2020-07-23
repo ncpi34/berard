@@ -8,6 +8,7 @@
 {% block content %}
     {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <style>
     .label-icon{
         display: none;
@@ -16,7 +17,7 @@
     <main>
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
-
+<p id="message"></p>
     {% if cart %}
         <div class="row">
             <div class="col mb-5">
@@ -81,7 +82,11 @@
             </td>
             <td class="num mb-1">
                 {{ order_item.prix_achat }}€
-                <form name="myform1" action="{% url 'cart:cart_update' product.id %}" method="post">
+                <form name="myform1"
+                      class="form_update"
+                      data-id="{{product.id}}"
+                      action="{% url 'cart:cart_update' product.id %}" method="post"
+                >
                         <div class="mr-1">
                             {{ order_item.update_quantity_form.quantity }}
                             {{ order_item.update_quantity_form.update }}
@@ -143,6 +148,7 @@
    {% endif %}
     </div>
     </div>
+    </div>
   </main>
 
 {% endblock %}
@@ -152,8 +158,8 @@
 
 
     <script>
+        // calculate screen windows onload and change html
     let widthScreenStart = window.innerWidth;
-
     if (document.querySelector('.btn_return')
         && document.querySelector('#basket_update')) {
         const btn = document.querySelector('.btn_return');
@@ -220,14 +226,9 @@
 
     });
 
-    function submitform() {   document.myform.submit(); }
-    function submitform1() {   document.myform1.submit(); }
-    function submitform2() {   document.myform2.submit(); }
-
 
     // to get values from all the basket and use it in django views
     const getValue = () => {
-
             let quant_val = document.querySelectorAll('.quantity_val');
             let prod_url = document.querySelectorAll('.product_url');
             let ids = [];
@@ -242,8 +243,127 @@
 
         document.querySelector('#hidden_values').value=ids
 
+
+
     }
 
+    // // get values and display it on key change
+    // //     const quantity = document.querySelectorAll('.quantity_val')
+    //     const form_update = document.querySelectorAll('.form_update')
+    //     const hidden_values = document.querySelectorAll('.hidden_value')
+    //     form_update.forEach(button => {
+    //         button.addEventListener('change', (e)=> {
+    //             e.preventDefault();
+    //
+    //             const product_id = parseInt(button.dataset.id)
+    //             const data = {
+    //                 'product_id': button.dataset.id,
+    //                 'quantity': button[0].value
+    //             }
+    //
+    //             requestFetch(data, product_id).then(
+    //                 (response) => {
+    //                     if (!response.ok) {
+    //                         console.log('error')
+    //                         // error processing
+    //                         throw 'Error';
+    //                     }
+    //                     if (response.status === 200) {
+    //                         location.reload();
+    //                         // response.json().then((data)=> {
+    //                         //     console.log(data)
+    //                         // })
+    //                         // getCart().then(
+    //                         //     response => {
+    //                         //         if (!response.ok) {
+    //                         //             console.log('error2')
+    //                         //             // error processing
+    //                         //             throw 'Error';
+    //                         //         }
+    //                         //         console.log('RESp8', response)
+    //                         //         response.then(
+    //                         //             (data) => {
+    //                         //                 console.log(data)
+    //                         //             }
+    //                         //         )
+    //                         //         return response
+    //                         //     }
+    //                         // )
+    //                     // location.reload();
+    //                     // document.querySelector('#message').innerHTML =
+    //                     return response
+    //                     }
+    //
+    //                 }
+    //             )
+    //         })
+    //     })
+
+        // Ajax request
+    const requestFetch = async (data, product_id) => {
+
+        const csrftoken = await Cookies.get('csrftoken');
+        let rst = await fetch(`/panier/update/${product_id}/` , {
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                        headers: { "X-CSRFToken": csrftoken },
+        })
+        return rst
+    }
+    const getCart = async () => {
+        const csrftoken = await Cookies.get('csrftoken');
+        let rst = await fetch(`/panier/` , {
+                        method: 'GET',
+                        headers: { "X-CSRFToken": csrftoken },
+        })
+        return rst
+    }
+
+  // // to get values from all the basket and use it in django views
+  //   const updateCart = document.querySelector('#myform2')
+  //       updateCart.addEventListener('submit', (e) => {
+  //           e.preventDefault();
+  //           let quant_val = document.querySelectorAll('.quantity_val');
+  //           let prod_url = document.querySelectorAll('.product_url');
+  //           let ids = [];
+  //           prod_url.forEach((val, index) => {
+  //               const quantity = quant_val[index];
+  //
+  //               let obj = {'id':0, 'quantity':0};
+  //               obj['id'] = val.href.split('/').slice(-1)[0];
+  //               obj['quantity'] = quantity.value;
+  //               ids.push(parseInt(val.href.split('/').slice(-1)[0]) + '/' + parseInt(quantity.value))
+  //           });
+  //
+  //       document.querySelector('#hidden_values').value=ids
+  //
+  //       requestFetch(ids).then(
+  //           (response) => {
+  //               if (!response.ok) {
+  //                   console.log('error')
+  //                   // error processing
+  //                   throw 'Error';
+  //               }
+  //               console.log('RESp', response)
+  //               return response
+  //           }
+  //       )
+  //
+  //       })
+  //
+  //   // Ajax request
+  //   const requestFetch = async (quantity) => {
+  //       let data = {
+  //           'quantity': quantity,
+  //       };
+  //       var csrftoken = await Cookies.get('csrftoken');
+  //       let rst = await fetch('/panier/update_all_cart/' , {
+  //                       method: 'POST',
+  //                       body: JSON.stringify(data),
+  //                       headers: { "X-CSRFToken": csrftoken },
+  //       })
+  //       return rst
+  //   }
 
 
     </script>

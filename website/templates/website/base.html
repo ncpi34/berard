@@ -90,7 +90,6 @@
     }
 
 
-
   </style>
 
 
@@ -102,7 +101,8 @@
 
     <div class="bg">
     <!-- Navbar -->
-        {% block navbar %}{% endblock %}
+        {% block navbar %}
+        {% endblock %}
       <!-- Navbar -->
 
       <!-- flashmessages -->
@@ -111,11 +111,10 @@
         </div>
     <!-- flashmessages -->
 
-    <!-- Includes -->
-{#    {% include "_header.html" %}#}
+
+
 <div style="margin-top: 100px">
     {% block content %}
-
     {% endblock content %}
 
 </div>
@@ -126,7 +125,7 @@
 
     <!-- Includes -->
     {% include "website/footer.html" %}
-{#    {% include "website/scripts.html" %}#}
+
  </div>
     <!-- JavaScript -->
     {% block scripts %}

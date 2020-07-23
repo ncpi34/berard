@@ -1,0 +1,25 @@
+
+{% with total_items=cart|length %}
+    {% if cart|length > 0 %}
+        <a href="{% url 'cart:cart_detail' %}"
+           class="btn-floating btn-large waves-effect green waves-light hide-on-large-only btn_cart">
+            <i class="material-icons">shopping_cart</i>
+        </a>
+    {% else %}
+        <a href="{% url 'cart:cart_detail' %}"
+           class="btn-floating btn-large waves-effect waves-light red hide-on-large-only btn_cart">
+            <i class="material-icons">shopping_cart</i>
+        </a>
+    {% endif %}
+{% endwith %}
+
+<style>
+    .btn_cart{
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+        z-index: 1;
+    }
+
+
+</style>

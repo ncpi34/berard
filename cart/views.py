@@ -15,6 +15,11 @@ from django.contrib import messages
 import datetime
 from datetime import date
 from django.http import HttpResponseRedirect
+import json
+from django.http import HttpResponse
+from django.http.response import JsonResponse
+from django.conf import settings
+
 
 """ Cart """
 
@@ -36,14 +41,7 @@ def cart_add(request, product_id):  # add method
         str_split = cd['url'].split('/')
 
     # redirect with hidden form
-    if str_split[1] == 'detail':
-        return HttpResponseRedirect(encoded_url)
-    elif str_split[1] == 'groupe':
-        return HttpResponseRedirect(encoded_url)
-    elif str_split[1] == 'favoris':
-        return HttpResponseRedirect(encoded_url)
-    elif str_split[1] == 'accueil':
-        return HttpResponseRedirect(encoded_url)
+    return HttpResponseRedirect(encoded_url)
 
 
 # @login_required(login_url="")
@@ -229,6 +227,7 @@ def cart_detail(request):
         item['update_quantity_form'] = CartAddProductForm(
             initial={'quantity': item['quantity'],
                      'update': True})
+
     return render(request, 'cart/cart-detail.html', {'cart': cart, 'quantity': quantity})
 
 
@@ -238,13 +237,23 @@ def cart_update(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
-    print('FORM: ', form)
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'],
-                 update_quantity=cd['update'])
-    # return redirect("cart:cart_detail")
+                 )
+    else:
+        data = json.loads(request.body)
+        cart.add(product=product,
+                 quantity=int(data['quantity']),
+                 )
+        # cart_detail(request)
+        # tab = []
+        # for item in cart:
+        #     tab.append({'libelle':item['libelle']})
+        # print(tab)
+        # return JsonResponse({'success': True, 'status_code':200, 'cart': tab})
+
     return redirect("cart:cart_detail")
 
 
@@ -253,15 +262,25 @@ def cart_update(request, product_id):
 def update_all_cart(request):
     cart = Cart(request)
     form = CartCheckAllProductsForm(request.POST)
+
     if form.is_valid():
         cd = form.cleaned_data
-        tab_join = cd['quantity'].split(',')
+        try:
+            tab_join = cd['quantity'].split(',')
 
-        for i in tab_join:
-            rst = i.split('/')
-            product = get_object_or_404(Article, id=int(rst[0]))
-            cart.add(product=product,
-                     quantity=int(rst[1]),
-                     update_quantity=True)
+            for i in tab_join:
+                rst = i.split('/')
+                product = get_object_or_404(Article, id=int(rst[0]))
+                cart.add(product=product,
+                         quantity=int(rst[1]),
+                         update_quantity=True)
+        except ValueError:
+            data = json.loads(request.body)
+            for i in data['quantity']:
+                rst = i.split('/')
+                product = get_object_or_404(Article, id=int(rst[0]))
+                cart.add(product=product,
+                         quantity=int(rst[1]),
+                         update_quantity=True)
 
     return redirect("cart:cart_detail")
