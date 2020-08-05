@@ -41,10 +41,12 @@ class ClientViews(object):
             try:
                 print(rst['email'])
                 user, created = User.objects.update_or_create(
-                    email=rst["email"],
                     username=rst["code_client"],
-                    last_name=rst['nom'],
-                    password=rst["mot_de_passe"],
+
+                    defaults=dict(
+                        email=rst["email"],
+                        last_name=rst['nom'],
+                        password=rst["mot_de_passe"], )
                 )
                 # to encrypt Password
                 # user.set_password(rst["mot_de_passe"])

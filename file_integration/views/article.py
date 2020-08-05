@@ -126,9 +126,8 @@ class ArticleViews(object):
 
             # Check if no null
             if rst["groupe"] is not None or rst["famille"] is not None or rst["sous_famille"] is not None:
-                print(rst['libelle'])
 
-                # ManyToOne
+                # ManyToOne -> get or null
                 try:
                     group = Groupe.objects.get(id=rst["groupe"])
                 except Groupe.DoesNotExist:
@@ -145,26 +144,17 @@ class ArticleViews(object):
                     subfamily = None
 
                 try:
-                    article = Article.objects.filter(
-                        libelle=rst['libelle'],
-                        code_article=rst["code_article"],
-                        gencode=rst["gencode"],
-                    )
-                    print('article found', article)
-
                     Article.objects.update_or_create(
-
-                        libelle=rst['libelle'],
                         code_article=rst["code_article"],
                         gencode=rst["gencode"],
 
                         defaults=dict(
+                            libelle=rst['libelle'],
                             prix_vente=rst["prix_vente"],
                             prix_achat_1=rst["prix_achat_1"],
                             prix_achat_2=rst["prix_achat_2"],
                             prix_achat_3=rst["prix_achat_3"],
                             prix_achat_4=rst["prix_achat_4"],
-                            gencode=rst["gencode"],
                             conditionnement=rst["conditionnement"],
                             groupe=group,
                             famille=family,
@@ -174,7 +164,7 @@ class ArticleViews(object):
 
 
                     )
-                    print('inserted')
+                    print('inserted', rst['libelle'])
 
                 except Exception as err:
                     f_art_err.write('not inserted ' + rst['code_article'] + '\n')
