@@ -44,12 +44,19 @@ def cart_add(request, product_id):  # add method
     return HttpResponseRedirect(encoded_url)
 
 
-# @login_required(login_url="")
-# def cart_remove(request, product_id):
-#     cart = Cart(request)
-#     product = get_object_or_404(Article, id=product_id)
-#     cart.remove(product)
-#     return redirect("cart:cart_detail")
+@login_required(login_url="")
+@require_POST
+def order_summary_to_cart(request, order_id):
+    order = HistoriqueCommande.objects.get(id=int(order_id))
+    products = ProduitCommande.objects.filter(commande__id=int(order_id))
+    cart = Cart(request)
+    for item in products:
+        product = get_object_or_404(Article, id=item.article.id)
+        cart.add(product=product,
+                 quantity=item.quantite,
+                 )
+    return redirect("cart:cart_detail")
+
 
 
 class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal

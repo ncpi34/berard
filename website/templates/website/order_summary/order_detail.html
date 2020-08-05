@@ -38,15 +38,28 @@
      {% endfor %}
         </tbody>
     </table>
+
     <div class="text-right mr-3">
         <p>Total: {{ object.get_total_cost}}€</p>
-            <a href="{% url 'website:order_summary' %}">
-                <button  id="btn_return" class="btn btn-success">Retour</button>
-            </a>
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'website:order_summary' %}">
+                    <button  id="btn_return" class="btn btn-success">Retour</button>
+                </a>
+            </div>
+            <div class="col">
+                <form action="{% url 'cart:order_summary_to_cart' object.id %}" method="post"
+                      class="small mb-5">
+                    {% csrf_token %}
+                    <button class="form-control btn btn-success" type="submit">
+                        <i class="fas fa-cart-plus"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
     </div>
 
-
-    </div>
     </div>
   </main>
 {% endblock %}
