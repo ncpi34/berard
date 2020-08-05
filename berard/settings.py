@@ -38,7 +38,7 @@ DATABASES = {
 
 ALLOWED_HOSTS = ['*']
 
-CONNECTED_OR_NOT = False
+FIRST_CONNECTION = False
 # MATERIAL_ADMIN_SITE = {
 #     'HEADER':  _('Demo'),
 #     'TITLE':  _('Demo'),

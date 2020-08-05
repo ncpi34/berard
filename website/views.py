@@ -14,17 +14,30 @@ from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
 from website.models import Article, Groupe, ProfilUtilisateur, HistoriqueCommande, Favori
+from cart.models import PanierEnCours
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
 from django.views.decorators.cache import cache_page
 import time
 from django.contrib.messages.views import SuccessMessageMixin
 from django.conf import settings
+from django.contrib.sessions.models import Session
+import asyncio
 
 """ login"""
 
 
 class LoginView(View):
+
+
+    def get_old_cart(self, request):
+        """ get cart not finalized """
+        try:
+            old_cart = PanierEnCours.objects.get(utilisateur=request.user.id).donnees
+            request.session['cart'] = old_cart
+        except PanierEnCours.DoesNotExist:
+            pass
+
     def get(self, request):
         form = LoginForm()
         return render(request, 'auth/login.html', locals())
@@ -46,6 +59,7 @@ class LoginView(View):
                                 # messages.success(request, 'Vous êtes bien connecté')
                                 login(request, user)
                                 request.session['tarif'] = int(user.profilutilisateur.tarif)
+                                self.get_old_cart(request)
                                 return redirect('website:offers')
                                 # return HttpResponse("Vous avez été redirigé.")
                         else:
@@ -61,9 +75,22 @@ class LoginView(View):
                     return render(request, 'auth/login.html', locals())
 
 
+""" Logout """
+
+def save_cart_before_logout(request):
+    """ Save cart before logout"""
+    PanierEnCours.objects.update_or_create(
+        utilisateur=int(request.session.get('_auth_user_id')),
+
+        defaults=dict(
+        donnees=request.session.get('cart'),)
+    )
+
 def logout_view(request):
+    save_cart_before_logout(request)
     logout(request)
     return redirect('website:login')
+
 
 
 """Offers View"""
@@ -76,22 +103,23 @@ class OffersView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         # flash message on connection
-        if not settings.CONNECTED_OR_NOT:
+        if not settings.FIRST_CONNECTION:
+            settings.FIRST_CONNECTION = True
             messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
-            settings.CONNECTED_OR_NOT = True
+        # self.get_session()
 
         article = Favori.objects.all().iterator()
         art = []
         for ex in article:
             art+=Article.objects.filter(libelle=ex)
         return art
+
     def get_context_data(self, **kwargs):
         context = super(OffersView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
         return context
 
-    """ Products views"""
-
+""" Products views"""
 
 class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
     template_name = 'website/products.html'
@@ -129,7 +157,6 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
 
         else:
             article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
-            print(article)
             return article
 
     def get_context_data(self, **kwargs):
