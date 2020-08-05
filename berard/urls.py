@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^favicon\.ico$', RedirectView.as_view(url='/media/img/favicon.ico')),
     path('', include('website.urls', namespace='website')),
     path('panier/', include('cart.urls', namespace='cart')),
+    path('commande/', include('order.urls', namespace='order')),
     path('file/', include('file_integration.urls', namespace='file')),
     path('admin/', admin.site.urls),
 

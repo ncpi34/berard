@@ -86,6 +86,7 @@ class Article(models.Model):
     code_article = models.CharField(max_length=25, null=True)
     # slug = models.SlugField(max_length=200, db_index=True)
     libelle = models.CharField(max_length=150, null=True)
+    nb_vues = models.IntegerField(default=0)
     conditionnement = models.CharField(null=True,
                                        max_length=30)
     prix_vente = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
@@ -135,68 +136,8 @@ class Article(models.Model):
     # get_img.allow_tags = True
 
 
-""" Order Summary """
 
-
-class HistoriqueCommande(models.Model):
-    date = models.DateTimeField(auto_now=True)
-    utilisateur = models.ForeignKey(User,
-                                    related_name='user',
-                                    on_delete=models.CASCADE,
-                                    null=True)
-
-    class Meta:
-        ordering = ('-date',)
-
-    def __str__(self):
-        return 'Commande {}'.format(self.id)
-
-    def get_absolute_url(self):
-        return reverse('website:order_detail',
-                       args=[self.id])
-
-    def get_number_products(self):
-        total = 0
-        for item in self.items.all():
-            total += item.quantite
-        return total
-
-    def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
-
-    # def get_total_cost_by_article(self):
-    #     return sum(item.get_cost() for item in self.items.all())
-
-    def get_articles(self):
-        return [item.get_article() for item in self.items.all()]
-
-
-""" Order """
-
-
-class ProduitCommande(models.Model):
-    commande = models.ForeignKey(HistoriqueCommande,
-                                 related_name='items',
-                                 on_delete=models.CASCADE)
-    article = models.ForeignKey(Article,
-                                related_name='orders_items',
-                                on_delete=models.CASCADE)
-    prix = models.DecimalField(max_digits=100,
-                               decimal_places=2,
-                               default=0)
-    quantite = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return '{}'.format(self.id)
-
-    def get_cost(self):
-        return self.prix * self.quantite
-
-    def get_article(self):
-        return self
-
-
-""" Favorite"""
+""" Offers """
 
 
 class Favori(models.Model):
@@ -212,3 +153,28 @@ class Favori(models.Model):
         numFavorites = Favori.objects.all().count()
         if numFavorites > 5:
             raise ValidationError("Vous ne pouvez pas créer plus de  {} favoris".format(numFavorites))
+
+
+""" Favorites """
+
+class FavorisClient(models.Model):
+    utilisateur = models.ForeignKey(User,
+                                    on_delete=models.CASCADE,
+                                    related_name='user_favorite',
+                                    )
+    article = models.ForeignKey(Article,
+                                on_delete=models.CASCADE,
+                                related_name='article_favorite',
+                                )
+    quantite = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return self.utilisateur.id
+
+    def __str__(self):
+        return self.article.libelle
+
+    # def clean(self):
+    #     numFavorites = FavorisClient.objects.all().count()
+    #     if numFavorites > 19:
+    #         raise ValidationError("Vous ne pouvez pas créer plus de  {} favoris".format(numFavorites))

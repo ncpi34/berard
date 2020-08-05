@@ -3,7 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.utils.text import Truncator
 
-from website.models import ProfilUtilisateur, Article, HistoriqueCommande, ProduitCommande, Favori
+from website.models import ProfilUtilisateur, Article, Favori
+from order.models import HistoriqueCommande, ProduitCommande
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
 

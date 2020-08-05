@@ -13,7 +13,8 @@ from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
-from website.models import Article, Groupe, ProfilUtilisateur, HistoriqueCommande, Favori
+from website.models import Article, Groupe, ProfilUtilisateur, Favori
+from order.models import HistoriqueCommande
 from cart.models import PanierEnCours
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
@@ -95,7 +96,7 @@ def logout_view(request):
 
 """Offers View"""
 class OffersView(LoginRequiredMixin, ListView):
-    template_name = 'website/offers.html'
+    template_name = 'website/product/offers.html'
     # paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -106,7 +107,6 @@ class OffersView(LoginRequiredMixin, ListView):
         if not settings.FIRST_CONNECTION:
             settings.FIRST_CONNECTION = True
             messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
-        # self.get_session()
 
         article = Favori.objects.all().iterator()
         art = []
@@ -119,10 +119,36 @@ class OffersView(LoginRequiredMixin, ListView):
         context['form'] = CartAddProductForm()
         return context
 
+
+""" Favorites View """
+class FavoritesView(LoginRequiredMixin, ListView):
+    template_name = 'website/product/favorites.html'
+    # paginate_by = 60
+    ordering = ['libelle']
+    context_object_name = 'articles'
+    login_url = ''
+
+    def get_queryset(self):
+        # flash message on connection
+        if not settings.FIRST_CONNECTION:
+            settings.FIRST_CONNECTION = True
+            messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
+
+        article = Favori.objects.all().iterator()
+        art = []
+        for ex in article:
+            art+=Article.objects.filter(libelle=ex)
+        return art
+
+    def get_context_data(self, **kwargs):
+        context = super(FavoritesView, self).get_context_data(**kwargs)
+        context['form'] = CartAddProductForm()
+        return context
+
 """ Products views"""
 
 class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
-    template_name = 'website/products.html'
+    template_name = 'website/product/products.html'
     paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -133,7 +159,8 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
         if self.request.GET.get('code_article'):
             query = self.request.GET.get('code_article')
             postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
-                                                | Q(actif=True) & Q(libelle__contains=query.upper()))
+                                                | Q(actif=True) & Q(libelle__contains=query.upper())
+                                                ).exclude(Q(prix_achat_1=0.00))
 
             return postresult
         elif self.kwargs.get('group') and self.kwargs.get('family') and not self.request.GET.get('code_article'):
@@ -167,7 +194,7 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
 
 
 class ArticleByFamillyView(LoginRequiredMixin, ListView):
-    template_name = 'website/products.html'
+    template_name = 'website/product/products.html'
     paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -185,50 +212,21 @@ class ArticleByFamillyView(LoginRequiredMixin, ListView):
 
 
 class ArticleDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'website/product.html'
+    template_name = 'website/product/product.html'
     queryset = Article.objects.all()
     login_url = ''
 
     def get_object(self):
         id_ = self.kwargs.get('pk')
-        # article.nb_vues += 1  # views_numb
-        # article.save()
+        # views_numb
+        article = Article.objects.get(id=id_)
+        article.nb_vues += 1
+        article.save()
         return get_object_or_404(Article, pk=id_)
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
-        return context
-
-
-"""Order Summary"""
-
-
-class OrderSummaryView(LoginRequiredMixin, ListView):
-    template_name = 'website/order_summary/order_summary.html'
-    queryset = HistoriqueCommande.objects.all()
-    login_url = ''
-    context_object_name = 'histories'
-
-    def get_queryset(self):
-        _user = self.request.user.id
-        history = HistoriqueCommande.objects.filter(Q(utilisateur__id=_user)).order_by('-date')[:4]
-        return history
-
-
-class OrderDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'website/order_summary/order_detail.html'
-    queryset = HistoriqueCommande.objects.all()
-    login_url = ''
-
-    # context_object_name = 'article'
-
-    def get_object(self):
-        id_ = self.kwargs.get('pk')
-        return get_object_or_404(HistoriqueCommande, pk=id_)
-
-    def get_context_data(self, **kwargs):
-        context = super(OrderDetailView, self).get_context_data(**kwargs)
         return context
 
 

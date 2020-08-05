@@ -10,7 +10,8 @@ from django.views.generic import DeleteView
 from django.views.generic.base import View
 from cart.cart import Cart
 from cart.forms import CartAddProductForm, CartCheckAllProductsForm
-from website.models import Article, HistoriqueCommande, ProduitCommande
+from website.models import Article, FavorisClient
+from order.models import HistoriqueCommande, ProduitCommande
 from django.contrib import messages
 import datetime
 from datetime import date
@@ -197,6 +198,14 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                     quantite=item['quantity'],
                 )
                 item_order.save()
+
+                # add favorites products for user
+                favorite, created = FavorisClient.objects.get_or_create(
+                    utilisateur=request.user,
+                    article=article,
+                )
+                favorite.quantite += item['quantity']
+                favorite.save()
 
                 # products line to ftp file
                 line3 = """!000C$01{code_client}0011{code_article}{prix_achat}{filler}{filler}PC{prix_achat}{filler}{libelle}{conditionnement}{quantite}{filler} #\n"""

@@ -106,13 +106,20 @@
                   </a>
                 </li>
                 <!-- Home -->
-                <!-- Favorite -->
+                 <!-- Offers -->
                 <li>
                   <a href="{% url 'website:offers' %}">
-                      <i class="fas fa-heart" title="Offres"></i>
+                      <i class="fas fa-star" title="Offres"></i>
                   </a>
                 </li>
-                <!-- Favorite -->
+                <!-- Offers -->
+                  <!-- Favorite -->
+                    <li>
+                            <a href="{% url 'website:favorites' %}">
+                            <i class="fas fa-heart" title="Favoris"></i>
+                            </a>
+                    </li>
+                  <!-- Favorite -->
                 <!-- Basket -->
                 <li>
                     <a href="{% url 'cart:cart_detail' %}" title="Panier">
@@ -136,7 +143,7 @@
                 <!-- Basket -->
                 <!-- Order Summary -->
                 <li>
-                    <a href="{% url 'website:order_summary' %}" title="Historique" ><i class="fa fa-history"></i></a>
+                    <a href="{% url 'order:order_summary' %}" title="Historique" ><i class="fa fa-history"></i></a>
                 </li>
                 <!-- Order Summary -->
                 <!-- Logout -->
@@ -180,25 +187,25 @@
               </a>
             </li>
           <!-- Home -->
-          <!-- Favorite -->
+          <!-- Offers -->
                 <li>
                   <a href="{% url 'website:offers' %}">
-                      <i class="fas fa-heart" title="Offres"></i>
-                      <p>Favoris</p>
+                      <i class="fas fa-star"></i>
+                      <p>Offres</p>
                   </a>
                 </li>
-                <!-- Favorite -->
-          <!-- Basket -->
-<!--            <li>-->
-<!--                    <a href="{% url 'cart:cart_detail' %}" title="Panier">-->
-<!--                    <i class="fas fa-shopping-cart"></i>-->
-<!--                        <p>Panier</p>-->
+                <!-- Offers -->
+          <!-- Favorite -->
+            <li>
+                    <a href="{% url 'website:favorites' %}">
+                    <i class="fas fa-heart"></i>
+                        <p>Favoris</p>
 
-<!--                    </a>-->
-<!--            </li>-->
-          <!-- Basket -->
+                    </a>
+            </li>
+          <!-- Favorite -->
                 <li>
-                    <a href="{% url 'website:order_summary' %}" title="Historique" >
+                    <a href="{% url 'order:order_summary' %}" title="Historique" >
                         <i class="fa fa-history"></i>
                         <p>Historique</p>
                     </a>
