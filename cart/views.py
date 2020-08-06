@@ -191,6 +191,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
             for item in cart:
                 article = Article.objects.get(id=item['article_id'])
 
+                # insert orders
                 item_order = ProduitCommande(
                     commande=order,
                     article=article,

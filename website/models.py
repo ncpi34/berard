@@ -174,6 +174,9 @@ class FavorisClient(models.Model):
     def __str__(self):
         return self.article.libelle
 
+    def get_20_first_results(self):
+        return {'libelle': self.article.libelle, 'quantite': self.quantite}
+
     # def clean(self):
     #     numFavorites = FavorisClient.objects.all().count()
     #     if numFavorites > 19:

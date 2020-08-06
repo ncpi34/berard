@@ -13,7 +13,7 @@ from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
-from website.models import Article, Groupe, ProfilUtilisateur, Favori
+from website.models import Article, Groupe, ProfilUtilisateur, Favori, FavorisClient
 from order.models import HistoriqueCommande
 from cart.models import PanierEnCours
 from django.db.models import Q
@@ -24,6 +24,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.conf import settings
 from django.contrib.sessions.models import Session
 import asyncio
+import operator
+import pandas as pd
 
 """ login"""
 
@@ -129,15 +131,19 @@ class FavoritesView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        # flash message on connection
-        if not settings.FIRST_CONNECTION:
-            settings.FIRST_CONNECTION = True
-            messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
-
-        article = Favori.objects.all().iterator()
+        articles = FavorisClient.objects.all().iterator()
         art = []
-        for ex in article:
-            art+=Article.objects.filter(libelle=ex)
+        obj_from_method_db = []
+        for article in articles:
+            obj_from_method_db.append(article.get_20_first_results())
+
+        # sort by quantity
+        df = pd.DataFrame(obj_from_method_db)
+        df = df.sort_values('quantite')
+        sorted_listOfDicts = df.T.to_dict().values()
+
+        for article in list(sorted_listOfDicts)[0:20]: # 20first results
+            art+=Article.objects.filter(libelle=article['libelle'])
         return art
 
     def get_context_data(self, **kwargs):
