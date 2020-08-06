@@ -51,9 +51,18 @@
                 <form action="{% url 'cart:order_summary_to_cart' object.id %}" method="post"
                       class="small mb-5">
                     {% csrf_token %}
-                    <button class="form-control btn btn-success" type="submit">
+                    <button class="form-control btn btn-success w-50" type="submit">
                         <i class="fas fa-cart-plus"></i>
                     </button>
+                </form>
+            </div>
+            <div class="col">
+                <form action="{% url 'order:generate_pdf' object.id %}" method="post"
+                      class="small mb-5">
+                    {% csrf_token %}
+                    <button class="form-control btn w-50">
+                    <i class="fas fa-file-pdf"></i>
+                </button>
                 </form>
             </div>
         </div>

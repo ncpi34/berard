@@ -10,5 +10,7 @@ app_name = 'order'
 urlpatterns = [
     path('accueil_commande/', OrderSummaryView.as_view(), name='order_summary'),
     path('detail_commande/<int:pk>', OrderDetailView.as_view(), name='order_detail'),
+    path('pdf/<order_id>', PdfCreator.build_pdf, name='generate_pdf'),
+    # path('pdf/<order_id>', generate_pdf, name='generate_pdf'),
 
 ]
