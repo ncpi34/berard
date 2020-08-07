@@ -12,18 +12,28 @@ SECRET_KEY='kr10r4_n87g+t57b&n#x-^7c+yh!%%+94g0(^_*8&gbwe(+91_'
 CELERY_BROKER_URL='redis://localhost:6379'
 CELERY_RESULT_BACKEND='redis://localhost:6379'
 
+change cart/models.py with that:
+from django.db import models
+from django.contrib.postgres import fields
+
+class OldJSONField(fields.JSONField):
+    def db_type(self, connection):
+        return 'json'
+
+class PanierEnCours(models.Model):
+    utilisateur = models.IntegerField()
+    donnees = OldJSONField(default=dict)
+
+    def __unicode__(self):
+        return self.utilisateur
+        
+
 python manage.py makemigrations
 python manage.py makemigrations website
 python manage.py migrate
 
 python manage.py runserver
 
-créer un dossier
-/resources/import
-/resources/export
-
-ajouter nophoto.jpg dans media
-ajouter favicon.ico dans media
 
 https://testsite.uno/file/group/
 https://testsite.uno/file/article/
