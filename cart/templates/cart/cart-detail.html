@@ -127,11 +127,10 @@
             <a href="#menu-modal"
                class="btn btn-success waves-effect modal-trigger"
                 >Commander</a>
-{#            <button id="send-order" class="btn btn-success">Commander</button>#}
-            <a href="{% url 'website:products' %}">
-                <button  class="btn_return btn btn-success">Retourner aux produits</button>
-            </a>
-        </p>
+<!--            <a href="{% url 'website:products' %}">-->
+<!--                <button  class="btn_return btn btn-success">Retourner aux produits</button>-->
+<!--            </a>-->
+
 
     {% else %}
         <div class="container text-center mt-5" style="min-height: 60vh">
@@ -139,9 +138,9 @@
 
         <p class="text-right">
 
-            <a href="{% url 'website:products' %}">
-                <button  class="btn_return btn btn-success">Retourner aux produits</button>
-            </a>
+<!--            <a href="{% url 'website:products' %}">-->
+<!--                <button  class="btn_return btn btn-success">Retourner aux produits</button>-->
+<!--            </a>-->
         </p>
         </div>
 
@@ -245,7 +244,7 @@
 
 
 
-    }
+    };
 
     // // get values and display it on key change
     // //     const quantity = document.querySelectorAll('.quantity_val')
@@ -307,15 +306,15 @@
                         method: 'POST',
                         body: JSON.stringify(data),
                         headers: { "X-CSRFToken": csrftoken },
-        })
+        });
         return rst
-    }
+    };
     const getCart = async () => {
         const csrftoken = await Cookies.get('csrftoken');
         let rst = await fetch(`/panier/` , {
                         method: 'GET',
                         headers: { "X-CSRFToken": csrftoken },
-        })
+        });
         return rst
     }
 

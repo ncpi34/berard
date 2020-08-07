@@ -32,7 +32,6 @@ import pandas as pd
 
 class LoginView(View):
 
-
     def get_old_cart(self, request):
         """ get cart not finalized """
         try:
@@ -80,14 +79,16 @@ class LoginView(View):
 
 """ Logout """
 
+
 def save_cart_before_logout(request):
     """ Save cart before logout"""
     PanierEnCours.objects.update_or_create(
         utilisateur=int(request.session.get('_auth_user_id')),
 
         defaults=dict(
-        donnees=request.session.get('cart'),)
+            donnees=request.session.get('cart'), )
     )
+
 
 def logout_view(request):
     save_cart_before_logout(request)
@@ -95,8 +96,9 @@ def logout_view(request):
     return redirect('website:login')
 
 
-
 """Offers View"""
+
+
 class OffersView(LoginRequiredMixin, ListView):
     template_name = 'website/product/offers.html'
     # paginate_by = 60
@@ -113,7 +115,7 @@ class OffersView(LoginRequiredMixin, ListView):
         article = Favori.objects.all().iterator()
         art = []
         for ex in article:
-            art+=Article.objects.filter(libelle=ex)
+            art += Article.objects.filter(libelle=ex)
         return art
 
     def get_context_data(self, **kwargs):
@@ -123,6 +125,8 @@ class OffersView(LoginRequiredMixin, ListView):
 
 
 """ Favorites View """
+
+
 class FavoritesView(LoginRequiredMixin, ListView):
     template_name = 'website/product/favorites.html'
     # paginate_by = 60
@@ -139,19 +143,24 @@ class FavoritesView(LoginRequiredMixin, ListView):
 
         # sort by quantity
         df = pd.DataFrame(obj_from_method_db)
-        df = df.sort_values('quantite')
-        sorted_listOfDicts = df.T.to_dict().values()
+        if df.empty:
+            return ''
+        else:
+            df = df.sort_values('quantite')
+            sorted_list_of_dicts = df.T.to_dict().values()
 
-        for article in list(sorted_listOfDicts)[0:20]: # 20first results
-            art+=Article.objects.filter(libelle=article['libelle'])
-        return art
+            for article in list(sorted_list_of_dicts)[0:20]:  # 20first results
+                art += Article.objects.filter(libelle=article['libelle'])
+            return art
 
     def get_context_data(self, **kwargs):
         context = super(FavoritesView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
         return context
 
+
 """ Products views"""
+
 
 class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
     template_name = 'website/product/products.html'
