@@ -40,6 +40,7 @@ class ClientViews(object):
         for rst in self:
             try:
                 print(rst['email'])
+
                 user, created = User.objects.update_or_create(
                     username=rst["code_client"],
 
@@ -48,6 +49,14 @@ class ClientViews(object):
                         last_name=rst['nom'],
                         password=rst["mot_de_passe"], )
                 )
+
+                # check if user has tarif equal to 0
+                if rst['tarif'] == 0:
+                    user.is_active = False
+                    user.save()
+                else:
+                    user.is_active = True
+                    user.save()
                 # to encrypt Password
                 # user.set_password(rst["mot_de_passe"])
                 # user.save()

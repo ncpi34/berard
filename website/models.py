@@ -136,7 +136,6 @@ class Article(models.Model):
     # get_img.allow_tags = True
 
 
-
 """ Offers """
 
 
@@ -156,6 +155,7 @@ class Favori(models.Model):
 
 
 """ Favorites """
+
 
 class FavorisClient(models.Model):
     utilisateur = models.ForeignKey(User,

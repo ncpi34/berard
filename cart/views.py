@@ -21,7 +21,6 @@ from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.conf import settings
 
-
 """ Cart """
 
 
@@ -57,7 +56,6 @@ def order_summary_to_cart(request, order_id):
                  quantity=item.quantite,
                  )
     return redirect("cart:cart_detail")
-
 
 
 class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal
@@ -228,8 +226,8 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
             # cart.clear()
             cart.clear_all(cart)
             messages.success(request, 'Votre commande a bien été passée')
-            return redirect("cart:cart_detail")
-            # return redirect("website:products")
+
+            return redirect("order:order_detail", pk=order.id)
         except Exception as e:
             print("ERROR champs ", e)
             messages.error(request, "Votre commande n'a pas pu être éffectuée")

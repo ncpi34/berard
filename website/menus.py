@@ -1,5 +1,5 @@
 import itertools
-
+from django.db.models import Q
 from website.models import Groupe, Famille, SousFamille
 
 """ Dynamic menus and submenus from DB"""
@@ -7,7 +7,9 @@ from website.models import Groupe, Famille, SousFamille
 
 # to get parent menu
 def get_menus():
-    group_query = Groupe.objects.exclude(nom='DIVERS').values_list('nom', 'pk')  # Groupe
+    group_query = Groupe.objects.all().exclude(
+        Q(nom__in=['DIVERS', 'BOISSONS BIO', 'ENTRETIEN BIO', 'EPICERIE BIO', 'FRAIS BIO'])
+    ).values_list('nom', 'pk')  # Groupe
     groups = [list(i) for i in group_query]
     # groups = list(itertools.chain(*group_query))
     # print(groups)

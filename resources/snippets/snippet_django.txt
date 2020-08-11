@@ -17,6 +17,13 @@ pip install virtualenv
 virtualenv zendic_venv
 zendic_venv\Scripts\activate.bat
 
+SUPRESS
+source venv/bin/activate
+pip freeze > requirements.txt
+pip uninstall -r requirements.txt -y
+deactivate
+rm -r venv/
+
 !!!DJANGO
 pip install django
 python -m django --version
