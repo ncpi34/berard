@@ -13,7 +13,7 @@ colorama==0.4.3
 defusedxml==0.6.0
 diff-match-patch==20181111
 distlib==0.3.1
-Django==3.0.5
+Django==2.2.12
 django-advanced-filters==1.1.1
 django-bootstrap-modal-forms==1.5.0
 django-bootstrap4==2.0.0
@@ -35,7 +35,6 @@ django-shopping-cart==0.1
 django-timezone-field==4.0
 django-widget-tweaks==1.4.8
 djangorestframework==3.11.0
-djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.4.0
 dnspython==1.16.0
 environ==1.0
@@ -79,7 +78,7 @@ pytz==2019.3
 PyYAML==5.3.1
 rabbitmq==0.2.0
 redis==3.5.3
-reportlab==3.5.46
+reportlab==3.5.47
 requests==2.24.0
 schedule==0.6.0
 simplejson==3.17.0
