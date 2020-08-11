@@ -14,6 +14,8 @@ admin.site.unregister(Group)
 """Register part"""
 
 """ Article """
+
+
 @admin.register(Article)
 class ArticleViews(admin.ModelAdmin):
     list_display = ('code_article', 'libelle',
@@ -37,14 +39,16 @@ class ArticlesInLine(admin.TabularInline):
     model = ProduitCommande
     raw_id_fields = ['article']
 
+
 """ Order Summary """
+
+
 @admin.register(HistoriqueCommande)
 class HistoriqueViews(admin.ModelAdmin):
     list_display = ['date', 'get_articles', 'utilisateur']
     list_filter = ['date']
     date_hierarchy = 'date'
     inlines = [ArticlesInLine]
-
 
     # def show_content_part(self, article):
     #     """
@@ -61,6 +65,8 @@ class HistoriqueViews(admin.ModelAdmin):
 
 
 """ CustomUser """
+
+
 class CustomUserAdmin(UserAdmin):
     # exclude = ('username',)
     list_display = ('username', 'last_name', 'first_name', 'email', 'is_active',)
@@ -68,7 +74,8 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         ('Informations personnelles', {'fields': (
             'email',
-            'password'
+            'password',
+            # 'profilutilisateur__tarif'
         )}),
 
         # ('Important dates', {'fields': (
@@ -83,10 +90,13 @@ class CustomUserAdmin(UserAdmin):
                                     )}),
     )
 
+    def get_queryset(self, request):  # exclude user with tarif equal to 0
+        qs = super().get_queryset(request)
+        return qs.exclude(profilutilisateur__tarif=0)
+
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
-
 
 """ Favorite"""
 # @admin.register(Favoris)

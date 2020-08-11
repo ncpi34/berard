@@ -64,16 +64,6 @@ class LoginView(View):
                         else:
                             messages.error(request, 'Vos identifiants sont erronés')
                             return render(request, 'auth/login.html', locals())
-                        #     if tarif is not '0':
-                        #         # messages.success(request, 'Vous êtes bien connecté')
-                        #         login(request, user)
-                        #         request.session['tarif'] = int(user.profilutilisateur.tarif)
-                        #         self.get_old_cart(request)
-                        #         return redirect('website:offers')
-                        #         # return HttpResponse("Vous avez été redirigé.")
-                        # else:
-                        #     messages.error(request, 'Vos identifiants sont erronés')
-                        #     return render(request, 'auth/login.html', locals())
 
                     except ProfilUtilisateur.DoesNotExist:
                         messages.error(request, "Vous n'avez pas accès à ce site")
