@@ -123,7 +123,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
             ftp = FTP(host)
             ftp.set_debuglevel(2)
             ftp.login(user, passw)
-            ftp.cwd('/Rep/EXPORT')  # !!! to change !!!
+            ftp.cwd('/Rep/IMPORT/Archive')  # !!! to change !!!
             # ftp.cwd('/Rep/IMPORT')
             file = open(self.name, 'rb')
             ftp.storbinary('STOR %s' % os.path.basename(self.name), file, 1024)
@@ -165,7 +165,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                 str(date.today()).replace('-', ''),
                 hour_with_minute,
                 second_with_microsecond,
-                '_0_')
+                '_030_')
 
             # if path not exists
             path = 'resources/export/'

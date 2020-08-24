@@ -34,9 +34,9 @@
             <div class="card medium" style="margin: -2%">
               <!--Card image-->
               <div class="view overlay">
-                <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}" >
-                        <img class="img_modal img-fluid img-thumbnail card-img-top"
-                             alt="photo"
+                <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}"  >
+                        <img class="img_modal img-fluid img-thumbnail w-75 ml-auto mr-auto card-img-top"
+                             alt="photo" 
                         src="{{ article.get_img }}"/>
                 </a>
 
@@ -158,9 +158,24 @@
 
 {% block extrascripts %}
 
+<!--<script src="{% static 'js/scroll_position.js' %}"></script>-->
 
 
     <script>
+     
+          // // scroll position
+          // let close_modal = document.querySelectorAll('.close_modal')
+          // close_modal.forEach(butt => {
+          //   butt.addEventListener('click', () => {
+          //     console.log('clicked')
+          //       if(localStorage.getItem('scrollPosition') !== null){
+          //         console.log(localStorage.getItem('scrollPosition'))
+          //         window.scrollTo(0, localStorage.getItem('scrollPosition'))
+          //       }
+          //
+          //     })
+          // }, false)
+        
 
         document.addEventListener('DOMContentLoaded', function() {
              //floating
@@ -179,6 +194,11 @@
 
                 const elemsModal = document.querySelectorAll('.modal');
                 const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
+
+                //When click on img, you save it on localStorage.
+                localStorage.setItem('scrollPosition',window.scrollY);
+
+                
             }
             ))
         });
