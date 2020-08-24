@@ -126,6 +126,10 @@ class Article(models.Model):
     def get_img(self):
         if Path("media/img/product/" + self.code_article + ".png").is_file():
             return Path("/media/img/product/" + self.code_article + ".png")
+        elif Path("media/img/product/" + self.code_article + ".PNG").is_file():
+            return Path("/media/img/product/" + self.code_article + ".PNG")
+        elif Path("media/img/product/" + self.code_article + ".JPG").is_file():
+            return Path("/media/img/product/" + self.code_article + ".JPG")
         elif Path("media/img/product/" + self.code_article + ".jpg").is_file():
             return Path("/media/img/product/" + self.code_article + ".jpg")
         elif Path("media/img/product/" + self.code_article + ".jpeg").is_file():
