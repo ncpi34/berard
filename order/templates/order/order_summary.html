@@ -47,7 +47,7 @@
     </table>
         <p class="text-right">
             <a href="{% url 'website:products' %}">
-                <button class="btn btn-success">Retourner aux produits</button>
+                <button id="btn_return" class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
 
@@ -57,7 +57,7 @@
 
         <p class="text-right">
             <a href="{% url 'website:products' %}">
-                <button  id="btn_return" class="btn btn-success">Retourner aux produits</button>
+                <button   class="btn btn-success">Retourner aux produits</button>
             </a>
         </p>
         </div>
@@ -74,13 +74,6 @@
     <script>
     let widthScreenStart = window.innerWidth;
     const btn = document.querySelector('#btn_return')
-    const title = document.querySelector('#title_page')
-
-    if (widthScreenStart < 752) {
-                title.innerHTML = 'Historique'
-            } else {
-                title.innerHTML = 'Historique de commandes'
-            }
     if (btn) {
             if (widthScreenStart < 445) {
                 btn.innerHTML = 'RETOUR'
@@ -91,13 +84,6 @@
     // calculate screen windows in real time and change html
     function resize() {
         let widthScreenReload = window.innerWidth;
-        const title = document.querySelector('#title_page')
-        if (widthScreenReload < 752) {
-                title.innerHTML = 'Historique'
-            } else {
-                title.innerHTML = 'Historique de commandes'
-            }
-
 
         if (btn) {
             if (widthScreenReload < 445) {
