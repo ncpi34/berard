@@ -21,9 +21,6 @@
     {% if cart %}
         <div class="row">
             <div class="col mb-5">
-<!--                <h5 class="alert alert-success position-fixed" style="right: 0">-->
-<!--                    Total: {{ cart.get_total_price}} €-->
-<!--                </h5>-->
                 <form  name="myform2"
               action="{% url 'cart:update_all_cart' %}" method="post">
                     <div class="text-left">
@@ -41,7 +38,11 @@
 
 
             </div>
-
+            <div class="col">
+                {% if cart.get_total_price < 200 %}
+                    <div class="alert alert-danger position-fixed">Veuillez avoir une commande de 200 € minimum</div>
+                {% endif %}
+            </div>
 
 
 
@@ -124,12 +125,17 @@
     </table>
          <div class="text-right">
             <h5 >Total: {{ cart.get_total_price }} €</h5>
-            <a href="#menu-modal"
-               class="btn btn-success waves-effect modal-trigger"
-                >Commander</a>
-<!--            <a href="{% url 'website:products' %}">-->
-<!--                <button  class="btn_return btn btn-success">Retourner aux produits</button>-->
-<!--            </a>-->
+             {% if cart.get_total_price < 200 %}
+                    <button disabled class="btn btn-success waves-effect modal-trigger">
+                        Commander
+                    </button>
+             {% else %}
+             <a href="#menu-modal" class="btn btn-success waves-effect modal-trigger">
+                 Commander
+             </a>
+             {% endif %}
+
+
 
 
     {% else %}
@@ -138,9 +144,6 @@
 
         <p class="text-right">
 
-<!--            <a href="{% url 'website:products' %}">-->
-<!--                <button  class="btn_return btn btn-success">Retourner aux produits</button>-->
-<!--            </a>-->
         </p>
         </div>
 

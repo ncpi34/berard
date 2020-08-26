@@ -1,19 +1,22 @@
 {% if messages %}
 {% for message in messages %}
-    <div id="msg" class="alert {{ message.tags }} alert-dismissible" role="alert">
-<!--        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
-<!--{#        <button type="button" class="close" data-dismiss="alert" aria-label="Close">#}-->
-<!--{#            <span aria-hidden="true">&times;</span>#}-->
-<!--{#        </button>#}-->
+
+      <div id="msg" class="text-center alert {{ message.tags }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <div id="msg_text">
             <strong>{{ message | safe }}</strong>
         </div>
     </div>
+
 {% endfor %}
 {% endif %}
 
+
+
 <script type="text/javascript">
-    let msg = document.getElementById('msg')
+    let msg = document.querySelector('#msg')
     setTimeout(() => {
         msg.remove();
 }, 5000);

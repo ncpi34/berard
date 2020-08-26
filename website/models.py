@@ -17,6 +17,7 @@ class ProfilUtilisateur(models.Model):
     adresse = models.TextField()
     code_client = models.CharField(max_length=30)
     tarif = models.CharField(max_length=10)
+    code_representant = models.CharField(max_length=3, null=True)
 
     def __str__(self):
         return self.code_client

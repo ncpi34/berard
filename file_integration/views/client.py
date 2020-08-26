@@ -63,15 +63,17 @@ class ClientViews(object):
                 # print('RESULT', user.qs)
                 # user = User.objects.get(email=rst['email']).id
 
-                user_one_to_one = ProfilUtilisateur.objects.update_or_create(
+                profile = ProfilUtilisateur.objects.update_or_create(
                     utilisateur=user,
                     defaults=dict(
-                        adresse=rst["adresse"],
-                        telephone=rst["telephone"],
-                        tarif=rst["tarif"],
-                        code_client=rst["code_client"],)
+                        code_representant=rst["code_representant"]),
+                    adresse=rst["adresse"],
+                    telephone=rst["telephone"],
+                    tarif=rst["tarif"],
+                    code_client=rst["code_client"],
 
                 )
+
             except Exception as err:
                 print('not inserted', rst['code_client'])
                 print(err)
@@ -106,6 +108,7 @@ class ClientViews(object):
 
             # array of dict
             obj_bdd = [{
+                "code_representant": val[4:7].strip(),
                 "code_client": val[10:16],
                 "nom": val[26:52],
                 'mot_de_passe': val[10:16] + val[146:151],
@@ -116,7 +119,7 @@ class ClientViews(object):
                 "email": val[438:509].strip(),
 
             } for val in text_lines]
-            # print([val[230:240] for val in text_lines])
+            print([val[4:7] for val in text_lines])
 
             cls.insert_into_db(obj_bdd)  # call method to insert in db
 

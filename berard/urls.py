@@ -22,7 +22,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    # url(r'^favicon\.ico$', RedirectView.as_view(url='/media/img/favicon.ico')),
+    url(r'^favicon\.ico$', RedirectView.as_view(url='/media/img/favicon.ico')),
     path('', include('website.urls', namespace='website')),
     path('panier/', include('cart.urls', namespace='cart')),
     path('commande/', include('order.urls', namespace='order')),
