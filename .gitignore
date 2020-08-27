@@ -13,3 +13,4 @@ tests
 order/migrations
 resources/export
 resources/import
+/static_root

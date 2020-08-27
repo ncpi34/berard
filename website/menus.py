@@ -6,14 +6,13 @@ from website.models import Groupe, Famille, SousFamille
 
 
 # to get parent menu
-def get_menus():
+def get_menus(request):
     group_query = Groupe.objects.all().exclude(
         Q(nom__in=['DIVERS', 'BOISSONS BIO', 'ENTRETIEN BIO', 'EPICERIE BIO', 'FRAIS BIO'])
-    ).values_list('nom', 'pk')  # Groupe
+    ).values_list('nom', 'pk')
     groups = [list(i) for i in group_query]
     # groups = list(itertools.chain(*group_query))
     # print(groups)
-
     liste = [{"id": item[0][1],
               "name": item[0][0], 'url': '#',  # retrieve query to array of dictionnaries
               'validators': ["menu_generator.validators.is_authenticated"],
@@ -21,7 +20,8 @@ def get_menus():
               } for item in zip(groups)]
     # [print(i, '\n') for i in liste]
 
-    return liste
+    # return liste
+    return {'liste': liste}
 
 
 # to get families
@@ -32,7 +32,7 @@ def get_families(group_name):
     for item in range(len(families)):
         temp = {'id':  families[item][1],
                 'name': families[item][0],
-                'subsubmenu': get_sub_families(families[item][0]),
+                # 'subsubmenu': get_sub_families(families[item][0]),
                 'url': '#'}
         liste.append(temp)
     return liste
@@ -53,18 +53,18 @@ def get_sub_families(family_name):
     return liste
 
 
-MENUS = {
-    'NAV_MENU_TOP': [
-        {
-            "name": "Logo",
-            "url": "/home",
-            "validators": ["menu_generator.validators.is_authenticated"],
-        },
-        {
-            "name": "Deconnexion",
-            "url": "/logout",
-            "validators": ["menu_generator.validators.is_authenticated"],
-        },
-    ],
-    'NAV_MENU_LEFT': get_menus()
-}
+# MENUS = {
+#     # 'NAV_MENU_TOP': [
+#     #     {
+#     #         "name": "Logo",
+#     #         "url": "/home",
+#     #         "validators": ["menu_generator.validators.is_authenticated"],
+#     #     },
+#     #     {
+#     #         "name": "Deconnexion",
+#     #         "url": "/logout",
+#     #         "validators": ["menu_generator.validators.is_authenticated"],
+#     #     },
+#     # ],
+#     'NAV_MENU_LEFT': get_menus()
+# }

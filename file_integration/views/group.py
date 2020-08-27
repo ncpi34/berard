@@ -54,8 +54,7 @@ class GroupViews(object):
         # Groupe
         for row in data['Groupe']:
             try:
-                group = Groupe.objects.get_or_create(nom=row[1],
-                                                     pk=row[0])
+                Groupe.objects.update_or_create(pk=row[0], defaults=dict(nom=row[1]))
                 # group = Groupe(nom=row[1], )
                 # group.save()
             except Exception as e:
@@ -70,8 +69,8 @@ class GroupViews(object):
 
                 if re.search(',', str(row[0])):
                     tab_str_split = str(row[0]).split(',')
-                    Famille.objects.update_or_create(nom=row[1],
-                                                     pk=row[2])
+                    Famille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
+
 
                     for item in tab_str_split:
                         group = Groupe.objects.get(id=item)
@@ -82,8 +81,8 @@ class GroupViews(object):
                 elif re.search('.', str(row[0])):
                     tab_str_split = str(row[0]).split('.')
                     print(tab_str_split)
-                    Famille.objects.update_or_create(nom=row[1],
-                                                     pk=row[2])
+                    Famille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
+
                     for item in tab_str_split:
                         group = Groupe.objects.get(id=int(item))
                         family = Famille.objects.get(nom=row[1],
@@ -110,8 +109,7 @@ class GroupViews(object):
 
                 if re.search(',', str(row[0])):
                     tab_str_split = str(row[0]).split(',')
-                    SousFamille.objects.update_or_create(nom=row[1],
-                                                         pk=row[2])
+                    SousFamille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
 
                     for item in tab_str_split:
                         family = Famille.objects.get(id=item)
@@ -122,8 +120,7 @@ class GroupViews(object):
                 elif re.search('.', str(row[0])):
                     tab_str_split = str(row[0]).split('.')
                     print(tab_str_split)
-                    SousFamille.objects.update_or_create(nom=row[1],
-                                                         pk=row[2])
+                    SousFamille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
                     for item in tab_str_split:
                         family = Famille.objects.get(id=int(item))
                         subfamily = SousFamille.objects.get(nom=row[1],
@@ -141,6 +138,5 @@ class GroupViews(object):
                 print("no value for subfamily")
 
         print('subfamily creation done')
-
-        # resp = json.dumps(csv_reader)
+        
         return HttpResponse(200, content_type='application/json')

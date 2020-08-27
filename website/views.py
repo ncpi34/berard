@@ -180,32 +180,30 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
     def get_queryset(self):
         if self.request.GET.get('code_article'):
             query = self.request.GET.get('code_article')
-            postresult = Article.objects.filter(Q(actif=True) & Q(code_article__contains=query)
-                                                | Q(actif=True) & Q(libelle__contains=query.upper())
-                                                ).exclude(Q(prix_achat_1=0.00))
+            print(query)
+            postresult = Article.objects.filter( Q(code_article__contains=query)
+                                                |Q(code_article__contains=query.upper())
+                                                |Q(libelle__contains=query.upper())
+                                                ).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
 
             return postresult
-        elif self.kwargs.get('group') and self.kwargs.get('family') and not self.request.GET.get('code_article'):
+        elif self.kwargs.get('group') and self.kwargs.get('family'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
-            article = Article.objects.filter(
-                Q(actif=True)
-                & Q(groupe__nom=_group)
-                & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00)
-                                                   )
-            return article
+            articles = Article.objects.filter(Q(groupe__nom=_group) & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+            return articles
         elif self.kwargs.get('group'):
             _name = self.kwargs.get("group")
-            article = Article.objects.filter(Q(actif=True) & Q(groupe__nom=_name)).exclude(Q(prix_achat_1=0.00))
+            article = Article.objects.filter(Q(groupe__nom=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
             return article
 
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
-            article = Article.objects.filter(Q(actif=True) & Q(sous_famille__nom=_name)).exclude(Q(prix_achat_1=0.00))
+            article = Article.objects.filter(Q(sous_famille__nom=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False) )
             return article
 
         else:
-            article = Article.objects.filter(Q(actif=True)).exclude(Q(prix_achat_1=0.00))
+            article = Article.objects.all().exclude(Q(prix_achat_1=0.00) & Q(actif=False))
             return article
 
     def get_context_data(self, **kwargs):
@@ -223,15 +221,21 @@ class ArticleByFamillyView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        _name = self.kwargs.get("nom")
-        article = Article.objects.filter(Q(famille__nom=_name))
+        _family = self.kwargs.get("family")
+        _group = self.kwargs.get("group")
+        article = Article.objects.filter(
+            Q(actif=True)
+            & Q(groupe__nom=_group)
+            & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00)
+                                                   )
         return article
 
     def get_context_data(self, **kwargs):
         context = super(ArticleByFamillyView, self).get_context_data(**kwargs)
         context['form'] = CartAddProductForm()
+        context['filter'] = ArticleFilter()
         return context
-
+      
 
 class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/product/product.html'

@@ -1,5 +1,5 @@
 {% load static %}
-{% load menu_generator %}
+
 {% load widget_tweaks %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
 {#<link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">#}
@@ -60,7 +60,7 @@
 
   <nav  class="nav-extended">
     <div id="navbar" class="nav-wrapper   green">
-      {% get_menu "NAV_MENU_TOP" as top_menu %}
+
     <!--Top menu -->
         <!-- Hamburger -->
         <!-- NavBar Title -->
@@ -123,19 +123,15 @@
                 <!-- Basket -->
                 <li>
                     <a href="{% url 'cart:cart_detail' %}" title="Panier">
-                        {% with total_items=cart|length %}
-                      {% if cart|length > 0 %}
+                      {% if cart.get_total_items > 0 %}
                           <span class="badge green z-depth-1 position-absolute rounded-circle">
-{#                          {{ total_items }}#}
-                          1
-
+                              {{ cart.get_total_items }}
                           </span>
                       {% else %}
                           <span class="badge red z-depth-1  position-absolute rounded-circle">
                           0
                           </span>
                       {% endif %}
-                  {% endwith %}
                     <i class="fas fa-shopping-cart"></i>
 
                     </a>
@@ -242,31 +238,23 @@
                     </div>
                 </div>
             </li>
-<!--          <li id="signout_link">-->
-<!--              <a href="{% url 'website:logout' %}">-->
-<!--              <i class="fas fa-sign-out-alt"></i>-->
-<!--                  <p>Déconnexion</p>-->
-<!--              </a>-->
-<!--          </li>-->
-
 
           <!--Sidebar -->
-{% get_menu "NAV_MENU_LEFT" as left_menu %}
 
-            {% for item in left_menu %}
+
+            {% for item in liste %}
         <li class="white">
           <ul class="collapsible collapsible-accordion">
 
             <li>
                 <!-- Links -->
-              <a
-{#                      href="{% url 'website:products_by_group' group=item.name %}"#}
-                      href="#{{ item.id }}"
-                      class="collapsible-header waves-effect waves-blue text-dark">
-                  <i class="material-icons">data_usage</i>
-                  {{ item.name|title }}
-                  <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i>
-              </a>
+
+                <a class="nav-link d-inline-flex"
+                   href="{% url 'website:products_by_group' group=item.name %}">{{ item.name|title }}</a>
+                <a href="#{{ item.id }}"
+                   class="collapsible-header  waves-grey text-dark nav-link d-inline-flex float-right">
+                    <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i>
+                </a>
 
                 <!-- Links -->
 

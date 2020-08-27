@@ -66,6 +66,9 @@ class Cart(object):
                 self.cart[product.id]['quantity'] += quantity
             self.save()
 
+    def get_total_items(self):
+        return len(self.cart)
+
     def save(self):
         # update the session cart
         self.session[settings.CART_SESSION_ID] = self.cart

@@ -80,7 +80,6 @@ INSTALLED_APPS = [
 
     'bootstrap_modal_forms',
     'crispy_forms',
-    'menu_generator',
     'django_filters',
     'widget_tweaks',
 
@@ -90,8 +89,7 @@ INSTALLED_APPS = [
     'order',
 ]
 
-CART_SESSION_ID = 'cart'
-MENUS = 'website.menus'  # during 15 days
+CART_SESSION_ID = 'cart' # during 15 days
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,7 +120,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'cart.context_processors.cart',  # processor
+                'cart.context_processors.cart',  # cart processor
+                'website.menus.get_menus',  # sidenav processor
                 # "django.template.context_processors.i18n"  # i18n
             ],
         },
