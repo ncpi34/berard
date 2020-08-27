@@ -38,6 +38,7 @@ def cart_add(request, product_id):  # add method
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
         encoded_url = cd['url']
+        print(encoded_url)
         str_split = cd['url'].split('/')
 
     # redirect with hidden form

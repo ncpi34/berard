@@ -17,9 +17,12 @@
 
 <script type="text/javascript">
     let msg = document.querySelector('#msg')
-    setTimeout(() => {
-        msg.remove();
-}, 5000);
+    if (msg) {
+          setTimeout(() => {
+                msg.remove();
+            }, 5000);
+    }
+
 </script>
 <style>
     #msg{

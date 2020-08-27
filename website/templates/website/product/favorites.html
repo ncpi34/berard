@@ -164,44 +164,5 @@
 {% endblock content %}
 
 {% block extrascripts %}
-
-
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-             //floating
-             const elemsBtns = document.querySelectorAll('.modal');
-             const floatingBtn = M.FloatingActionButton.init(elemsBtns, {
-                 direction: 'left',
-                 hoverEnabled: false
-             });
-
-            // onclick event
-            document.querySelectorAll(".pic_button").forEach(box =>
-            box.addEventListener("click", () =>{
-                let modal = document.getElementById("test");
-                modal.src= box.id;
-                console.log(box.id);
-
-                const elemsModal = document.querySelectorAll('.modal');
-                const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
-            }
-            ))
-        });
-
-        // to insert path in hidden form
-        let btn_send = document.querySelectorAll('.btn_send');
-        let hidd_url = document.querySelectorAll('#hidden_url');
-        for (const button of btn_send) {
-          button.addEventListener('click', (event)=> {
-              hidd_url.forEach(val => {
-                  val.value=window.location.pathname;
-              })
-          })
-
-        }
-
-    </script>
-
+    <script src="{% static 'js/hiddenUrl.js'%}"></script>
 {% endblock extrascripts %}

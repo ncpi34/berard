@@ -126,9 +126,8 @@ class ArticleAutomate:
 
             # Check if no null
             if rst["groupe"] is not None or rst["famille"] is not None or rst["sous_famille"] is not None:
-                print(rst['libelle'])
 
-                # ManyToOne
+                # ManyToOne -> get or null
                 try:
                     group = Groupe.objects.get(id=rst["groupe"])
                 except Groupe.DoesNotExist:
@@ -145,25 +144,26 @@ class ArticleAutomate:
                     subfamily = None
 
                 try:
-
-
-                    article, created = Article.objects.update_or_create(
-                        libelle=rst['libelle'],
-                        # libelle=rst['libelle'].lower(),
+                    Article.objects.update_or_create(
                         code_article=rst["code_article"],
-                        prix_vente=rst["prix_vente"],
-                        prix_achat_1=rst["prix_achat_1"],
-                        prix_achat_2=rst["prix_achat_2"],
-                        prix_achat_3=rst["prix_achat_3"],
-                        prix_achat_4=rst["prix_achat_4"],
                         gencode=rst["gencode"],
-                        conditionnement=rst["conditionnement"],
-                        # taux_TVA=rst["taux_TVA"],
-                        groupe=group,
-                        famille=family,
-                        sous_famille=subfamily,
+
+                        defaults=dict(
+                            libelle=rst['libelle'],
+                            prix_vente=rst["prix_vente"],
+                            prix_achat_1=rst["prix_achat_1"],
+                            prix_achat_2=rst["prix_achat_2"],
+                            prix_achat_3=rst["prix_achat_3"],
+                            prix_achat_4=rst["prix_achat_4"],
+                            conditionnement=rst["conditionnement"],
+                            groupe=group,
+                            famille=family,
+                            sous_famille=subfamily,
+                            # taux_TVA=rst["taux_TVA"],
+                        )
+
                     )
-                    print('inserted')
+                    print('inserted', rst['libelle'])
 
                 except Exception as err:
                     f_art_err.write('not inserted ' + rst['code_article'] + '\n')

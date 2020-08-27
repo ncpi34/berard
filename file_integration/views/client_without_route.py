@@ -5,9 +5,7 @@ from ftplib import FTP
 import os
 import string
 import numpy as np
-
 import json
-
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -33,61 +31,51 @@ class ClientAutomate:
         except ValueError:
             return 0
 
-        # Insert in DB
-
+    # Insert in DB
     @staticmethod
     def insert_into_db(self):
         print('beginning db insert')
         for rst in self:
             try:
                 print(rst['email'])
-                user = User.objects.update_or_create(
-                    email=rst["email"],
+
+                user, created = User.objects.update_or_create(
                     username=rst["code_client"],
-                    last_name=rst['nom'],
-                    password=rst["mot_de_passe"],
+
+                    defaults=dict(
+                        email=rst["email"],
+                        last_name=rst['nom'],
+                        password=rst["mot_de_passe"], )
                 )
+
+                # check if user has tarif equal to 0
+                if rst['tarif'] == 0:
+                    user.is_active = False
+                    user.save()
+                else:
+                    user.is_active = True
+                    user.save()
                 # to encrypt Password
                 # user.set_password(rst["mot_de_passe"])
                 # user.save()
-                print('RESULT', user.qs)
-                ProfilUtilisateur.objects.update_or_create(
-                    utilisateur=user,
+                # print('RESULT', user.qs)
+                # user = User.objects.get(email=rst['email']).id
 
+                profile = ProfilUtilisateur.objects.update_or_create(
+                    utilisateur=user,
+                    defaults=dict(
+                        code_representant=rst["code_representant"]),
                     adresse=rst["adresse"],
                     telephone=rst["telephone"],
                     tarif=rst["tarif"],
                     code_client=rst["code_client"],
 
                 )
-                print('inserted')
-            except Exception:
-                try:
-                    print(rst['email'])
-                    user = User.objects.filter(username=rst["code_client"]).update(
-                        email=rst["email"],
-                        username=rst["code_client"],
-                        last_name=rst['nom'],
-                        password=rst["mot_de_passe"],
 
-                    )
-                    ProfilUtilisateur.objects.filter(utilisateur=user).update(
-                        utilisateur=user,
-                        adresse=rst["adresse"],
-                        telephone=rst["telephone"],
-                        tarif=rst["tarif"],
-                        code_client=rst["code_client"],
-
-                    )
-                except Exception as err:
-                    print('not inserted', rst['code_client'])
-                    print(err)
-                    raise err
-            # except Exception as err:
-            #     print('not inserted', rst['code_client'])
-            #     print(err)
-            #     raise err
-
+            except Exception as err:
+                print('not inserted', rst['code_client'])
+                print(err)
+                raise err
     # Index_method
     @classmethod
     def file_treatement(cls, **kwargs):
@@ -117,6 +105,7 @@ class ClientAutomate:
 
             # array of dict
             obj_bdd = [{
+                "code_representant": val[4:7].strip(),
                 "code_client": val[10:16],
                 "nom": val[26:52],
                 'mot_de_passe': val[10:16] + val[146:151],

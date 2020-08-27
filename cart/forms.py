@@ -29,7 +29,7 @@ class CartAddProductForm(forms.Form):
     url = forms.CharField(required=False,
                           widget=forms.HiddenInput(
                               attrs={
-                                  'id': 'hidden_url',
+                                  'class': 'hidden_url',
                               })
                           )
 

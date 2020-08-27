@@ -24,6 +24,7 @@
   <link href="{% static 'assets/css/style.min.css' %}" rel="stylesheet">
 
       <link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">
+      <script src="{% static 'js/scroll_position.js' %}"></script>
 
 
   <title>{% block head_title %}Berard{% endblock %}</title>
@@ -132,6 +133,9 @@
  </div>
     <!-- JavaScript -->
     {% block scripts %}
+      <script src="{% static 'js/modalPicture.js'%}"></script>
+      <script src="{% static 'js/scroll_position_open_modal.js'%}"></script>
+      <script src="{% static 'js/scroll_position_send_to_cart.js'%}"></script>
 
       <script src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
       <script src="{% static 'assets/js/popper.min.js' %}"></script>
