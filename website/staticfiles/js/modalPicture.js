@@ -9,9 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // onclick event
             document.querySelectorAll(".pic_button").forEach(box =>
             box.addEventListener("click", () =>{
-                let modal = document.getElementById("test");
+                let modal = document.getElementById("img-modal");
                 modal.src= box.id;
-                console.log(box.id);
 
                 const elemsModal = document.querySelectorAll('.modal');
                 const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})

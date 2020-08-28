@@ -1,16 +1,50 @@
 {% load widget_tweaks %}
-<div class="modal" id="menu-modal">
-    <div class="modal-content" id="modal-content">
+<style>
+    /* Add Animation */
+.modal-content {
+  -webkit-animation-name: zoom;
+  -webkit-animation-duration: 0.6s;
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+    @-webkit-keyframes zoom {
+  from {-webkit-transform:scale(0)}
+  to {-webkit-transform:scale(1)}
+}
 
-    <div class="modal-header">
-        <hr>
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+     #menu-modal{
+        height:40%
+    }
+}
+    @media only screen and (min-width: 700px){
+  #img-modal {
+    width: 30%;
+  }
+     #menu-modal{
+        height:40%
+    }
+}
+
+</style>
+<div class="modal" id="menu-modal">
+    <div class="modal-header float-right">
         <a href="#" class="modal-close  btn-flat close_modal_picture">
             <i class="material-icons close_modal red-text">close</i>
         </a>
     </div>
-    <div class="mt-auto mb-auto ml-auto mr-auto w-50">
-      <img class=" img-fluid" id="test" src=""/>
+    <div class="modal-content ml-auto mr-auto">
+        <img id="img-modal" class="img-fluid"  src=""/>
     </div>
 
-    </div>
+
 </div>
