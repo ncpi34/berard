@@ -190,16 +190,16 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
         elif self.kwargs.get('group') and self.kwargs.get('family'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
-            articles = Article.objects.filter(Q(groupe__nom=_group) & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+            articles = Article.objects.filter(Q(groupe__pk=_group) & Q(famille__pk=_family)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
             return articles
         elif self.kwargs.get('group'):
             _name = self.kwargs.get("group")
-            article = Article.objects.filter(Q(groupe__nom=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+            article = Article.objects.filter(Q(groupe__pk=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
             return article
 
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
-            article = Article.objects.filter(Q(sous_famille__nom=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False) )
+            article = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False) )
             return article
 
         else:

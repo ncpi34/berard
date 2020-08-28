@@ -69,34 +69,34 @@ class GroupViews(object):
 
                 if re.search(',', str(row[0])):
                     tab_str_split = str(row[0]).split(',')
-                    Famille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
+                    Famille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1].strip()))
 
 
                     for item in tab_str_split:
                         group = Groupe.objects.get(id=item)
-                        family = Famille.objects.get(nom=row[1],
+                        family = Famille.objects.get(nom=row[1].strip(),
                                                      pk=row[2])
                         family.groupe.add(group)
 
                 elif re.search('.', str(row[0])):
                     tab_str_split = str(row[0]).split('.')
                     print(tab_str_split)
-                    Famille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
+                    Famille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1].strip()))
 
                     for item in tab_str_split:
                         group = Groupe.objects.get(id=int(item))
-                        family = Famille.objects.get(nom=row[1],
+                        family = Famille.objects.get(nom=row[1].strip(),
                                                      pk=row[2])
                         family.groupe.add(group)
 
                 else:
                     group = Groupe.objects.get(id=row[0])
                     print('GROUP', group)
-                    family = Famille.objects.get(nom=row[1],
+                    family = Famille.objects.get(nom=row[1].strip(),
                                                  pk=row[2])
                     family.groupe.add(group)
             else:
-                family = Famille.objects.get_or_create(nom=row[1],
+                family = Famille.objects.get_or_create(nom=row[1].strip(),
                                                        pk=row[2])
                 print("no value for family")
 
@@ -109,31 +109,31 @@ class GroupViews(object):
 
                 if re.search(',', str(row[0])):
                     tab_str_split = str(row[0]).split(',')
-                    SousFamille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
+                    SousFamille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1].strip()))
 
                     for item in tab_str_split:
                         family = Famille.objects.get(id=item)
-                        subfamily = SousFamille.objects.get(nom=row[1],
+                        subfamily = SousFamille.objects.get(nom=row[1].strip(),
                                                             pk=row[2])
                         subfamily.famille.add(family)
 
                 elif re.search('.', str(row[0])):
                     tab_str_split = str(row[0]).split('.')
                     print(tab_str_split)
-                    SousFamille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1]))
+                    SousFamille.objects.update_or_create(pk=row[2], defaults=dict(nom=row[1].strip()))
                     for item in tab_str_split:
                         family = Famille.objects.get(id=int(item))
-                        subfamily = SousFamille.objects.get(nom=row[1],
+                        subfamily = SousFamille.objects.get(nom=row[1].strip(),
                                                             pk=row[2])
                         subfamily.famille.add(family)
 
                 else:
                     family = Famille.objects.get(id=row[0])
-                    subfamily = SousFamille.objects.get(nom=row[1],
+                    subfamily = SousFamille.objects.get(nom=row[1].strip(),
                                                         pk=row[2])
                     subfamily.famille.add(family)
             else:
-                subfamily = SousFamille.objects.get_or_create(nom=row[1],
+                subfamily = SousFamille.objects.get_or_create(nom=row[1].strip(),
                                                               pk=row[2])
                 print("no value for subfamily")
 

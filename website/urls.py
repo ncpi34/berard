@@ -13,9 +13,9 @@ urlpatterns = [
     path('mot_de_passe_oublie/', ForgotPasswordView.as_view(), name='forgot_password'),
 
     url(r'accueil/$', ArticleView.as_view(), name='products'),
-    path('groupe/<str:group>/', ArticleView.as_view(model=Article), name='products_by_group'),
-    path('groupe/<str:group>/famille/<str:family>/', ArticleView.as_view(model=Article), name='products_by_family'),
-    path('sous_famille/<str:subfamily>', ArticleView.as_view(model=Article), name='products_by_subfamily'),
+    path('groupe/<int:group>/', ArticleView.as_view(model=Article), name='products_by_group'),
+    path('groupe/<int:group>/famille/<int:family>/', ArticleView.as_view(model=Article), name='products_by_family'),
+    path('sous_famille/<int:subfamily>', ArticleView.as_view(model=Article), name='products_by_subfamily'),
     # path('home_by_family/<str:nom>', ArticleView.as_view(model=Article), name='products_by_sub_family'),
     path('detail/<int:pk>', ArticleDetailView.as_view(), name='product_detail'),
 

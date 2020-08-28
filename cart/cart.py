@@ -50,7 +50,7 @@ class Cart(object):
         """
         id = str(product.id)
         # newItem = True
-        if product.id not in self.cart.keys() and quantity is not 0:
+        if product.id not in self.cart.keys() and quantity is not 0 and self.get_price_by_user(product) is not 0.00:
             self.cart[product.id] = {
                 'userid': self.request.user.id,
                 'article_id': id,

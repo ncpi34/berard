@@ -70,4 +70,13 @@
     </div>
   </main>
 {% endblock %}
+{% block extrascripts %}
+<script>
 
+document.addEventListener("DOMContentLoaded", () => {
+    window.scrollTo(0, 0);
+});
+
+</script>
+
+{% endblock extrascripts %}

@@ -40,7 +40,7 @@
             </div>
             <div class="col">
                 {% if cart.get_total_price < 200 %}
-                    <div class="alert alert-danger position-fixed">Veuillez avoir une commande de 200 € minimum</div>
+                    <div class="alert alert-danger">Veuillez avoir une commande de 200 € minimum</div>
                 {% endif %}
             </div>
 
@@ -160,38 +160,22 @@
 
 
     <script>
-        // calculate screen windows onload and change html
-    let widthScreenStart = window.innerWidth;
-    if (document.querySelector('.btn_return')
-        && document.querySelector('#basket_update')) {
-        const btn = document.querySelector('.btn_return');
-        const btn2 = document.querySelector('#basket_update');
-            if (widthScreenStart < 445) {
-                btn.innerHTML = 'RETOUR';
-                btn2.innerHTML = 'MAJ'
-            } else if(widthScreenStart > 445 && widthScreenStart < 675) {
-                btn2.innerHTML = 'MAJ'
-            } else {
-                btn.innerHTML = 'RETOUR AUX PRODUITS';
-                btn2.innerHTML = 'MAJ PANIER'
-            }
-        }
+
 
 
     // calculate screen windows in real time and change html
     function resize() {
         let widthScreenReload = window.innerWidth;
-        if (document.querySelector('.btn_return')
-            && document.querySelector('#basket_update')) {
-            const btn = document.querySelector('.btn_return');
+        if (document.querySelector('#basket_update')) {
+
             const btn2 = document.querySelector('#basket_update');
             if (widthScreenReload < 445) {
-                btn.innerHTML = 'RETOUR';
+
                 btn2.innerHTML = 'MAJ'
             } else if(widthScreenReload > 445 && widthScreenReload < 675) {
                 btn2.innerHTML = 'MAJ'
             }else {
-                btn.innerHTML = 'RETOUR AUX PRODUITS';
+
                 btn2.innerHTML = 'MAJ PANIER'
             }
         }
@@ -200,6 +184,21 @@
     window.onresize = resize;
 
     document.addEventListener('DOMContentLoaded', function() {
+          // calculate screen windows onload and change html
+    let widthScreenStart = window.innerWidth;
+    if (document.querySelector('#basket_update')) {
+
+        const btn2 = document.querySelector('#basket_update');
+            if (widthScreenStart < 445) {
+
+                btn2.innerHTML = 'MAJ'
+            } else if(widthScreenStart > 445 && widthScreenStart < 675) {
+                btn2.innerHTML = 'MAJ'
+            } else {
+
+                btn2.innerHTML = 'MAJ PANIER'
+            }
+        }
          //floating
          const elemsBtns = document.querySelectorAll('.fixed-action-btn');
          const floatingBtn = M.FloatingActionButton.init(elemsBtns, {
@@ -249,57 +248,7 @@
 
     };
 
-    // // get values and display it on key change
-    // //     const quantity = document.querySelectorAll('.quantity_val')
-    //     const form_update = document.querySelectorAll('.form_update')
-    //     const hidden_values = document.querySelectorAll('.hidden_value')
-    //     form_update.forEach(button => {
-    //         button.addEventListener('change', (e)=> {
-    //             e.preventDefault();
-    //
-    //             const product_id = parseInt(button.dataset.id)
-    //             const data = {
-    //                 'product_id': button.dataset.id,
-    //                 'quantity': button[0].value
-    //             }
-    //
-    //             requestFetch(data, product_id).then(
-    //                 (response) => {
-    //                     if (!response.ok) {
-    //                         console.log('error')
-    //                         // error processing
-    //                         throw 'Error';
-    //                     }
-    //                     if (response.status === 200) {
-    //                         location.reload();
-    //                         // response.json().then((data)=> {
-    //                         //     console.log(data)
-    //                         // })
-    //                         // getCart().then(
-    //                         //     response => {
-    //                         //         if (!response.ok) {
-    //                         //             console.log('error2')
-    //                         //             // error processing
-    //                         //             throw 'Error';
-    //                         //         }
-    //                         //         console.log('RESp8', response)
-    //                         //         response.then(
-    //                         //             (data) => {
-    //                         //                 console.log(data)
-    //                         //             }
-    //                         //         )
-    //                         //         return response
-    //                         //     }
-    //                         // )
-    //                     // location.reload();
-    //                     // document.querySelector('#message').innerHTML =
-    //                     return response
-    //                     }
-    //
-    //                 }
-    //             )
-    //         })
-    //     })
+
 
         // Ajax request
     const requestFetch = async (data, product_id) => {
@@ -320,52 +269,6 @@
         });
         return rst
     }
-
-  // // to get values from all the basket and use it in django views
-  //   const updateCart = document.querySelector('#myform2')
-  //       updateCart.addEventListener('submit', (e) => {
-  //           e.preventDefault();
-  //           let quant_val = document.querySelectorAll('.quantity_val');
-  //           let prod_url = document.querySelectorAll('.product_url');
-  //           let ids = [];
-  //           prod_url.forEach((val, index) => {
-  //               const quantity = quant_val[index];
-  //
-  //               let obj = {'id':0, 'quantity':0};
-  //               obj['id'] = val.href.split('/').slice(-1)[0];
-  //               obj['quantity'] = quantity.value;
-  //               ids.push(parseInt(val.href.split('/').slice(-1)[0]) + '/' + parseInt(quantity.value))
-  //           });
-  //
-  //       document.querySelector('#hidden_values').value=ids
-  //
-  //       requestFetch(ids).then(
-  //           (response) => {
-  //               if (!response.ok) {
-  //                   console.log('error')
-  //                   // error processing
-  //                   throw 'Error';
-  //               }
-  //               console.log('RESp', response)
-  //               return response
-  //           }
-  //       )
-  //
-  //       })
-  //
-  //   // Ajax request
-  //   const requestFetch = async (quantity) => {
-  //       let data = {
-  //           'quantity': quantity,
-  //       };
-  //       var csrftoken = await Cookies.get('csrftoken');
-  //       let rst = await fetch('/panier/update_all_cart/' , {
-  //                       method: 'POST',
-  //                       body: JSON.stringify(data),
-  //                       headers: { "X-CSRFToken": csrftoken },
-  //       })
-  //       return rst
-  //   }
 
 
     </script>

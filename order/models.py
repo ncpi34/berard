@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.db.models import Count
 from django.core.exceptions import ValidationError
 from website.models import Article
+from django.utils import timezone
 
 """ Order Summary """
 
@@ -50,9 +51,11 @@ class HistoriqueCommande(models.Model):
 
 class ProduitCommande(models.Model):
     commande = models.ForeignKey(HistoriqueCommande,
+                                 null=True,
                                  related_name='items',
                                  on_delete=models.CASCADE)
     article = models.ForeignKey(Article,
+                                null=True,
                                 related_name='orders_items',
                                 on_delete=models.CASCADE)
     prix = models.DecimalField(max_digits=100,

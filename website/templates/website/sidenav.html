@@ -250,7 +250,7 @@
                 <!-- Links -->
 
                 <a class="nav-link d-inline-flex"
-                   href="{% url 'website:products_by_group' group=item.name %}">{{ item.name|title }}</a>
+                   href="{% url 'website:products_by_group' group=item.id %}">{{ item.name|title }}</a>
                 <a href="#{{ item.id }}"
                    class="collapsible-header  waves-grey text-dark nav-link d-inline-flex float-right">
                     <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i>
@@ -263,7 +263,7 @@
                 <ul>
                     {% for menu in item.submenu %}
                         <li>
-                            <a href="{% url 'website:products_by_family' group=item.name family=menu.name %}"
+                            <a href="{% url 'website:products_by_family' group=item.id family=menu.id %}"
                                id="submenu" class="waves-effect waves-blue">
                                 <i class="material-icons">remove</i>
                                   {{ menu.name|lower }}
