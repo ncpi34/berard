@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from website.models import Article, ProfilUtilisateur
+from django.core.exceptions import ObjectDoesNotExist
 
 """ Client File"""
 
@@ -37,7 +38,7 @@ class ClientViews(object):
     @staticmethod
     def insert_into_db(self):
         print('beginning db insert')
-        for rst in self:
+        for iteration, rst in enumerate(self):
             try:
                 print(rst['email'])
 
@@ -49,6 +50,7 @@ class ClientViews(object):
                         last_name=rst['nom'],
                         password=rst["mot_de_passe"], )
                 )
+                print('user done')
 
                 # check if user has tarif equal to 0
                 if rst['tarif'] == 0:
@@ -62,21 +64,36 @@ class ClientViews(object):
                 # user.save()
                 # print('RESULT', user.qs)
                 # user = User.objects.get(email=rst['email']).id
+                # print(user)
+                # print(user.pk)
+                # print('iteration', iteration)
+                try:
+                    user.profilutilisateur.coderepresentant = rst["code_representant"]
+                    user.profilutilisateur.adresse = rst["adresse"]
+                    user.profilutilisateur.telephone = rst["telephone"]
+                    user.profilutilisateur.tarif = rst["tarif"]
+                    user.profilutilisateur.code_client = rst["code_client"]
+                    user.profilutilisateur.save()
+                    print('profile done')
+                except ObjectDoesNotExist as err:
+                    print('!!!!!!!!!!!profile error!!!!!!!!!!!!!')
+                    raise err
 
-                profile = ProfilUtilisateur.objects.update_or_create(
-                    utilisateur=user,
-                    defaults=dict(
-                        code_representant=rst["code_representant"]),
-                    adresse=rst["adresse"],
-                    telephone=rst["telephone"],
-                    tarif=rst["tarif"],
-                    code_client=rst["code_client"],
+                # profile = ProfilUtilisateur.objects.update_or_create(
+                #     utilisateur=user,
+                #     defaults=dict(
+                #         code_representant=rst["code_representant"]),
+                #         adresse=rst["adresse"],
+                #         telephone=rst["telephone"],
+                #         tarif=rst["tarif"],
+                #         code_client=rst["code_client"],
 
-                )
+                # )
+                # print('profile done')
 
             except Exception as err:
                 print('not inserted', rst['code_client'])
-                print(err)
+                print('Inserted error client:', err)
                 raise err
 
     # Index_method

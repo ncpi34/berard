@@ -7,6 +7,8 @@ from website.helpers import RandomFileName
 from django.db.models import Q
 from django.db.models import Count
 from django.core.exceptions import ValidationError
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 """ Profil """
 
@@ -21,6 +23,15 @@ class ProfilUtilisateur(models.Model):
 
     def __str__(self):
         return self.code_client
+
+    @receiver(post_save, sender=User)
+    def update_profile_signal(sender, instance, created, **kwargs):
+        # instance.profile.save()
+        if created:
+            print('created: ', created)
+            ProfilUtilisateur.objects.get_or_create(utilisateur=instance)
+        ProfilUtilisateur.objects.get_or_create(utilisateur=instance)    
+        # instance.profilutilisateur.save()    
 
 
 """ Group """

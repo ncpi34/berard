@@ -50,21 +50,23 @@ class Cart(object):
         """
         id = str(product.id)
         # newItem = True
-        if product.id not in self.cart.keys() and quantity is not 0 and self.get_price_by_user(product) is not 0.00:
-            self.cart[product.id] = {
-                'userid': self.request.user.id,
-                'article_id': id,
-                'libelle': product.libelle,
-                'quantity': 0,
-                'prix_achat': str(self.get_price_by_user(product)),
-                'image': product.image,
-                'code_article': product.code_article,
-            }
-            if update_quantity and quantity is not 0:
-                self.cart[product.id]['quantity'] = quantity
-            else:
-                self.cart[product.id]['quantity'] += quantity
-            self.save()
+        price_null = self.get_price_by_user(product) != 0.00
+        if price_null:
+            if product.id not in self.cart.keys() or quantity is not 0:
+                self.cart[product.id] = {
+                    'userid': self.request.user.id,
+                    'article_id': id,
+                    'libelle': product.libelle,
+                    'quantity': 0,
+                    'prix_achat': str(self.get_price_by_user(product)),
+                    'image': product.image,
+                    'code_article': product.code_article,
+                }
+                if update_quantity and quantity is not 0:
+                    self.cart[product.id]['quantity'] = quantity
+                else:
+                    self.cart[product.id]['quantity'] += quantity
+                self.save()
 
     def get_total_items(self):
         return len(self.cart)

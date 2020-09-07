@@ -179,31 +179,30 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
 
     def get_queryset(self):
         if self.request.GET.get('code_article'):
-            query = self.request.GET.get('code_article')
-            print(query)
+            query = self.request.GET.get('code_article')         
             postresult = Article.objects.filter( Q(code_article__contains=query)
                                                 |Q(code_article__contains=query.upper())
                                                 |Q(libelle__contains=query.upper())
-                                                ).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+                                                ).exclude(Q(prix_achat_1=0.00) | Q(actif=False))
 
             return postresult
         elif self.kwargs.get('group') and self.kwargs.get('family'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
-            articles = Article.objects.filter(Q(groupe__pk=_group) & Q(famille__pk=_family)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+            articles = Article.objects.filter(Q(groupe__pk=_group) & Q(famille__pk=_family)).exclude(Q(prix_achat_1=0.00) | Q(actif=False))
             return articles
         elif self.kwargs.get('group'):
             _name = self.kwargs.get("group")
-            article = Article.objects.filter(Q(groupe__pk=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+            article = Article.objects.filter(Q(groupe__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False))
             return article
 
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
-            article = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(Q(prix_achat_1=0.00) & Q(actif=False) )
+            article = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False) )
             return article
 
         else:
-            article = Article.objects.all().exclude(Q(prix_achat_1=0.00) & Q(actif=False))
+            article = Article.objects.all().exclude(Q(prix_achat_1=0.00) | Q(actif=False))
             return article
 
     def get_context_data(self, **kwargs):
