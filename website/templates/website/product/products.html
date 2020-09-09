@@ -32,18 +32,18 @@
         <!--Grid row-->
         <div class="row justify-content-center wow fadeIn no-gutters">
 <!--            <div class="row wow fadeIn no-gutters">-->
-
+<!--<div class="card-deck">-->
               {% for article in articles %}
           <!--Grid column-->
           <div class="articles col-lg-3 col-md-3  col-sm-6 mb-3">
 
             <!--Card-->
 
-            <div class="card medium" style="margin: -2%">
+            <div class="card large" style="margin: -2%">
               <!--Card image-->
               <div class="view overlay">
                 <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}"  >
-                        <img class="img_modal img-fluid img-thumbnail w-75 ml-auto mr-auto card-img-top"
+                        <img class="rounded img_modal img-fluid img-thumbnail w-75 ml-auto mr-auto card-img-top"
                              alt="photo" 
                         src="{{ article.get_img }}"/>
                 </a>
@@ -107,7 +107,7 @@
           </div>
           <!--Fourth column-->
               {% endfor %}
-
+<!--</div>-->
         </div>
         <!--Grid row-->
       </section>
@@ -166,4 +166,6 @@
 
 {% block extrascripts %}
 <script src="{% static 'js/hiddenUrl.js'%}"></script>
+<script src="{% static 'js/modalPicture.js'%}"></script>
+<script src="{% static 'js/scroll_position_send_to_cart.js'%}"></script>
 {% endblock extrascripts %}

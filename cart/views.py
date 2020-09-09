@@ -30,18 +30,14 @@ def cart_add(request, product_id):  # add method
     cart = Cart(request)
     product = get_object_or_404(Article, id=product_id)
     form = CartAddProductForm(request.POST)
-    str_split = []
     encoded_url = ''
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
+        # redirect with hidden form
         encoded_url = cd['url']
-        print(encoded_url)
-        str_split = cd['url'].split('/')
-
-    # redirect with hidden form
 
     if encoded_url:
         return HttpResponseRedirect(encoded_url)
