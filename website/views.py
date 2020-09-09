@@ -32,21 +32,21 @@ import pandas as pd
 
 class LoginView(View):
 
-    def get_old_cart(self, request):
+    def get_old_cart(self, *args, **kwargs):
         """ get cart not finalized """
         try:
-            old_cart = PanierEnCours.objects.get(utilisateur=request.user.id).donnees
-            request.session['cart'] = old_cart
+            old_cart = PanierEnCours.objects.get(utilisateur=self.request.user.id).donnees
+            self.request.session['cart'] = old_cart
         except PanierEnCours.DoesNotExist:
             pass
 
-    def get(self, request):
+    def get(self, *args, **kwargs):
         form = LoginForm()
-        return render(request, 'auth/login.html', locals())
+        return render(self.request, 'auth/login.html', locals())
 
-    def post(self, request):
-        if request.method == "POST":
-            form = LoginForm(request.POST)
+    def post(self, *args, **kwargs):
+        if self.request.method == "POST":
+            form = LoginForm(self.request.POST)
             if form.is_valid():
                 username = form.cleaned_data["username"]
                 password = form.cleaned_data["password"]
@@ -57,13 +57,14 @@ class LoginView(View):
                         # user = authenticate(username=username, password=password)
                         # admin = User.objects.filter(username=username, groups__name='admin')  # Check if admin
                         if user:
-                            login(request, user)
-                            request.session['tarif'] = int(user.profilutilisateur.tarif)
-                            self.get_old_cart(request)
-                            return redirect('website:offers')
+                            login(self.request, user)
+                            self.request.session['tarif'] = int(user.profilutilisateur.tarif)
+                            self.get_old_cart()
+                            messages.success(self.request, 'Bienvenue ' + self.request.user.last_name)
+                            return redirect('website:home')
                         else:
-                            messages.error(request, 'Vos identifiants sont erronés')
-                            return render(request, 'auth/login.html', locals())
+                            messages.error(self.request, 'Vos identifiants sont erronés')
+                            return render(self.request, 'auth/login.html', locals())
                         #     if tarif is not '0':
                         #         # messages.success(request, 'Vous êtes bien connecté')
                         #         login(request, user)
@@ -76,12 +77,12 @@ class LoginView(View):
                         #     return render(request, 'auth/login.html', locals())
 
                     except ProfilUtilisateur.DoesNotExist:
-                        messages.error(request, "Vous n'avez pas accès à ce site")
-                        return render(request, 'auth/login.html', locals())
+                        messages.error(self.request, "Vous n'avez pas accès à ce site")
+                        return render(self.request, 'auth/login.html', locals())
 
                 except User.DoesNotExist:
-                    messages.error(request, "Vous n'avez pas de compte")
-                    return render(request, 'auth/login.html', locals())
+                    messages.error(self.request, "Vous n'avez pas de compte")
+                    return render(self.request, 'auth/login.html', locals())
 
 
 """ Logout """
@@ -102,6 +103,10 @@ def logout_view(request):
     logout(request)
     return redirect('website:login')
 
+""" Home """
+class HomeView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        return render(self.request, 'website/home.html')
 
 """Offers View"""
 
@@ -114,11 +119,6 @@ class OffersView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        # flash message on connection
-        if not settings.FIRST_CONNECTION:
-            settings.FIRST_CONNECTION = True
-            messages.info(self.request, 'Bienvenue ' + self.request.user.last_name)
-
         article = Favori.objects.all().iterator()
         art = []
         for ex in article:
@@ -178,14 +178,13 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
     success_message = 'List successfully saved!!!!'
 
     def get_queryset(self):
-        if self.request.GET.get('code_article'):
-            query = self.request.GET.get('code_article')         
-            postresult = Article.objects.filter( Q(code_article__contains=query)
-                                                |Q(code_article__contains=query.upper())
+        if self.request.GET.get('q'):
+            query = self.request.GET.get('q')
+            articles = Article.objects.filter(Q(code_article__contains=query.upper())
                                                 |Q(libelle__contains=query.upper())
                                                 ).exclude(Q(prix_achat_1=0.00) | Q(actif=False))
 
-            return postresult
+            return articles
         elif self.kwargs.get('group') and self.kwargs.get('family'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
@@ -193,13 +192,13 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
             return articles
         elif self.kwargs.get('group'):
             _name = self.kwargs.get("group")
-            article = Article.objects.filter(Q(groupe__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False))
-            return article
+            articles = Article.objects.filter(Q(groupe__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False))
+            return articles
 
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
-            article = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False) )
-            return article
+            articles = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False) )
+            return articles
 
         else:
             article = Article.objects.all().exclude(Q(prix_achat_1=0.00) | Q(actif=False))

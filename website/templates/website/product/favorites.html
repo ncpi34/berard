@@ -9,16 +9,12 @@
     {% include 'website/modals/display_picture.html' %}
     {% include 'helpers/cart_button.html' %}
     {% load static %}
-<style>
-    .label-icon{
-        display: none;
-    }
-</style>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
     <!--Main layout-->
   <main>
 
-    <div class="main_container" style="min-height: 80vh;">
+    <div class="main_container" style="min-height: 80vh;margin-top: 8%">
 
     {% if articles %}
 
@@ -26,7 +22,7 @@
 
 
         <!--Grid row-->
-        <div class="row justify-content-center wow fadeIn">
+        <div class="row justify-content-center wow fadeIn no-gutters">
 <!--            <div class="row wow fadeIn no-gutters">-->
 
               {% for article in articles %}
@@ -72,7 +68,7 @@
 
                       <h6 class="ml-auto">
                     <label>P.U HT: </label>
-                  <strong>
+                  <span class="badge badge-info">
                           {% if request.session.tarif == 1  %} {{ article.prix_achat_1 }}
                               {% elif request.session.tarif == 2 %} {{ article.prix_achat_2 }}
                               {% elif request.session.tarif == 3 %} {{ article.prix_achat_3 }}
@@ -80,7 +76,7 @@
                               {% else %} Prix non disponible
                           {% endif %}€
 
-                  </strong>
+                  </span>
                 </h6>
 
               </div>
@@ -111,28 +107,9 @@
       <!--Section: Products v.3-->
         {# Mise en forme de la pagination ici #}
 
-        <!-- Pagination-->
-<!--{#        {% if page_obj.has_previous %}#}-->
-<!--{#        <div class="pagination">#}-->
-<!--{#            <span class="step-links">#}-->
-<!--{#                <a href="?page=1">début</a>#}-->
-<!--{#                <a href="?page={{ page_obj.previous_page_number }}">précédente</a>#}-->
-<!--{#        {% endif %}#}-->
-<!--{##}-->
-<!--{#            <span class="current">#}-->
-<!--{#                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}#}-->
-<!--{#            </span>#}-->
-<!--{##}-->
-<!--{#            {% if page_obj.has_next %}#}-->
-<!--{#                <a href="?page={{ page_obj.paginator.num_pages }}">dernière</a>#}-->
-<!--{#                <a href="?page={{ page_obj.next_page_number }}">suivante</a>#}-->
-<!--{#            {% endif %}#}-->
-<!--{#        </span>#}-->
-<!--{#        </div>#}-->
-
         {% else %}
-            <div class="container text-center mt-5" style="min-height: 80vh">
-            <h3>Vous n'avez pas de favoris pour l'instant ...</h3>
+            <div class="container text-center" style="min-height: 80vh; margin-top: 15%">
+            <h4>Vous n'avez pas de favoris pour l'instant ...</h4>
             </div>
         {% endif %}
     </div>

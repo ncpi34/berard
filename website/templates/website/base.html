@@ -67,6 +67,12 @@
               display: block;
           }
     }
+    @media screen and (max-width: 992px) {
+      #main-content {margin-left: 0;}
+    }
+    @media screen and (min-width: 992px) {
+      #main-content {margin-left: 280px;}
+    }
 
     a{
         color: black;
@@ -99,7 +105,7 @@
 
 
 
-<div style="margin-top: 100px">
+<div>
     {% block content %}
     {% endblock content %}
 

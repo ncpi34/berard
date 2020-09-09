@@ -5,23 +5,23 @@ from website.models import Article
 
 
 class ArticleFilter(django_filters.FilterSet):
-    code_article = django_filters.CharFilter(label='',
+    q = django_filters.CharFilter(label='',
                                              lookup_expr='icontains',
                                              widget=TextInput(attrs={
                                                  'id': 'search',
                                                  'class': 'searchTerm',
-                                                 # 'placeholder': 'Rechercher',
+                                                 'placeholder': 'Rechercher',
                                                  'style':
-                                                     'border-radius: 4px;color:white;'
+                                                 #     'border-radius: 4px;color:white;'
                                                      'text-align:center;'
-                                                     'background-color:white;'
+                                                 #     'background-color:white;'
                                                      'color:black;'
-                                                     'top:1px;'
-                                                     'display:none;'
-                                                     'width:100%'
+                                                 #     'top:1px;'
+                                                 #     'display:none;'
+                                                 #     'width:100%'
                                              })
                                              )
 
     class Meta:
         model = Article
-        fields = ['code_article']
+        fields = ['q']

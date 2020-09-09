@@ -8,13 +8,9 @@
 {% block content %}
     {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
-<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-<style>
-    .label-icon{
-        display: none;
-    }
-</style>
-    <main>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
+    <main style="margin-top: 10%">
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
 <p id="message"></p>
@@ -139,7 +135,7 @@
 
 
     {% else %}
-        <div class="container text-center mt-5" style="min-height: 60vh">
+        <div class="container text-center mt-5" style="min-height: 80vh; margin-top: 15%">
             <h4 class="text-left mb-5">Votre panier est vide ...</h4>
 
         <p class="text-right">
@@ -247,28 +243,6 @@
 
 
     };
-
-
-
-        // Ajax request
-    const requestFetch = async (data, product_id) => {
-
-        const csrftoken = await Cookies.get('csrftoken');
-        let rst = await fetch(`/panier/update/${product_id}/` , {
-                        method: 'POST',
-                        body: JSON.stringify(data),
-                        headers: { "X-CSRFToken": csrftoken },
-        });
-        return rst
-    };
-    const getCart = async () => {
-        const csrftoken = await Cookies.get('csrftoken');
-        let rst = await fetch(`/panier/` , {
-                        method: 'GET',
-                        headers: { "X-CSRFToken": csrftoken },
-        });
-        return rst
-    }
 
 
     </script>

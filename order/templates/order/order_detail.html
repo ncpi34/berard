@@ -7,14 +7,10 @@
 {% endblock %}
 
 {% block content %}
-<style>
-    .label-icon{
-        display: none;
-    }
-</style>
-    <main>
+<link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
+    <main style="min-height: 83vh; margin-top: 8%">
     <div class="container">
-    <div class="table-responsive text-center" style="min-height: 83vh">
+    <div class="table-responsive text-center" >
     <h4 class="text-center mb-5" id="title_page" >{{ object.date }}</h4>
     <table class="table">
         <thead>
@@ -61,9 +57,6 @@
                 </form>
             </div>
         </div>
-        <a href="{% url 'order:order_summary' %}">
-                    <button  id="btn_return" class="btn btn-success">Retour</button>
-                </a>
     </div>
     </div>
 

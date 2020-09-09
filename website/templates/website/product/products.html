@@ -9,8 +9,16 @@
     {% include 'website/modals/display_picture.html' %}
     {% include 'helpers/cart_button.html' %}
     {% load static %}
+<style>
+    @media screen and (min-width: 992px) {
+       #img_navbar{
+        display: none;
+    }
+    }
 
+</style>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+<div style="margin-top: 70px" id="main-content">
     <!--Main layout-->
   <main>
 
@@ -22,12 +30,12 @@
 
 
         <!--Grid row-->
-        <div class="row justify-content-center wow fadeIn">
+        <div class="row justify-content-center wow fadeIn no-gutters">
 <!--            <div class="row wow fadeIn no-gutters">-->
 
               {% for article in articles %}
           <!--Grid column-->
-          <div class="articles col-lg-2 col-md-3  col-sm-6 mb-3">
+          <div class="articles col-lg-3 col-md-3  col-sm-6 mb-3">
 
             <!--Card-->
 
@@ -68,7 +76,7 @@
 
                       <h6 class="ml-auto">
                     <label>P.U HT: </label>
-                  <strong>
+                  <span class="badge badge-info">
                           {% if request.session.tarif == 1  %} {{ article.prix_achat_1 }}
                               {% elif request.session.tarif == 2 %} {{ article.prix_achat_2 }}
                               {% elif request.session.tarif == 3 %} {{ article.prix_achat_3 }}
@@ -76,7 +84,7 @@
                               {% else %} Prix non disponible
                           {% endif %}€
 
-                  </strong>
+                  </span>
                 </h6>
 
               </div>
@@ -126,8 +134,8 @@
 <!--{#        </div>#}-->
 
         {% else %}
-            <div class="container text-center mt-5" style="min-height: 80vh">
-            <h3>Pas d'articles pour le moment ...</h3>
+            <div class="container text-center" style="min-height: 80vh; margin-top: 15%">
+            <h4>Pas d'articles pour le moment ...</h4>
             </div>
         {% endif %}
     </div>
@@ -152,7 +160,7 @@
     </div>
 {% endif %}
   </main>
-
+</div>
 
 {% endblock content %}
 

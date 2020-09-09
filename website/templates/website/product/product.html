@@ -4,66 +4,13 @@
 {% include "website/sidenav.html" %}
 {% endblock %}
 
+{% load static %}
+
 {% block content %}
 {% include 'helpers/cart_button.html' %}
-<style>
-    .label-icon{
-        display: none;
-    }
-</style>
-
-  <main class=" pt-4 mb-5" style="min-height: 73vh;">
-  <h6 class="text-center mb-1">{{ object.libelle }}</h6>
-    <div class="container dark-grey-text">
-
-{#        <h4 class="my-4 h4 text-center">{{ object.code_article }}</h4>#}
-
-      <!--Grid row-->
-      <div class="row d-flex justify-content-center wow fadeIn">
-
-        <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Cdt:</span>
-          <p>
-              {% if object.conditionnement is None%}
-                indéfini
-              {% else %}
-                {{ object.conditionnement }}
-              {% endif %}
-          </p>
-        </div>
-        <!--Grid column-->
-
-          <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Code article:</span>
-          <p>{{ object.code_article }}</p>
-        </div>
-        <!--Grid column-->
-
-          <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Gencod:</span>
-          <p>{{ object.gencode }}</p>
-        </div>
-        <!--Grid column-->
-
-           <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Prix:</span>
-          <p>
-              {% if request.session.tarif == 1  %} {{ object.prix_achat_1 }}
-                  {% elif request.session.tarif == 2 %} {{ object.prix_achat_2 }}
-                  {% elif request.session.tarif == 3 %} {{ object.prix_achat_3 }}
-                  {% elif request.session.tarif == 4 %} {{ object.prix_achat_4 }}
-                  {% else %} Prix non disponible
-                {% endif %}€
-          </p>
-        </div>
-        <!--Grid column-->
-
-      </div>
-      <!--Grid row-->
+ <link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
+<main class="mt-5 pt-4" style="min-height: 83vh">
+    <div class="container dark-grey-text mt-5">
 
       <!--Grid row-->
       <div class="row wow fadeIn">
@@ -71,8 +18,7 @@
         <!--Grid column-->
         <div class="col-md-6 mb-4">
 
-                <img class="img-fluid" alt="photo"
-                     src="{{ object.get_img }}">
+          <img src="{{ object.get_img }}" class="img-fluid" alt="image">
 
         </div>
         <!--Grid column-->
@@ -90,31 +36,18 @@
             </div>
 
 
+            <p class="lead font-weight-bold">{{ object.libelle }}</p class="lead font-weight-bold">
 
-            {% comment %} <form class="d-flex justify-content-left">
-              <!-- Default input -->
-              <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
-              <button class="btn btn-primary btn-md my-0 p" type="submit">
-                Add to cart
-                <i class="fas fa-shopping-cart ml-1"></i>
-              </button>
+<!--            <p>{{ object.description }}</p>-->
 
-            </form> {% endcomment %}
-          <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
+            <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                 class="d-flex justify-content-left">
               {{ form }}
               {% csrf_token %}
-              <button id="add_basket" class="form-control btn-success mt-2 btn_send" type="submit">
-{#                  <i class="fas fa-cart-plus"></i>#}
+              <button id="add_basket" class="form-control btn-success  btn_send" type="submit">
                   Ajouter au panier
               </button>
           </form>
-
-              <p class="text-right">
-                <a href="{% url 'website:products' %}">
-                    <button  id="btn_return" class="btn btn-success">Retourner aux produits</button>
-                </a>
-              </p>
 
           </div>
           <!--Content-->
@@ -127,74 +60,54 @@
 
       <hr>
 
-
-
-{#      <!--Grid row-->#}
-{#      <div class="row wow fadeIn">#}
-{##}
-{#        <!--Grid column-->#}
-{#        <div class="col-lg-4 col-md-12 mb-4">#}
-{##}
-{#          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">#}
-{##}
-{#        </div>#}
-{#        <!--Grid column-->#}
-{##}
-{#      </div>#}
-{#      <!--Grid row-->#}
+      <!--Grid row-->
+        <h4 class="my-4 h4 text-center">Informations additionnelles</h4>
+      <div class="row d-flex justify-content-center wow fadeIn">
+        <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Prix:</span>
+         <p class="badge badge-info">
+              {% if request.session.tarif == 1  %} {{ object.prix_achat_1 }}
+                  {% elif request.session.tarif == 2 %} {{ object.prix_achat_2 }}
+                  {% elif request.session.tarif == 3 %} {{ object.prix_achat_3 }}
+                  {% elif request.session.tarif == 4 %} {{ object.prix_achat_4 }}
+                  {% else %} Prix non disponible
+                {% endif %}€
+         </span>
+        </div>
+        <!--Grid column-->
+           <!--Grid column-->
+          <div class="col-md-6 text-center">
+            <span>Gencod:</span>
+          <p>{{ object.gencode }}</p>
+        </div>
+         <!--Grid column-->
+         <!--Grid column-->
+          <div class="col-md-6 text-center">
+            <span>Code article:</span>
+            <p>{{ object.code_article }}</p>
+          </div>
+         <!--Grid column-->
+          <!--Grid column-->
+        <div class="col-md-6 text-center">
+            <span>Cdt:</span>
+          <p>
+              {% if object.conditionnement is None%}
+                indéfini
+              {% else %}
+                {{ object.conditionnement }}
+              {% endif %}
+          </p>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
 
     </div>
   </main>
 
 {% endblock content %}
+
 {% block extrascripts %}
-    <script>
-    let widthScreenStart = window.innerWidth;
-
-    if (document.querySelector('#btn_return') && document.querySelector('#add_basket')) {
-        const btn = document.querySelector('#btn_return')
-        const btn2 = document.querySelector('#add_basket')
-            if (widthScreenStart < 445) {
-                btn.innerHTML = 'RETOUR'
-                btn2.innerHTML = '<i class="fas fa-cart-plus"></i>'
-
-            } else {
-                btn.innerHTML = 'RETOUR AUX PRODUITS'
-                btn2.innerHTML = 'Ajout au panier'
-            }
-        }
-
-
-    // calculate screen windows in real time and change html
-    function resize() {
-        let widthScreenReload = window.innerWidth;
-        {#console.log(widthScreenReload)#}
-        if (document.querySelector('#btn_return')
-        && document.querySelector('#add_basket')) {
-            const btn = document.querySelector('#btn_return')
-            const btn2 = document.querySelector('#add_basket')
-            if (widthScreenReload < 445) {
-                btn.innerHTML = 'RETOUR'
-                btn2.innerHTML = '<i class="fas fa-cart-plus"></i>'
-            } else {
-                btn.innerHTML = 'RETOUR AUX PRODUITS'
-                btn2.innerHTML = 'Ajout au panier'
-            }
-        }
-
-    }
-    window.onresize = resize;
-
-    // to insert path in hidden form
-        let btn_send = document.querySelectorAll('.btn_send');
-        let hidd_url = document.querySelectorAll('#hidden_url');
-        for (const button of btn_send) {
-          button.addEventListener('click', (event)=> {
-              hidd_url.forEach(val => {
-                  val.value=window.location.pathname;
-              })
-          })
-
-        }
-    </script>
-{% endblock %}
+<script src="{% static 'js/hiddenUrl.js'%}"></script>
+{% endblock extrascripts %}

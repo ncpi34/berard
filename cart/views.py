@@ -42,7 +42,11 @@ def cart_add(request, product_id):  # add method
         str_split = cd['url'].split('/')
 
     # redirect with hidden form
-    return HttpResponseRedirect(encoded_url)
+
+    if encoded_url:
+        return HttpResponseRedirect(encoded_url)
+    else:
+        return HttpResponseRedirect('/produit')
 
 
 @login_required(login_url="")

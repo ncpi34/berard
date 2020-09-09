@@ -58,54 +58,49 @@
 
 </style>
 
-  <nav  class="nav-extended">
-    <div id="navbar" class="nav-wrapper   green">
+  <nav  class="nav-extended" >
+    <div id="navbar" class="nav-wrapper green darken-2" >
 
     <!--Top menu -->
+
         <!-- Hamburger -->
-        <!-- NavBar Title -->
-        <a id="nav-icon1" href="#" data-target="mobile-demo" class="sidenav-trigger show-on-large">
-            <i class="fa fa-bars" aria-hidden="true"></i>
-        </a>
-        <!-- NavBar Title -->
-        <!-- Hamburger -->
-        <h5 class="brand-logo ml-4"> {{ title_pager }} {{ price }} </h5>
-        <!-- Hamburger -->
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger right">
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger">
             <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
         <!-- Hamburger -->
+
+        <!-- Hamburger -->
+            <!-- NavBar Title -->
+            <a id="nav-icon1" href="#" data-target="sidenav-mobile" class="sidenav-trigger right">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </a>
+            <!-- NavBar Title -->
+        <!-- Hamburger -->
+
+
         <div>
 
 
-            <!-- Searchform-->
-          <form class="center" id="form1" action="" method="get">
-              <div class="wrap">
-               <div class="search mt-3">
-                   {{ filter.form.as_p }}
-                        <label class="label-icon" for="search"
-                           style="color: white">
-                            <a href="javascript:void(0);">
-                                <i id="search_icon" class="material-icons">search</i>
-                            </a>
-                        </label>
-                   <a href="javascript:void(0);">
-                        <i id="close_icon" class="material-icons ">close</i>
-                   </a>
-               </div>
-            </div>
-          </form>
-            <!-- Searchform-->
+                        <h5 class="wrap"> {{ title_pager }} {{ price }} </h5>
+                        <img id="img_navbar" class="rounded w-25 ml-lg-5" src="/media/img/logo-berard-distribution.png" />
+<!--                        <span class="wrap">Berard Distribution</span>-->
 
             <!-- Navbar -->
             <ul  class="right hide-on-med-and-down">
                 <!-- Home -->
                 <li>
-                  <a href="{% url 'website:products' %}">
+                  <a href="{% url 'website:home' %}">
                   <i class="fas fa-home" title="Accueil"></i>
                   </a>
                 </li>
                 <!-- Home -->
+                <!-- Products -->
+                    <li>
+                      <a href="{% url 'website:products' %}">
+                      <i class="fab fa-readme" title="Catalogue"></i>
+                      </a>
+                    </li>
+                  <!-- Products -->
                  <!-- Offers -->
                 <li>
                   <a href="{% url 'website:offers' %}">
@@ -158,7 +153,7 @@
       <!--Top menu -->
       <!-- Navbar to sidenav -->
       <ul class="sidenav" id="nav-mobile">
-            <li class="sidenav-header green">
+            <li class="sidenav-header green darken-2">
                 <div class="row">
                     <div class="col">
                         <a href="javascript:void(0);">
@@ -167,9 +162,9 @@
                             </i>
                         </a>
                     </div>
-                    <div class="col">
-                        <img class="w-50 ml-5 circle" src="/media/img/logo.jpg"/>
-                    </div>
+<!--                    <div class="col">-->
+<!--                        <img class="w-50 ml-5 circle" src="/media/img/logo.jpg"/>-->
+<!--                    </div>-->
                 </div>
             </li>
           <!-- Divider -->
@@ -177,12 +172,20 @@
           <!-- Divider -->
           <!-- Home -->
             <li>
-              <a href="{% url 'website:products' %}">
+              <a href="{% url 'website:home' %}">
               <i class="fas fa-home"></i>
                   <p>Accueil</p>
               </a>
             </li>
           <!-- Home -->
+          <!-- Products -->
+            <li>
+              <a href="{% url 'website:products' %}">
+              <i class="fab fa-readme"></i>
+                  <p>Catalogue</p>
+              </a>
+            </li>
+          <!-- Products -->
           <!-- Offers -->
                 <li>
                   <a href="{% url 'website:offers' %}">
@@ -219,18 +222,17 @@
 
       <!-- Navbar to sidenav -->
 
+<!-- SideNav Left Mobile -->
 
-<!--SideNav Left -->
+      <ul class="sidenav darken-2 sidenav-fixed" id="sidenav-mobile" style="width: 270px">
 
-      <ul class="sidenav darken-2" id="mobile-demo">
-
-            <li class="sidenav-header green">
+            <li class="sidenav-header green darken-2" style="height: 8%">
                 <div class="row">
                     <div class="col">
-                        <img class="w-50 ml-5 circle" src="/media/img/logo.jpg"/>
+                        <img class="w-100 ml-5 rounded" src="/media/img/logo-berard-distribution.png"/>
                     </div>
                     <div class="col">
-                        <a href="javascript:void(0);">
+                        <a href="javascript:void(0);" class="d-lg-none">
                             <i class="fa fa-times right sidenav-close"
                                aria-hidden="true">
                             </i>
@@ -239,8 +241,21 @@
                 </div>
             </li>
 
-          <!--Sidebar -->
-
+                        <li class="ml-4" >
+                  <!-- Searchform-->
+                      <form class="" action="" method="get" id="search_form">
+                           <div class="search md-form">
+<!--                               {{ filter.form.as_p }}-->
+                               <input type="text" class="black-text text-center" name="q" id="search"/>
+                                    <label class="label-icon" for="search">
+                                        <a onclick="submitSearch()" href="javascript:void(0);">
+                                            <i id="search_icon" class="material-icons black-text">search</i>
+                                        </a>
+                                    </label>
+                           </div>
+                      </form>
+                    <!-- Searchform-->
+              </li>
 
             {% for item in liste %}
         <li class="white">
@@ -288,10 +303,8 @@
           </ul>
           </li>
       </ul>
+<!--SideNav Left Mobile-->
   </nav>
-<!--SideNav Left -->
-
-
 <!-- Scripts -->
 <script src="{% static 'js/sidenav.js' %}"></script>
 <!--Import materialize.js-->
