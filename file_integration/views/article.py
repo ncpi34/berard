@@ -5,7 +5,7 @@ import string
 import numpy as np
 
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from website.models import Article, Groupe, Famille, SousFamille
 import os.path
@@ -180,60 +180,63 @@ class ArticleViews(object):
     # Index_method
     @classmethod
     def file_treatement(cls, request, **kwargs):
-        host = "213.215.12.22"
-        user = "admin"
-        passw = "cMp5jU1C"
+        if kwargs['password'] == 'berard_article':
+            host = "213.215.12.22"
+            user = "admin"
+            passw = "cMp5jU1C"
 
-        try:
-            # if path not exists
-            path = 'resources/import/'
-            if not os.path.exists(path):
-                os.makedirs(path)
+            try:
+                # if path not exists
+                path = 'resources/import/'
+                if not os.path.exists(path):
+                    os.makedirs(path)
 
-            # FTP
-            ftp = FTP(host)
-            ftp.login(user, passw)
-            ftp.cwd('/Rep/EXPORT')
-            ftp.retrbinary('RETR TART.PLN', open(os.path.join(path, 'TART.PLN'), 'wb').write)
-            ftp.quit()
+                # FTP
+                ftp = FTP(host)
+                ftp.login(user, passw)
+                ftp.cwd('/Rep/EXPORT')
+                ftp.retrbinary('RETR TART.PLN', open(os.path.join(path, 'TART.PLN'), 'wb').write)
+                ftp.quit()
 
-            with open(os.path.join(path, 'TART.PLN'), encoding="utf-8", errors='ignore') as file:
-                text_lines = file.readlines()
+                with open(os.path.join(path, 'TART.PLN'), encoding="utf-8", errors='ignore') as file:
+                    text_lines = file.readlines()
 
-            # array of dict
-            obj_bdd = [{
-                "code_article": val[10:16],
-                "libelle": val[18:54],
-                "conditionnement": cls.is_integer(val[54:58]),
+                # array of dict
+                obj_bdd = [{
+                    "code_article": val[10:16],
+                    "libelle": val[18:54],
+                    "conditionnement": cls.is_integer(val[54:58]),
 
-                "prix_achat_1": cls.is_float(val[83:91]),
-                "prix_achat_2": cls.is_float(val[91:99]),
-                "prix_achat_3": cls.is_float(val[99:107]),
-                "prix_achat_4": cls.is_float(val[107:115]),
-                "prix_vente": cls.is_float(val[161:169]),
+                    "prix_achat_1": cls.is_float(val[83:91]),
+                    "prix_achat_2": cls.is_float(val[91:99]),
+                    "prix_achat_3": cls.is_float(val[99:107]),
+                    "prix_achat_4": cls.is_float(val[107:115]),
+                    "prix_vente": cls.is_float(val[161:169]),
 
-                "gencode": val[228:241],
-                # # "taux_TVA": 6,  # TO DEFINE
+                    "gencode": val[228:241],
+                    # # "taux_TVA": 6,  # TO DEFINE
 
-                "tri": val[58:68],
-                "groupe": cls.is_integer(val[58:60]),
-                # "famille": cls.is_integer(val[62:64]),
-                "famille": cls.is_integer(val[61:64]),
-                "sous_famille": cls.is_integer(val[65:68]),
-            } for val in text_lines]
+                    "tri": val[58:68],
+                    "groupe": cls.is_integer(val[58:60]),
+                    # "famille": cls.is_integer(val[62:64]),
+                    "famille": cls.is_integer(val[61:64]),
+                    "sous_famille": cls.is_integer(val[65:68]),
+                } for val in text_lines]
 
-            f = open('tri.txt', 'w')
-            [f.write(i['tri'] + '\n') for i in obj_bdd]
-            f.close()
+                f = open('tri.txt', 'w')
+                [f.write(i['tri'] + '\n') for i in obj_bdd]
+                f.close()
 
-            # print([i['tri'] for i in obj_bdd])
+                # print([i['tri'] for i in obj_bdd])
 
-            cls.insert_into_db(obj_bdd)  # call method to insert in db
-            file.close()
-            resp = json.dumps(obj_bdd)
-            return HttpResponse(200, content_type='application/json')
-            # return HttpResponse(resp, content_type='application/json')
+                cls.insert_into_db(obj_bdd)  # call method to insert in db
+                file.close()
+                resp = json.dumps(obj_bdd)
+                return HttpResponse(200, content_type='application/json')
+                # return HttpResponse(resp, content_type='application/json')
 
-        except OSError as error:
-            print("OS error: {0}".format(error))
-            return False
+            except OSError as error:
+                print("OS error: {0}".format(error))
+                return False
+        else:
+            return HttpResponseBadRequest("Vous n'avez pas les accés")
