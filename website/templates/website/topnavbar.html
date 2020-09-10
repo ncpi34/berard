@@ -1,20 +1,237 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg green">
 
-  <a href="{% url 'website:products' %}">
-      <img class="w-25 circle ml-5" src="{% static 'img/logo.jpg' %}"/>
-  </a>
+{% load widget_tweaks %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+{#<link rel="stylesheet" type="text/css" href="{% static 'css/sidenav.css' %}">#}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/hamburgers.css' %}">
+
+<!-- For placeholder -->
+<style>
+
+
+#navbar{
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: block;
+  transition: top 0.3s;
+    z-index: 1;
+
+}
 
 
 
-        <a href="{% url 'website:logout' %}" >
-                        <span class="clearfix d-none d-sm-inline-block">
-                            <i class="fas fa-sign-out-alt"></i></span>
+
+::-webkit-input-placeholder {
+   color: black;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: black;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: black;
+}
+
+:-ms-input-placeholder {
+   color: black;
+}
+#close_icon{
+    display:none;
+}
+
+    .searchbar{
+        display: block!important;
+        margin-top: 20px!important;
+
+    }
+    .search_icon{
+            display:none!important;
+    }
+    .close_icon{
+        display:block!important;
+        margin-top: 10px!important;
+    }
+
+</style>
+
+  <nav  class="nav-extended" >
+    <div id="navbar" class="nav-wrapper green darken-2" >
+
+    <!--Top menu -->
+
+        <!-- Hamburger -->
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger">
+            <i class="fa fa-bars" aria-hidden="true"></i>
         </a>
+        <!-- Hamburger -->
+
+        <!-- Hamburger -->
+            <!-- NavBar Title -->
+            <a id="nav-icon1" href="#" data-target="sidenav-mobile" class="sidenav-trigger right">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </a>
+            <!-- NavBar Title -->
+        <!-- Hamburger -->
 
 
- <a  href="{% url 'website:order_summary' %}" ><i class="fas fa-user" ></i></a>
+        <div>
 
 
+                        <h5 class="wrap"> {{ title_pager }} {{ price }} </h5>
+                        <img id="img_navbar" class="rounded w-25 ml-lg-5" src="/media/img/logo-berard-distribution.png" />
+<!--                        <span class="wrap">Berard Distribution</span>-->
 
-</nav>
+            <!-- Navbar -->
+            <ul  class="right hide-on-med-and-down">
+                <!-- Home -->
+                <li>
+                  <a href="{% url 'website:home' %}">
+                  <i class="fas fa-home" title="Accueil"></i>
+                  </a>
+                </li>
+                <!-- Home -->
+                <!-- Products -->
+                    <li>
+                      <a href="{% url 'website:products' %}">
+                      <i class="fab fa-readme" title="Catalogue"></i>
+                      </a>
+                    </li>
+                  <!-- Products -->
+                 <!-- Offers -->
+                <li>
+                  <a href="{% url 'website:offers' %}">
+                      <i class="fas fa-star" title="Offres"></i>
+                  </a>
+                </li>
+                <!-- Offers -->
+                  <!-- Favorite -->
+                    <li>
+                            <a href="{% url 'website:favorites' %}">
+                            <i class="fas fa-heart" title="Favoris"></i>
+                            </a>
+                    </li>
+                  <!-- Favorite -->
+                <!-- Basket -->
+                <li>
+                    <a href="{% url 'cart:cart_detail' %}" title="Panier">
+                      {% if cart.get_total_items > 0 %}
+                          <span class="badge green z-depth-1 position-absolute rounded-circle">
+                              {{ cart.get_total_items }}
+                          </span>
+                      {% else %}
+                          <span class="badge red z-depth-1  position-absolute rounded-circle">
+                          0
+                          </span>
+                      {% endif %}
+                    <i class="fas fa-shopping-cart"></i>
+
+                    </a>
+                </li>
+                <!-- Basket -->
+                <!-- Order Summary -->
+                <li>
+                    <a href="{% url 'order:order_summary' %}" title="Historique" ><i class="fa fa-history"></i></a>
+                </li>
+                <!-- Order Summary -->
+                <!-- Logout -->
+                <li>
+                    <a href="{% url 'website:logout' %}" title="Déconnexion" >
+                        <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt"></i></span>
+                    </a>
+                </li>
+                <!-- Logout -->
+            </ul>
+            <!-- Navbar -->
+
+        </div>
+      </div>
+
+      <!--Top menu -->
+      <!-- Navbar to sidenav -->
+      <ul class="sidenav" id="nav-mobile">
+            <li class="sidenav-header green darken-2">
+                <div class="row">
+                    <div class="col">
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-times left sidenav-close"
+                               aria-hidden="true">
+                            </i>
+                        </a>
+                    </div>
+<!--                    <div class="col">-->
+<!--                        <img class="w-50 ml-5 circle" src="/media/img/logo.jpg"/>-->
+<!--                    </div>-->
+                </div>
+            </li>
+          <!-- Divider -->
+            <li><div class="divider"></div></li>
+          <!-- Divider -->
+          <!-- Home -->
+            <li>
+              <a href="{% url 'website:home' %}">
+              <i class="fas fa-home"></i>
+                  <p>Accueil</p>
+              </a>
+            </li>
+          <!-- Home -->
+          <!-- Products -->
+            <li>
+              <a href="{% url 'website:products' %}">
+              <i class="fab fa-readme"></i>
+                  <p>Catalogue</p>
+              </a>
+            </li>
+          <!-- Products -->
+          <!-- Offers -->
+                <li>
+                  <a href="{% url 'website:offers' %}">
+                      <i class="fas fa-star"></i>
+                      <p>Offres</p>
+                  </a>
+                </li>
+                <!-- Offers -->
+          <!-- Favorite -->
+            <li>
+                    <a href="{% url 'website:favorites' %}">
+                    <i class="fas fa-heart"></i>
+                        <p>Favoris</p>
+
+                    </a>
+            </li>
+          <!-- Favorite -->
+                <li>
+                    <a href="{% url 'order:order_summary' %}" title="Historique" >
+                        <i class="fa fa-history"></i>
+                        <p>Historique</p>
+                    </a>
+                </li>
+          <!-- Order Summary -->
+                <li>
+                    <a href="{% url 'website:logout' %}" title="Déconnexion" >
+<!--                        <span class="clearfix d-none d-sm-inline-block">-->
+                            <i class="fas fa-sign-out-alt"></i>
+                            <p>Déconnexion</p>
+                    </a>
+                </li>
+          <!-- Order Summary -->
+      </ul>
+
+      <!-- Navbar to sidenav -->
+
+<!-- SideNav Left Mobile -->
+
+     {% if sidenav %}
+      {% include 'website/sidenav.html' %}
+     {% endif %}
+<!--SideNav Left Mobile-->
+  </nav>
+<!-- Scripts -->
+<script src="{% static 'js/sidenav.js' %}"></script>
+<!--Import materialize.js-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<!-- Scripts -->
+

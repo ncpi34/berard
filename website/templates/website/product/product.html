@@ -1,14 +1,13 @@
 {% extends "website/base.html" %}
 
 {% block navbar %}
-{% include "website/sidenav.html" %}
+{% include "website/topnavbar.html" %}
 {% endblock %}
 
 {% load static %}
 
 {% block content %}
 {% include 'helpers/cart_button.html' %}
- <link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
 <main class="mt-5 pt-4" style="min-height: 83vh">
     <div class="container dark-grey-text mt-5">
 

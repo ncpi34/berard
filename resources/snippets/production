@@ -27,6 +27,7 @@ class PanierEnCours(models.Model):
     def __unicode__(self):
         return self.utilisateur
         
+suppress old migrations files
 
 python manage.py makemigrations
 python manage.py makemigrations website
@@ -35,8 +36,8 @@ python manage.py migrate
 python manage.py runserver
 
 
-https://testsite.uno/file/group/
-https://testsite.uno/file/article/
-https://testsite.uno/file/client/
+https://testsite.uno/file/group/berard_group
+https://testsite.uno/file/article/berard_article
+https://testsite.uno/file/client/berard_client
 
 python manage.py createsuperuser

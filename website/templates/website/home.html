@@ -2,14 +2,13 @@
 
 
 {% block navbar %}
-    {% include "website/sidenav.html" with title_pager='Accueil' %}
+{% include "website/topnavbar.html" with title_pager='Accueil' %}
 {% endblock %}
 
 {% block content %}
     {% include 'website/modals/display_picture.html' %}
     {% include 'helpers/cart_button.html' %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <!--Main layout-->
   <main>

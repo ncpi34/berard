@@ -144,6 +144,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
         else:
             try:
                 user = User.objects.get(id=request.user.id)
+                print(user.profilutilisateur.code_representant)
                 order = HistoriqueCommande(
                     utilisateur=user
                 )

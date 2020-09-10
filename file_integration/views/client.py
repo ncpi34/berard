@@ -68,7 +68,7 @@ class ClientViews(object):
                 # print(user.pk)
                 # print('iteration', iteration)
                 try:
-                    user.profilutilisateur.coderepresentant = rst["code_representant"]
+                    user.profilutilisateur.code_representant = rst["code_representant"]
                     user.profilutilisateur.adresse = rst["adresse"]
                     user.profilutilisateur.telephone = rst["telephone"]
                     user.profilutilisateur.tarif = rst["tarif"]

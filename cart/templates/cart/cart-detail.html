@@ -2,14 +2,13 @@
 {% load static %}
 
 {% block navbar %}
-    {% include 'website/sidenav.html' with title_pager=cart.get_total_price price='€' %}
+{% include "website/topnavbar.html" with title_pager=cart.get_total_price price='€' %}
 {% endblock %}
 
 {% block content %}
     {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/hide_sidenav.css' %}">
     <main style="margin-top: 10%">
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
