@@ -61,6 +61,7 @@ class ProduitCommande(models.Model):
     prix = models.DecimalField(max_digits=100,
                                decimal_places=2,
                                default=0)
+    taux_TVA = models.FloatField(null=True)
     quantite = models.PositiveIntegerField(default=1)
 
     def __str__(self):

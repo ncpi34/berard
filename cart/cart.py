@@ -3,6 +3,9 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from website.models import Article
+import json
+from decimal import Decimal
+
 
 """Cart Module"""
 
@@ -59,8 +62,9 @@ class Cart(object):
                     'libelle': product.libelle,
                     'quantity': 0,
                     'prix_achat': str(self.get_price_by_user(product)),
-                    'image': product.image,
+                    'tva': product.taux_TVA,
                     'code_article': product.code_article,
+                    'prix_taxes': str(self.get_price_by_user(product))
                 }
                 if update_quantity and quantity is not 0:
                     self.cart[product.id]['quantity'] = quantity
@@ -81,13 +85,13 @@ class Cart(object):
         tarif_id = self.request.session.get('tarif')
         # return product[tarif]
         if tarif_id == 1:
-            return product.prix_achat_1
+            return product.get_price_with_taxes_1()
         elif tarif_id == 2:
-            return product.prix_achat_2
+            return product.get_price_with_taxes_2()
         elif tarif_id == 3:
-            return product.prix_achat_3
+            return product.get_price_with_taxes_3()
         else:
-            return product.prix_achat_4
+            return product.get_price_with_taxes_4()
 
     def remove(self, product):
         """
@@ -97,6 +101,14 @@ class Cart(object):
         if product_id in self.cart:
             del self.cart[product_id]
             self.save()
+         
+
+    def get_total_taxes(self):
+        """
+        Get price of the cart
+        """
+        # round(float(arg) / (item['taux_TVA'] / 100 + 1 ), 2)
+        return sum(Decimal(item['prix_achat'] / (item['tva'] / 100 + 1) ) * item['quantity'] for item in self.cart.values())
 
     def get_total_price(self):
         """

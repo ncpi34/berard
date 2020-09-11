@@ -10,15 +10,26 @@
     {% include 'helpers/cart_button.html' %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <style>
+      @media screen and (max-width: 992px) {
+        #pic_home_page { margin-top: 20%;}
+    }
+    @media screen and (min-width: 992px) and (max-width: 1050px) {
+        #pic_home_page {margin-top: 11%; }
+    }
+    @media screen and (min-width: 1050px) {
+        #pic_home_page {margin-top: 11%; }
+    }
+    #nav-icon1{
+      display: none;
+    }
+    </style>
     <!--Main layout-->
   <main>
 
-    <div class="container text-center" style="min-height: 85vh;margin-top: 10%">
-      <h1>Page d'accueil</h1>
-      <p>
-        {% lorem 3 p %}
-      </p>
-
+    <div  id='pic_home_page' style="min-height: 85vh;" >
+      <img class="img-fluid d-flex ml-auto mr-auto" src="/media/accueil.jpg" alt="présentation Berard Distribution">
+        <!-- <p>{% lorem 3 p %}</p> -->
     </div>
 
 

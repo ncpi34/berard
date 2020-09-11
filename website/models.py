@@ -9,6 +9,7 @@ from django.db.models import Count
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from decimal import Decimal
 
 """ Profil """
 
@@ -40,6 +41,7 @@ class ProfilUtilisateur(models.Model):
 class Groupe(models.Model):
     nom = models.CharField(max_length=100,
                            unique=True)
+                       
 
     def __str__(self):
         return self.nom
@@ -107,7 +109,7 @@ class Article(models.Model):
     prix_achat_3 = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
     prix_achat_4 = models.DecimalField(default=0.0, null=True, max_digits=10, decimal_places=2)
     gencode = models.CharField(max_length=40, null=True)
-    taux_TVA = models.IntegerField(null=True)
+    taux_TVA = models.FloatField(null=True)
     actif = models.BooleanField(default=True)
     groupe = models.ForeignKey(Groupe,
                                on_delete=models.CASCADE,
@@ -150,7 +152,27 @@ class Article(models.Model):
             return '/media/img/nophoto.jpg'
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
+    def calculate_price_with_taxes(self, arg):
+        return round(float(arg) * (self.taux_TVA / 100 + 1 ), 2)
 
+    def get_price_with_taxes_1(self):
+        return self.calculate_price_with_taxes(self.prix_achat_1)
+
+    def get_price_with_taxes_2(self):
+        return self.calculate_price_with_taxes(self.prix_achat_2)
+
+    def get_price_with_taxes_3(self):
+        return self.calculate_price_with_taxes(self.prix_achat_3)
+
+    def get_price_with_taxes_4(self):
+        return self.calculate_price_with_taxes(self.prix_achat_4)  
+
+    def format_VAT(self):
+        if self.taux_TVA.is_integer():
+            return int(self.taux_TVA)
+        else:
+            return self.taux_TVA     
+                        
 
 """ Offers """
 

@@ -1,13 +1,14 @@
- <ul class="sidenav darken-2 sidenav-fixed" id="sidenav-mobile" style="width: 270px">
+ <ul class="sidenav darken-2 sidenav-fixed" id="sidenav-mobile" style="width: 300px">
 
-            <li class="sidenav-header green darken-2" style="height:69px">
+            <li class="sidenav-header white" style="height:5%">
+                <!-- green darken-2 -->
                 <div class="row">
                     <div class="col">
-                        <img class="w-100 ml-5 rounded" src="/media/img/logo-berard-distribution.png"/>
+                        <!-- <img class="w-100 ml-5 rounded" src="/media/img/logo-berard-distribution.png"/> -->
                     </div>
                     <div class="col">
                         <a href="javascript:void(0);" class="d-lg-none">
-                            <i class="fa fa-times right sidenav-close"
+                            <i class="fa fa-times right sidenav-close green-text"
                                aria-hidden="true">
                             </i>
                         </a>
@@ -37,7 +38,7 @@
 
             <li>
                 <!-- Links -->
-
+                <img class="img-fluid img-thumbnail ml-2" src="/media/icons/{{ item.name|title }}.png" style="width:28px; height:28px"/>
                 <a class="nav-link d-inline-flex"
                    href="{% url 'website:products_by_group' group=item.id %}">{{ item.name|title }}</a>
                 <a href="#{{ item.id }}"

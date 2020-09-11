@@ -9,11 +9,15 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from website.models import Article, Groupe, Famille, SousFamille
 import os.path
+from pyexcel_xlsx import get_data
 
 """ Article File"""
 
 
 class ArticleViews(object):
+
+ 
+       
     # Check errors
     @staticmethod
     def get_errors_on_three_values(val_1, val_2, val_3):
@@ -81,7 +85,23 @@ class ArticleViews(object):
             return float_self
         except ValueError:
             return 0.00
+    # get VAT
+    @staticmethod
+    def get_VAT():
+        xlsx_path = 'resources/import/TVA.xlsx'  # Xlsx file path
+        data = get_data(xlsx_path, start_row=1)
 
+        # VAT
+        for row in data['TVA']:
+            try:
+                if row:
+                    Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
+              
+            except Article.DoesNotExist as e:
+                print('ERROR VAT', e)
+                raise e
+        print('vat creation done')
+               
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
@@ -142,7 +162,7 @@ class ArticleViews(object):
                     subfamily = SousFamille.objects.get(id=rst["sous_famille"])
                 except SousFamille.DoesNotExist:
                     subfamily = None
-
+                
                 try:
                     Article.objects.update_or_create(
                         code_article=rst["code_article"],
@@ -171,6 +191,8 @@ class ArticleViews(object):
                     print('not inserted', rst['code_article'])
                     print(err)
                     raise err
+
+                
             else:
                 f.write(rst['code_article'] + '\n')
 
@@ -203,7 +225,7 @@ class ArticleViews(object):
 
                 # array of dict
                 obj_bdd = [{
-                    "code_article": val[10:16],
+                    "code_article": val[10:16].strip(),
                     "libelle": val[18:54],
                     "conditionnement": cls.is_integer(val[54:58]),
 
@@ -231,7 +253,9 @@ class ArticleViews(object):
 
                 cls.insert_into_db(obj_bdd)  # call method to insert in db
                 file.close()
-                resp = json.dumps(obj_bdd)
+
+                cls.get_VAT() # insert VAT from an other file
+                # resp = json.dumps(obj_bdd)
                 return HttpResponse(200, content_type='application/json')
                 # return HttpResponse(resp, content_type='application/json')
 

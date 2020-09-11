@@ -17,18 +17,22 @@ class ForgotPassForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(label="Nom d 'utilisateur", max_length=200,
                                widget=forms.TextInput(
-                                   # attrs={'style': 'text-align:center',
-                                   #        }
+                                   attrs={
+                                    #    'style': 'text-align:center',
+                                          'id':'username'
+                                    }
                                )
                                )
-    # telephone = forms.CharField(label="N° client", max_length=200)
+   
     password = forms.CharField(label="Mot de passe",
                                widget=forms.PasswordInput(
-                                   #     attrs={'style': 'max-width:50%',
-                                   #            }
+                                       attrs={
+                                        #    'style': 'max-width:50%',
+                                           'id':'password'
+                                              }
                                )
                                )
-    # connected = forms.BooleanField(help_text='Cochez si vous souhaitez rester connecté', required=False)
+  
 
     # def clean(self):
     #     username = self.cleaned_data['username']

@@ -41,7 +41,7 @@ class LoginView(View):
             pass
 
     def get(self, *args, **kwargs):
-        form = LoginForm()
+        # form = LoginForm()
         return render(self.request, 'auth/login.html', locals())
 
     def post(self, *args, **kwargs):
@@ -64,7 +64,7 @@ class LoginView(View):
                             return redirect('website:home')
                         else:
                             messages.error(self.request, 'Vos identifiants sont erronés')
-                            return render(self.request, 'auth/login.html', locals())
+                            return render(self.request, 'auth/login.html')
                         #     if tarif is not '0':
                         #         # messages.success(request, 'Vous êtes bien connecté')
                         #         login(request, user)
@@ -78,11 +78,14 @@ class LoginView(View):
 
                     except ProfilUtilisateur.DoesNotExist:
                         messages.error(self.request, "Vous n'avez pas accès à ce site")
-                        return render(self.request, 'auth/login.html', locals())
+                        return render(self.request, 'auth/login.html')
 
                 except User.DoesNotExist:
                     messages.error(self.request, "Vous n'avez pas de compte")
-                    return render(self.request, 'auth/login.html', locals())
+                    return render(self.request, 'auth/login.html')
+            else:
+                messages.error(self.request, "Veuillez bien remplir les champs demandés")
+                return render(self.request, 'auth/login.html')        
 
 
 """ Logout """
