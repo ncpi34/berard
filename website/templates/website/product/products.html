@@ -66,7 +66,8 @@
                 <div class="col">
                   <h6>
                     <label>UV: </label>
-                    <strong>{% if article.conditionnement is None%}
+                    <strong class='product_multiples' >
+                      {% if article.conditionnement is None%}
                        /
                       {% else %}
                       {{ article.conditionnement }}
@@ -174,7 +175,6 @@
 {% endblock content %}
 
 {% block extrascripts %}
-<script src="{% static 'js/hiddenUrl.js'%}"></script>
 <script src="{% static 'js/modalPicture.js'%}"></script>
 <script src="{% static 'js/scroll_position_send_to_cart.js'%}"></script>
 {% endblock extrascripts %}

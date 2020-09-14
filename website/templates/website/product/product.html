@@ -91,7 +91,7 @@
           <!--Grid column-->
         <div class="col-md-6 text-center">
             <span>Cdt:</span>
-          <p>
+          <p class='product_multiples'>
               {% if object.conditionnement is None%}
                 indéfini
               {% else %}
@@ -109,5 +109,5 @@
 {% endblock content %}
 
 {% block extrascripts %}
-<script src="{% static 'js/hiddenUrl.js'%}"></script>
+
 {% endblock extrascripts %}

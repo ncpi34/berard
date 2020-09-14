@@ -168,7 +168,7 @@ class Article(models.Model):
         return self.calculate_price_with_taxes(self.prix_achat_4)  
 
     def format_VAT(self):
-        if self.taux_TVA.is_integer():
+        if self.taux_TVA % 2 == 0.0:
             return int(self.taux_TVA)
         else:
             return self.taux_TVA     

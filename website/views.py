@@ -214,30 +214,6 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
         return context
 
 
-class ArticleByFamillyView(LoginRequiredMixin, ListView):
-    template_name = 'website/product/products.html'
-    paginate_by = 60
-    ordering = ['libelle']
-    context_object_name = 'articles'
-    login_url = ''
-
-    def get_queryset(self):
-        _family = self.kwargs.get("family")
-        _group = self.kwargs.get("group")
-        article = Article.objects.filter(
-            Q(actif=True)
-            & Q(groupe__nom=_group)
-            & Q(famille__nom=_family)).exclude(Q(prix_achat_1=0.00)
-                                                   )
-        return article
-
-    def get_context_data(self, **kwargs):
-        context = super(ArticleByFamillyView, self).get_context_data(**kwargs)
-        context['form'] = CartAddProductForm()
-        context['filter'] = ArticleFilter()
-        return context
-      
-
 class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'website/product/product.html'
     queryset = Article.objects.all()

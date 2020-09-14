@@ -79,6 +79,10 @@
             <td>
                 <div>{{ order_item.libelle|title }}</div>
                 {{ order_item.code_article }}
+                <div>
+                    par <span class='product_multiples'>{{ order_item.lot }}</span>
+                </div>
+                
             </td>
             <td class="num mb-1">
                 {{ order_item.prix_achat }}€
@@ -173,11 +177,10 @@
 
 
 
+
     <script>
 
-
-
-    // calculate screen windows in real time and change html
+   // calculate screen windows in real time and change html
     function resize() {
         let widthScreenReload = window.innerWidth;
         if (document.querySelector('#basket_update')) {
