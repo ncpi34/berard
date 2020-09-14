@@ -8,7 +8,11 @@
 {% block content %}
     {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
-
+    <style>
+        #nav-icon1{
+          display: none;
+        }
+        </style>
     <main style="margin-top: 10%">
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
@@ -119,14 +123,19 @@
         </tbody>
     </table>
          <div class="text-right">
+            <div class="row">
+                <div class="col">
+                    <h6>Total HT: {{ cart.get_total_price_without_taxes }} € </h5>
+                </div>
+            </div>
              <div class="row">
                  <div class="col">
-                     <h5 >Total: {{ cart.get_total_price }} € </h5>
+                     <h6>Taxes: {{ cart.get_total_taxes }} € </h5>
                  </div>
              </div>
              <div class="row">
                  <div class="col">
-                     <h6>Taxes: {{ cart.get_total_taxes }} € </h5>
+                     <h5 >Total TTC: {{ cart.get_total_price }} € </h5>
                  </div>
              </div>
             

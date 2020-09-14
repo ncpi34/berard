@@ -24,7 +24,7 @@ class HistoriqueCommande(models.Model):
         ordering = ('-date',)
 
     def __str__(self):
-        return 'Commande {}'.format(self.id)
+        return f'Commande {self.id}'
 
     def get_absolute_url(self):
         return reverse('order:order_detail',
@@ -36,14 +36,18 @@ class HistoriqueCommande(models.Model):
             total += item.quantite
         return total
 
-    def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
-
-    # def get_total_cost_by_article(self):
-    #     return sum(item.get_cost() for item in self.items.all())
-
     def get_articles(self):
         return [item.get_article() for item in self.items.all()]
+
+    def get_total_cost_with_taxes(self):
+        return sum(item.get_cost() for item in self.items.all())
+
+    def get_total_taxes(self):
+        return round(sum(item.get_taxes() for item in self.items.all()), 2)
+    
+    def get_total_cost_without_taxes(self):
+        return round( float(self.get_total_cost_with_taxes()) - self.get_total_taxes(), 2)    
+
 
 
 """ Order """
@@ -61,7 +65,7 @@ class ProduitCommande(models.Model):
     prix = models.DecimalField(max_digits=100,
                                decimal_places=2,
                                default=0)
-    taux_TVA = models.FloatField(null=True)
+    # taux_TVA = models.FloatField(null=True)
     quantite = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -69,6 +73,9 @@ class ProduitCommande(models.Model):
 
     def get_cost(self):
         return self.prix * self.quantite
+
+    def get_taxes(self) :
+        return float( self.get_cost() ) - ( float( self.get_cost() ) /( self.article.taux_TVA / 100 + 1))  
 
     def get_article(self):
         return self

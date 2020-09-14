@@ -62,32 +62,40 @@
                     <p style="font-size: 12px">{{ article.gencode }}</p>
                   </a>
 
-              <div class="row d-flex ml-auto mr-auto">
-              <h6>
-                    
-                  <span class="badge badge-info">
-                          {% if request.session.tarif == 1  %} {{ article.get_price_with_taxes_1}}
-                              {% elif request.session.tarif == 2 %} {{ article.get_price_with_taxes_2 }}
-                              {% elif request.session.tarif == 3 %} {{ article.get_price_with_taxes_3 }}
-                              {% elif request.session.tarif == 4 %} {{ article.get_price_with_taxes_4 }}
-                              {% else %} Prix non disponible
-                          {% endif %}€
-
-                  </span>
+              <div class="row d-flex justify-content-center">
+                <div class="col">
+                  <h6>
+                    <label>UV: </label>
+                    <strong>{% if article.conditionnement is None%}
+                       /
+                      {% else %}
+                      {{ article.conditionnement }}
+                  {% endif %}
+                    </strong>
                 </h6>
+                </div>
+                <div class="col">
+                  <h6>
+                        
+                      <span class="badge badge-info text-center">
+                              {% if request.session.tarif == 1  %} {{ article.get_price_with_taxes_1}}
+                                  {% elif request.session.tarif == 2 %} {{ article.get_price_with_taxes_2 }}
+                                  {% elif request.session.tarif == 3 %} {{ article.get_price_with_taxes_3 }}
+                                  {% elif request.session.tarif == 4 %} {{ article.get_price_with_taxes_4 }}
+                                  {% else %} Prix non disponible
+                              {% endif %}€
+    
+                      </span>
+                    </h6>
+                </div>
+                <div class="col">
+                  <label>TVA {{ article.format_VAT }} %</label>
+                </div>
               </div>
 
               <div class="row text-center">
-                <h6 class="mr-auto">
-                  <label>UV: </label>
-                  <strong>{% if article.conditionnement is None%}
-                     /
-                    {% else %}
-                    {{ article.conditionnement }}
-                {% endif %}
-                  </strong>
-              </h6>
-                <label>TVA {{ article.format_VAT }} %</label>
+                
+                
               </div>
 <!--                <div class="card-footer" style="max-height: 40px">-->
                   <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"

@@ -64,7 +64,7 @@ class Cart(object):
                     'prix_achat': str(self.get_price_by_user(product)),
                     'tva': product.taux_TVA,
                     'code_article': product.code_article,
-                    'prix_taxes': str(self.get_price_by_user(product))
+                    'prix_ht': str(self.get_price_by_user(product))
                 }
                 if update_quantity and quantity is not 0:
                     self.cart[product.id]['quantity'] = quantity
@@ -105,16 +105,24 @@ class Cart(object):
 
     def get_total_taxes(self):
         """
-        Get price of the cart
+        Get taxes of the cart
         """
-        # round(float(arg) / (item['taux_TVA'] / 100 + 1 ), 2)
-        return sum(Decimal(item['prix_achat'] / (item['tva'] / 100 + 1) ) * item['quantity'] for item in self.cart.values())
+        result = [ float(item['prix_achat']  * item['quantity']) - ( float(item['prix_achat']) * item['quantity']  / (item['tva'] / 100 + 1) ) for item in self.cart.values()]
+        return round(sum(result), 2)
+        
 
     def get_total_price(self):
         """
         Get price of the cart
         """
         return sum(Decimal(item['prix_achat']) * item['quantity'] for item in self.cart.values())
+
+    
+    def get_total_price_without_taxes(self):
+        """
+        Get price of the cart without taxes
+        """
+        return round(float(self.get_total_price()) - self.get_total_taxes(), 2)  
 
     def clear(self):  # remove cart from session
         try:

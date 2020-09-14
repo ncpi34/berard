@@ -144,7 +144,6 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
         else:
             try:
                 user = User.objects.get(id=request.user.id)
-                print(user.profilutilisateur.code_representant)
                 order = HistoriqueCommande(
                     utilisateur=user
                 )
@@ -200,7 +199,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                         article=article,
                         prix=float(item['prix_achat']),
                         quantite=item['quantity'],
-                    )
+                        )
                     item_order.save()
 
                     # add favorites products for user

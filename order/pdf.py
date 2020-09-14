@@ -85,12 +85,12 @@ class PdfCreator(object):
     @staticmethod
     def get_footer_style():
         sample_style_sheet = getSampleStyleSheet()
-        body_style = sample_style_sheet['Heading1']
+        body_style = sample_style_sheet['BodyText']
         body_style.fontSize = 12
         body_style.fonName = 'Helvetica'
-        body_style.alignment = TA_CENTER
+        body_style.alignment = TA_RIGHT
         # body_style.spaceAfter = 40
-        body_style.spaceBefore = 40
+        body_style.spaceBefore = 10
         body_style.textColor = colors.black
         return body_style
 
@@ -167,7 +167,10 @@ class PdfCreator(object):
                 rowHeights=[1.5 * inch], style=title_table_style),
             Paragraph('Commande du {}'.format(date), body_style),
             Table(data, style=body_table_style),
-            Paragraph("Prix total de la commande: {} €".format(order.get_total_cost()), footer_style),
+            Paragraph(f"HT: {order.get_total_cost_without_taxes()} €", footer_style),
+            Paragraph(f"Taxes: {order.get_total_taxes()} €", footer_style),
+            Paragraph(f"TTC: {order.get_total_cost_with_taxes()} €", footer_style),
+
 
         ]
 

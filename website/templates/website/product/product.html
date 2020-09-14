@@ -8,7 +8,12 @@
 
 {% block content %}
 {% include 'helpers/cart_button.html' %}
-<main class="mt-5 pt-4" style="min-height: 83vh">
+<style>
+  #nav-icon1{
+    display: none;
+  }
+  </style>
+<main class="mt-5 pt-4" style="min-height: 85vh">
     <div class="container dark-grey-text mt-5">
 
       <!--Grid row-->
@@ -26,18 +31,27 @@
         <div class="col-md-6 mb-4">
 
           <!--Content-->
-          <div class="p-4">
+          <div class="p-4 row">
 
-            <div class="mb-3">
-              <a href="">
-                <span class="badge purple mr-1">{{ object.get_category_display }}</span>
-              </a>
+            <div class="col">
+              <p class="lead font-weight-bold">{{ object.libelle }}</p class="lead font-weight-bold">
             </div>
 
+            <!--Grid column-->
+            <div class="col">
+              <h6>
+                <span class="badge badge-info text-center">
+                  {% if request.session.tarif == 1  %} {{ article.get_price_with_taxes_1}}
+                      {% elif request.session.tarif == 2 %} {{ article.get_price_with_taxes_2 }}
+                      {% elif request.session.tarif == 3 %} {{ article.get_price_with_taxes_3 }}
+                      {% elif request.session.tarif == 4 %} {{ article.get_price_with_taxes_4 }}
+                      {% else %} Prix non disponible
+                  {% endif %}€
 
-            <p class="lead font-weight-bold">{{ object.libelle }}</p class="lead font-weight-bold">
-
-<!--            <p>{{ object.description }}</p>-->
+                </span>
+              </h6>
+            </div>  
+            <!--Grid column-->
 
             <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                 class="d-flex justify-content-left">
@@ -63,19 +77,6 @@
         <h4 class="my-4 h4 text-center">Informations additionnelles</h4>
       <div class="row d-flex justify-content-center wow fadeIn">
         <!--Grid column-->
-        <div class="col-md-6 text-center">
-            <span>Prix:</span>
-         <p class="badge badge-info">
-              {% if request.session.tarif == 1  %} {{ object.prix_achat_1 }}
-                  {% elif request.session.tarif == 2 %} {{ object.prix_achat_2 }}
-                  {% elif request.session.tarif == 3 %} {{ object.prix_achat_3 }}
-                  {% elif request.session.tarif == 4 %} {{ object.prix_achat_4 }}
-                  {% else %} Prix non disponible
-                {% endif %}€
-         </span>
-        </div>
-        <!--Grid column-->
-           <!--Grid column-->
           <div class="col-md-6 text-center">
             <span>Gencod:</span>
           <p>{{ object.gencode }}</p>

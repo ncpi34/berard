@@ -27,29 +27,38 @@
     }
 }
     @media only screen and (min-width: 700px){
-  #img-modal {
-    width: 30%;
-  }
-     #menu-modal{
-        height:40%
+      #img-modal {
+        width: 40%;
+      }
+      #menu-modal{
+          height:40%
+      }
     }
-}
 #img-modal{
     width: 50%;
+}
+#btn {
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      border-radius: 10px;
 }
 </style>
 
 <!--        <img id="img-modal" class="modal img-fluid"  src=""/>-->
 <div class="modal" id="menu-modal">
-    <div class="modal-header float-right">
-        <a href="#" class="modal-close  btn-flat close_modal_picture">
-            <i class="material-icons close_modal red-text">close</i>
-        </a>
-    </div>
-    <div class="modal-content ml-auto mr-auto">
-        <img id="img-modal" class="img-fluid"  src=""/>
-    </div>
-</div>
+
+  
+  
+          <img id="img-modal" class="modal-content img-fluid m-auto"  src=""/>
+  
+             <i id="btn" class="modal-close material-icons  red-text ">close</i>
+  
+  
+  
+  </div>
 
 
 <!--<script>-->

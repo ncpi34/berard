@@ -11,6 +11,11 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <!--Main layout-->
+    <style>
+    #nav-icon1{
+      display: none;
+    }
+    </style>
   <main style="margin-top: 8%">
 
     <div class="main_container mt-5" style="min-height: 80vh;">
@@ -44,8 +49,8 @@
               </div>
               <!--Card image-->
 
-              <!--Card content-->
-              <div class="card-body text-center">
+               <!--Card content-->
+               <div class="card-body text-center">
                 <!--Category & Title-->
                   <a href="{{article.get_absolute_url}}">
                     <h6>{{ article.code_article }}</h6>
@@ -53,31 +58,40 @@
                     <p style="font-size: 12px">{{ article.gencode }}</p>
                   </a>
 
-              <div class="row text-center">
-
-                      <h6 class="mr-auto">
-                            <label>Cdt: </label>
-                            <strong>{% if article.conditionnement is None%}
-                               /
-                              {% else %}
-                              {{ article.conditionnement }}
-                          {% endif %}
-                            </strong>
-                        </h6>
-
-                      <h6 class="ml-auto">
-                    <label>P.U HT: </label>
-                  <span class="badge badge-info">
-                          {% if request.session.tarif == 1  %} {{ article.prix_achat_1 }}
-                              {% elif request.session.tarif == 2 %} {{ article.prix_achat_2 }}
-                              {% elif request.session.tarif == 3 %} {{ article.prix_achat_3 }}
-                              {% elif request.session.tarif == 4 %} {{ article.prix_achat_4 }}
-                              {% else %} Prix non disponible
-                          {% endif %}€
-
-                  </span>
+              <div class="row d-flex justify-content-center">
+                <div class="col">
+                  <h6>
+                    <label>UV: </label>
+                    <strong>{% if article.conditionnement is None%}
+                       /
+                      {% else %}
+                      {{ article.conditionnement }}
+                  {% endif %}
+                    </strong>
                 </h6>
+                </div>
+                <div class="col">
+                  <h6>
+                        
+                      <span class="badge badge-info text-center">
+                              {% if request.session.tarif == 1  %} {{ article.get_price_with_taxes_1}}
+                                  {% elif request.session.tarif == 2 %} {{ article.get_price_with_taxes_2 }}
+                                  {% elif request.session.tarif == 3 %} {{ article.get_price_with_taxes_3 }}
+                                  {% elif request.session.tarif == 4 %} {{ article.get_price_with_taxes_4 }}
+                                  {% else %} Prix non disponible
+                              {% endif %}€
+    
+                      </span>
+                    </h6>
+                </div>
+                <div class="col">
+                  <label>TVA {{ article.format_VAT }} %</label>
+                </div>
+              </div>
 
+              <div class="row text-center">
+                
+                
               </div>
 <!--                <div class="card-footer" style="max-height: 40px">-->
                   <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"

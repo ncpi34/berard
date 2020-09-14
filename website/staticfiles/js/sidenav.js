@@ -23,6 +23,7 @@
     let currentScrollPos = window.pageYOffset;
     let navbar = document.getElementById("navbar")
       if (prevScrollpos > currentScrollPos) {
+        console.log('down')
         navbar.style.top = "0";
 
       } else {
