@@ -153,13 +153,8 @@ class Article(models.Model):
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
     def calculate_price_with_taxes(self, arg):
-        try:
-            float(arg)
-            return round( float(arg) * (self.taux_TVA / 100 + 1 ), 2 )
-        except ValueError as error:
-            print('err cart/models.py l155', error)
-            pass
-
+        return round( float(arg) * (self.taux_TVA / 100 + 1 ), 2 )
+        
     def get_price_with_taxes_1(self):
         return self.calculate_price_with_taxes(self.prix_achat_1)
 
