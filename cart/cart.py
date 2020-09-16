@@ -55,18 +55,32 @@ class Cart(object):
         # newItem = True
         price_null = self.get_price_by_user(product) != 0.00
         if price_null:
-            if product.id not in self.cart.keys() and quantity is not 0 and  quantity % int(product.conditionnement) == 0:
-                self.cart[product.id] = {
-                    'userid': self.request.user.id,
-                    'article_id': id,
-                    'libelle': product.libelle,
-                    'quantity': 0,
-                    'prix_achat': str(self.get_price_by_user(product)),
-                    'tva': product.taux_TVA,
-                    'code_article': product.code_article,
-                    'prix_ht': str(self.get_price_by_user(product)),
-                    'lot': product.conditionnement,
-                }
+            if product.groupe == 'BOISSONS':
+                    if product.id not in self.cart.keys() and quantity is not 0 and  quantity % int(product.conditionnement) == 0:
+                        self.cart[product.id] = {
+                            'userid': self.request.user.id,
+                            'article_id': id,
+                            'libelle': product.libelle,
+                            'quantity': 0,
+                            'prix_achat': str(self.get_price_by_user(product)),
+                            'tva': product.taux_TVA,
+                            'code_article': product.code_article,
+                            'prix_ht': str(self.get_price_by_user(product)),
+                            'lot': product.conditionnement,
+                        }
+            else:
+                if product.id not in self.cart.keys() and quantity is not 0:
+                    self.cart[product.id] = {
+                        'userid': self.request.user.id,
+                        'article_id': id,
+                        'libelle': product.libelle,
+                        'quantity': 0,
+                        'prix_achat': str(self.get_price_by_user(product)),
+                        'tva': product.taux_TVA,
+                        'code_article': product.code_article,
+                        'prix_ht': str(self.get_price_by_user(product)),
+                        'lot': product.conditionnement,
+                    }
                 if update_quantity and quantity is not 0:
                     self.cart[product.id]['quantity'] = quantity
                 else:
