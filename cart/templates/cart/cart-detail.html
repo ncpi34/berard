@@ -65,6 +65,9 @@
 
         {% for order_item in cart%}
             {% with product=order_item.product %}
+            <!--Hidden Group-->
+            <input type="hidden" class="hidden_groups" value="{{ order_item.groupe }}"/>
+            <!--Hidden Group-->
 
         <tr>
 {#            <th scope="row">{{ forloop.counter }}</th>#}

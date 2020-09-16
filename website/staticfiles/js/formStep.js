@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => { 
-    
 
+    let hidden_groups = document.querySelectorAll('.hidden_groups')
+    
     // quantities form step
     let multiples = document.querySelectorAll('.product_multiples')
     let multiples_display = document.querySelectorAll('.quantity_val')
@@ -24,36 +25,39 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       
     
-      if(multiples &&  multiples_display){
+    if(multiples &&  multiples_display){
         for (let i=0; i< multiples.length; i++) {
-            if(!isNaN(parseInt(multiples[i].innerHTML))) {
-                multiples_display[i].step = multiples[i].innerHTML
-                multiples_display[i].addEventListener('input', debounce(() => {
-                    let value_onchange = multiples_display[i];
-                    let multiple_expected = multiples[i].innerHTML;
-                    // round result
-                    if (value_onchange.value % multiple_expected !== 0) {
-                        let result_to_display = Math.round(value_onchange.value / multiple_expected) * multiple_expected
-  
-                        value_onchange.value = result_to_display 
-                        // create error display
-                        if(value_onchange.value == 0) {
-                            let p = document.createElement('p')
-                            p.innerHTML = "Veuillez ajouter un minimum de " +  multiple_expected
-                            p.style.color = 'red'
+            if (hidden_groups[i].value === 'BOISSONS') { // only for products with group=BOISSONS
+                if(!isNaN(parseInt(multiples[i].innerHTML))) {
+                    multiples_display[i].step = multiples[i].innerHTML
+                    multiples_display[i].addEventListener('input', debounce(() => {
+                        console.log('movement!!!')
+                        let value_onchange = multiples_display[i];
+                        let multiple_expected = multiples[i].innerHTML;
+                        // round result
+                        if (value_onchange.value % multiple_expected !== 0) {
+                            let result_to_display = Math.round(value_onchange.value / multiple_expected) * multiple_expected
+    
+                            value_onchange.value = result_to_display 
+                            // create error display
+                            if(value_onchange.value == 0) {
+                                let p = document.createElement('p')
+                                p.innerHTML = "Veuillez ajouter un minimum de " +  multiple_expected
+                                p.style.color = 'red'
+                                
+                                insertBefore(p, value_onchange.parentNode)
+                                setTimeout( () => {
+                                    p.style.display = 'none'
+                                }, 3000)
                             
-                            insertBefore(p, value_onchange.parentNode)
-                            setTimeout( () => {
-                                p.style.display = 'none'
-                            }, 3000)
-                           
-                            // insertAfter(value_onchange, p);
+                                // insertAfter(value_onchange, p);
+                            }
                         }
-                    }
-                    
-                    
-                }, 1000))
-            } 
+                        
+                        
+                    }, 1000))
+                }
+            }     
         }
     }
   
