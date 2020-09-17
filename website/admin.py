@@ -7,6 +7,7 @@ from website.models import ProfilUtilisateur, Article, Favori
 from order.models import HistoriqueCommande, ProduitCommande
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 """Unregister Part"""
 admin.site.unregister(Group)
@@ -99,22 +100,23 @@ admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 """ Favorite"""
-# @admin.register(Favoris)
-# class ArticleViews(admin.ModelAdmin):
-#     list_display = ('code_article', 'libelle',
-#                     'conditionnement', 'prix_vente',
-#                     'gencode', 'image', 'actif')
-#     list_filter = ['code_article', 'libelle']
-#     ordering = ('libelle',)
-#     search_fields = ('libelle', 'code_article', 'gencode',)
-#     fieldsets = (
-#         ('Choisir sa visibilité',
-#          # 'description': 'une description',
-#          # 'classes': 'wide' or 'extrapretty' or 'collapse',
-#          {'fields': ('actif',)}),
-#
-#     )
-admin.site.register(Favori)
+
+
+
+# @admin.register(Favori)
+# class FavoritesViews(admin.ModelAdmin):
+#     def get_queryset(self, request):
+#         qs = super(FavoritesViews, self).queryset(request)
+#         return qs.exclude(Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
+    
+        
+
+@admin.register(Favori)
+class FavoritesViews(admin.ModelAdmin):
+     def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.exclude(Q(article__prix_achat_1=0.00) | Q(article__actif=False) | Q(article__taux_TVA=None))
+  
 """Unregister part"""
 admin.site.unregister(HistoriqueCommande)
 

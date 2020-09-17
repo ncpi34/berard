@@ -122,11 +122,9 @@ class OffersView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        article = Favori.objects.all().iterator()
-        art = []
-        for ex in article:
-            art += Article.objects.filter(libelle=ex)
-        return art
+        articles = Favori.objects.all()
+                
+        return articles
 
     def get_context_data(self, **kwargs):
         context = super(OffersView, self).get_context_data(**kwargs)

@@ -10,6 +10,7 @@ from django.shortcuts import render
 from website.models import Article, Groupe, Famille, SousFamille
 import os.path
 from pyexcel_xlsx import get_data
+from django.core.exceptions import ObjectDoesNotExist
 
 """ Article File"""
 
@@ -163,27 +164,39 @@ class ArticleViews(object):
                 except SousFamille.DoesNotExist:
                     subfamily = None
                 
+                # if price ==0.00
                 try:
-                    Article.objects.update_or_create(
-                        code_article=rst["code_article"],
-                        gencode=rst["gencode"],
+                    if rst['prix_achat_1'] == 0.00:
+                        try:
+                            print('suppress', rst["code_article"])
+                            article = Article.objects.get(
+                                code_article=rst["code_article"],
+                                gencode=rst["gencode"],)
+                            article.delete()
+                        except ObjectDoesNotExist:
+                            pass  
+                    # if price > 0.00       
+                    if rst['prix_achat_1'] > 0.00:
+                        Article.objects.update_or_create(
+                            code_article=rst["code_article"],
+                            gencode=rst["gencode"],
 
-                        defaults=dict(
-                            libelle=rst['libelle'],
-                            prix_vente=rst["prix_vente"],
-                            prix_achat_1=rst["prix_achat_1"],
-                            prix_achat_2=rst["prix_achat_2"],
-                            prix_achat_3=rst["prix_achat_3"],
-                            prix_achat_4=rst["prix_achat_4"],
-                            conditionnement=rst["conditionnement"],
-                            groupe=group,
-                            famille=family,
-                            sous_famille=subfamily,
-                            # taux_TVA=rst["taux_TVA"],
+                            defaults=dict(
+                                libelle=rst['libelle'],
+                                prix_vente=rst["prix_vente"],
+                                prix_achat_1=rst["prix_achat_1"],
+                                prix_achat_2=rst["prix_achat_2"],
+                                prix_achat_3=rst["prix_achat_3"],
+                                prix_achat_4=rst["prix_achat_4"],
+                                conditionnement=rst["conditionnement"],
+                                groupe=group,
+                                famille=family,
+                                sous_famille=subfamily,
+                                # taux_TVA=rst["taux_TVA"],
+                            )
+
+
                         )
-
-
-                    )
                     print('inserted', rst['libelle'])
 
                 except Exception as err:

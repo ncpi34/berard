@@ -38,10 +38,10 @@
             <div class="card large" style="margin: -2%">
               <!--Card image-->
               <div class="view overlay">
-                <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}" >
+                <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.article.get_img }}" >
                         <img class="img_modal img-fluid img-thumbnail w-75 ml-auto mr-auto card-img-top"
                              alt="photo"
-                        src="{{ article.get_img }}"/>
+                        src="{{ article.article.get_img }}"/>
                 </a>
 
 
@@ -52,24 +52,24 @@
                <!--Card content-->
                <div class="card-body text-center">
                 <!--Category & Title-->
-                  <a href="{{article.get_absolute_url}}">
-                    <h6>{{ article.code_article }}</h6>
-                    <p style="font-size: 12px">{{ article.libelle|title }}</p>
-                    <p style="font-size: 12px">{{ article.gencode }}</p>
+                  <a href="{{article.article.get_absolute_url}}">
+                    <h6>{{ article.article.code_article }}</h6>
+                    <p style="font-size: 12px">{{ article.article.libelle|title }}</p>
+                    <p style="font-size: 12px">{{ article.article.gencode }}</p>
                   </a>
 
               <div class="row d-flex justify-content-center">
                 <!--Hidden Group-->
-                <input type="hidden" class="hidden_groups" value="{{ article.groupe }}"/>
+                <input type="hidden" class="hidden_groups" value="{{ article.article.groupe }}"/>
                 <!--Hidden Group-->
                 <div class="col">
                   <h6>
                     <label>UV: </label>
                     <strong class='product_multiples'>
-                      {% if article.conditionnement is None%}
+                      {% if article.article.conditionnement is None%}
                        /
                       {% else %}
-                      {{ article.conditionnement }}
+                      {{ article.article.conditionnement }}
                   {% endif %}
                     </strong>
                 </h6>
@@ -78,10 +78,10 @@
                   <h6>
                         
                       <span class="badge badge-info text-center">
-                              {% if request.session.tarif == 1  %} {{ article.get_price_with_taxes_1}}
-                                  {% elif request.session.tarif == 2 %} {{ article.get_price_with_taxes_2 }}
-                                  {% elif request.session.tarif == 3 %} {{ article.get_price_with_taxes_3 }}
-                                  {% elif request.session.tarif == 4 %} {{ article.get_price_with_taxes_4 }}
+                              {% if request.session.tarif == 1  %} {{ article.article.get_price_with_taxes_1}}
+                                  {% elif request.session.tarif == 2 %} {{ article.article.get_price_with_taxes_2 }}
+                                  {% elif request.session.tarif == 3 %} {{ article.article.get_price_with_taxes_3 }}
+                                  {% elif request.session.tarif == 4 %} {{ article.article.get_price_with_taxes_4 }}
                                   {% else %} Prix non disponible
                               {% endif %}€
     
@@ -89,7 +89,7 @@
                     </h6>
                 </div>
                 <div class="col">
-                  <label>TVA {{ article.format_VAT }} %</label>
+                  <label>TVA {{ article.article.format_VAT }} %</label>
                 </div>
               </div>
 
@@ -98,7 +98,7 @@
                 
               </div>
 <!--                <div class="card-footer" style="max-height: 40px">-->
-                  <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
+                  <form action="{% url 'cart:cart_add' product_id=article.article.id %}" method="post"
                     class="d-flex justify-content-left small" style="margin-bottom: -20px">
                      {% csrf_token %}
                             {{ form }}
@@ -116,7 +116,7 @@
           </div>
           <!--Fourth column-->
               {% endfor %}
-
+          
         </div>
         <!--Grid row-->
 

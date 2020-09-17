@@ -183,9 +183,7 @@ class Favori(models.Model):
         verbose_name = "Favoris"
         verbose_name_plural = "Favoris"
 
-    def __unicode__(self):
-        return self.article.pk
-
+     
     def __str__(self):
         return self.article.libelle
 
