@@ -51,7 +51,7 @@ class Cart(object):
         """
         Add a product to the cart or update its quantity.
         """
-        id = str(product.id)
+        id_product = str(product.id)
         # newItem = True
         price_null = self.get_price_by_user(product) != 0.00
         if price_null:
@@ -59,7 +59,7 @@ class Cart(object):
                     if product.id not in self.cart.keys() and quantity is not 0 and  quantity % int(product.conditionnement) == 0:
                         self.cart[product.id] = {
                             'userid': self.request.user.id,
-                            'article_id': id,
+                            'article_id': id_product,
                             'libelle': product.libelle,
                             'quantity': 0,
                             'prix_achat': str(self.get_price_by_user(product)),
@@ -72,7 +72,7 @@ class Cart(object):
                 if product.id not in self.cart.keys() and quantity is not 0:
                     self.cart[product.id] = {
                         'userid': self.request.user.id,
-                        'article_id': id,
+                        'article_id': id_product,
                         'libelle': product.libelle,
                         'quantity': 0,
                         'prix_achat': str(self.get_price_by_user(product)),
@@ -81,8 +81,11 @@ class Cart(object):
                         'prix_ht': str(self.get_price_by_user(product)),
                         'lot': product.conditionnement,
                     }
-                if update_quantity and quantity is not 0:
-                    self.cart[product.id]['quantity'] = quantity
+
+                if update_quantity:
+                    if quantity is not 0:
+                        self.cart[product.id]['quantity'] = quantity
+                    
                 else:
                     self.cart[product.id]['quantity'] += quantity
                 self.save()

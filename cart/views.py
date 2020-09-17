@@ -24,45 +24,10 @@ from django.conf import settings
 """ Cart """
 
 
-@login_required(login_url="")
-@require_POST
-def cart_add(request, product_id):  # add method
-    cart = Cart(request)
-    product = get_object_or_404(Article, id=product_id)
-    form = CartAddProductForm(request.POST)
-    encoded_url = ''
-    if form.is_valid():
-        cd = form.cleaned_data
-        cart.add(product=product,
-                 quantity=cd['quantity'],
-                 update_quantity=cd['update'])
-        # redirect with hidden form
-        encoded_url = cd['url']
-
-    if encoded_url:
-        return HttpResponseRedirect(encoded_url)
-    else:
-        return HttpResponseRedirect('/produit')
-
-
-@login_required(login_url="")
-@require_POST
-def order_summary_to_cart(request, order_id):
-    order = HistoriqueCommande.objects.get(id=int(order_id))
-    products = ProduitCommande.objects.filter(commande__id=int(order_id))
-    cart = Cart(request)
-    for item in products:
-        product = get_object_or_404(Article, id=item.article.id)
-        cart.add(product=product,
-                 quantity=item.quantite,
-                 )
-    return redirect("cart:cart_detail")
-
-
+""" Remove item """
 class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal
 
     def get(self, request, **kwargs):
-        print(kwargs['product_id'])
         context = {
             'id': kwargs['product_id'],
         }
@@ -70,15 +35,13 @@ class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with mo
         return render(request, 'cart/suppress_modal_mat.html', context)
 
     def post(self, request, **kwargs):
-        print(request)
-        print(kwargs)
         cart = Cart(request)
         _pk = kwargs.get("product_id")
         product = get_object_or_404(Article, id=_pk)
         cart.remove(product)
         return redirect("cart:cart_detail")
 
-
+""" Send Order """
 class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
     @staticmethod
     def check_unity(self):
@@ -238,6 +201,41 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                 return redirect("cart:cart_detail")
 
 
+""" Cart actions """
+@login_required(login_url="")
+@require_POST
+def order_summary_to_cart(request, order_id):
+    order = HistoriqueCommande.objects.get(id=int(order_id))
+    products = ProduitCommande.objects.filter(commande__id=int(order_id))
+    cart = Cart(request)
+    for item in products:
+        product = get_object_or_404(Article, id=item.article.id)
+        cart.add(product=product,
+                 quantity=item.quantite,
+                 )
+    return redirect("cart:cart_detail")
+
+
+@login_required(login_url="")
+@require_POST
+def cart_add(request, product_id):  # add method
+    cart = Cart(request)
+    product = get_object_or_404(Article, id=product_id)
+    form = CartAddProductForm(request.POST)
+    encoded_url = ''
+    if form.is_valid():
+        cd = form.cleaned_data
+        cart.add(product=product,
+                 quantity=cd['quantity'],
+                 update_quantity=cd['update'])
+        # redirect with hidden form
+        encoded_url = cd['url']
+
+    if encoded_url:
+        return HttpResponseRedirect(encoded_url)
+    else:
+        return HttpResponseRedirect('/produit')
+
 @login_required(login_url="")
 def cart_detail(request):
     cart = Cart(request)
@@ -250,7 +248,6 @@ def cart_detail(request):
     return render(request, 'cart/cart-detail.html', {'cart': cart, 'quantity': quantity})
 
 
-# modify quantity from cart
 @require_POST
 def cart_update(request, product_id):
     cart = Cart(request)
@@ -260,11 +257,13 @@ def cart_update(request, product_id):
         cd = form.cleaned_data
         cart.add(product=product,
                  quantity=cd['quantity'],
-                 )
+                 update_quantity=True
+                )
     else:
         data = json.loads(request.body)
         cart.add(product=product,
                  quantity=int(data['quantity']),
+                 update_quantity=True
                  )
         # cart_detail(request)
         # tab = []
@@ -276,7 +275,6 @@ def cart_update(request, product_id):
     return redirect("cart:cart_detail")
 
 
-# modify quantity from cart
 @require_POST
 def update_all_cart(request):
     cart = Cart(request)
@@ -290,9 +288,12 @@ def update_all_cart(request):
             for i in tab_join:
                 rst = i.split('/')
                 product = get_object_or_404(Article, id=int(rst[0]))
-                cart.add(product=product,
-                         quantity=int(rst[1]),
-                         update_quantity=True)
+                # if int(rst[1]) is 0:
+                #     cart.remove(product)
+                if int(rst[1]) is not 0:
+                    cart.add(product=product,
+                            quantity=int(rst[1]),
+                            update_quantity=True)
         except ValueError:
             data = json.loads(request.body)
             for i in data['quantity']:
