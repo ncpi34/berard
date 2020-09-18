@@ -112,20 +112,17 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                 )
                 order.save()
 
-                # dt = datetime.datetime.now()
-                # print("{}.{:03d} {}".format(dt.strftime('%Y-%m-%d %H:%M:%S'), dt.microsecond // 1000, dt.strftime("%A")))
-
                 # to format hour with minute
                 now = datetime.datetime.now()
                 hour = '{:02d}'.format(now.hour)
                 minute = '{:02d}'.format(now.minute)
-                hour_with_minute = '{}{}'.format(hour, minute)
+                hour_with_minute = f'{hour}{minute}'
 
                 # to format second with microsecond
                 now = datetime.datetime.now()
                 second = '{:02d}'.format(now.second)
                 microsecond = str(now.microsecond // 1000)
-                second_with_microsecond = '{}{}'.format(second, microsecond)
+                second_with_microsecond = f'{second}{microsecond}'
 
                 # file to ftp
                 file_name = '{}{}{}{}COMSOC.PLN'.format(
@@ -195,8 +192,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                 messages.success(request, 'Votre commande a bien été passée')
 
                 return redirect("order:order_detail", pk=order.id)
-            except Exception as e:
-                print("ERROR champs ", e)
+            except:
                 messages.error(request, "Votre commande n'a pas pu être éffectuée")
                 return redirect("cart:cart_detail")
 
@@ -265,12 +261,6 @@ def cart_update(request, product_id):
                  quantity=int(data['quantity']),
                  update_quantity=True
                  )
-        # cart_detail(request)
-        # tab = []
-        # for item in cart:
-        #     tab.append({'libelle':item['libelle']})
-        # print(tab)
-        # return JsonResponse({'success': True, 'status_code':200, 'cart': tab})
 
     return redirect("cart:cart_detail")
 
@@ -288,8 +278,6 @@ def update_all_cart(request):
             for i in tab_join:
                 rst = i.split('/')
                 product = get_object_or_404(Article, id=int(rst[0]))
-                # if int(rst[1]) is 0:
-                #     cart.remove(product)
                 if int(rst[1]) is not 0:
                     cart.add(product=product,
                             quantity=int(rst[1]),

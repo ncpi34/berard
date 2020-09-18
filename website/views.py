@@ -53,28 +53,16 @@ class LoginView(View):
                 try:
                     user = User.objects.get(username=username, password=password)
                     try:
-                        tarif = user.profilutilisateur.tarif
-                        # user = authenticate(username=username, password=password)
-                        # admin = User.objects.filter(username=username, groups__name='admin')  # Check if admin
                         if user:
+                            tarif = user.profilutilisateur.tarif
                             login(self.request, user)
-                            self.request.session['tarif'] = int(user.profilutilisateur.tarif)
+                            self.request.session['tarif'] = int(tarif)
                             self.get_old_cart()
                             messages.success(self.request, 'Bienvenue ' + self.request.user.last_name)
                             return redirect('website:home')
                         else:
                             messages.error(self.request, 'Vos identifiants sont erronés')
                             return render(self.request, 'auth/login.html')
-                        #     if tarif is not '0':
-                        #         # messages.success(request, 'Vous êtes bien connecté')
-                        #         login(request, user)
-                        #         request.session['tarif'] = int(user.profilutilisateur.tarif)
-                        #         self.get_old_cart(request)
-                        #         return redirect('website:offers')
-                        #         # return HttpResponse("Vous avez été redirigé.")
-                        # else:
-                        #     messages.error(request, 'Vos identifiants sont erronés')
-                        #     return render(request, 'auth/login.html', locals())
 
                     except ProfilUtilisateur.DoesNotExist:
                         messages.error(self.request, "Vous n'avez pas accès à ce site")
@@ -137,7 +125,6 @@ class OffersView(LoginRequiredMixin, ListView):
 
 class FavoritesView(LoginRequiredMixin, ListView):
     template_name = 'website/product/favorites.html'
-    # paginate_by = 60
     ordering = ['libelle']
     context_object_name = 'articles'
     login_url = ''
@@ -147,7 +134,7 @@ class FavoritesView(LoginRequiredMixin, ListView):
         art = []
         obj_from_method_db = []
         for article in articles:
-            obj_from_method_db.append(article.get_20_first_results())
+            obj_from_method_db.append(article.format_data())
 
         # sort by quantity
         df = pd.DataFrame(obj_from_method_db)
@@ -251,15 +238,11 @@ class ForgotPasswordView(View):
                     send_mail(
                         'Mot de passe oublié',
                         'Votre mot de passe:  ' + user.password,
-                        'test34980test@gmail.com',
-                        # EMAIL_HOST_USER,
+                        settings.EMAIL_HOST_USER,
                         [user.email],
                         fail_silently=False,
                     )
                     messages.success(request, 'Vous allez recevoir un email contenant les instructions à suivre')
-                    # messages.add_message(request, messages.SUCCESS, 'Vous allez recevoir un email contenant les instructions à suivre')
-                    # time.sleep(5)
-                    # return redirect(reverse('website:login'))
                     return render(request, 'auth/password_forgot.html', locals())
 
                 except User.DoesNotExist:

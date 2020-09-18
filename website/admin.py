@@ -51,24 +51,14 @@ class HistoriqueViews(admin.ModelAdmin):
     date_hierarchy = 'date'
     inlines = [ArticlesInLine]
 
-    # def show_content_part(self, article):
-    #     """
-    #     Retourne les 40 premiers caractères du contenu de l'article,
-    #     suivi de points de suspension si le texte est plus long.
-    #     """
-    #     return Truncator(article.contenu).chars(40, truncate='...')
-    #
-    # # En-tête de notre colonne
-    # show_content_part.short_description = 'Aperçu du contenu'
-
-
-# admin.site.register(Historique, HistoriqueViews)
-
 
 """ CustomUser """
 
-
+class TarifInline(admin.StackedInline):
+    model = ProfilUtilisateur
+    exclude = ('telephone', 'adresse', 'code_client', 'code_representant', )
 class CustomUserAdmin(UserAdmin):
+    inlines = (TarifInline,)
     # exclude = ('username',)
     list_display = ('username', 'last_name', 'first_name', 'email', 'is_active',)
     # list_editable = ('username', 'is_active')
@@ -76,18 +66,10 @@ class CustomUserAdmin(UserAdmin):
         ('Informations personnelles', {'fields': (
             'email',
             'password',
-            # 'profilutilisateur__tarif'
         )}),
 
-        # ('Important dates', {'fields': (
-        #     'last_login',
-        #     'date_joined')}),
 
         ('Permissions', {'fields': ('is_active',
-                                    # 'is_staff',
-                                    # 'is_superuser',
-                                    # 'groups',
-                                    # 'user_permissions'
                                     )}),
     )
 
@@ -100,21 +82,10 @@ admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 """ Favorite"""
-
-
-
-# @admin.register(Favori)
-# class FavoritesViews(admin.ModelAdmin):
-#     def get_queryset(self, request):
-#         qs = super(FavoritesViews, self).queryset(request)
-#         return qs.exclude(Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
-    
-        
-
 @admin.register(Favori)
 class FavoritesViews(admin.ModelAdmin):
-     def get_queryset(self, request):
-        qs = super().get_queryset(request)
+     def queryset(self, request):
+        qs = super().queryset(request)
         return qs.exclude(Q(article__prix_achat_1=0.00) | Q(article__actif=False) | Q(article__taux_TVA=None))
   
 """Unregister part"""

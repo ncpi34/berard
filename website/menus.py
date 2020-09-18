@@ -11,16 +11,11 @@ def get_menus(request):
         Q(nom__in=['DIVERS', 'BOISSONS BIO', 'ENTRETIEN BIO', 'EPICERIE BIO', 'FRAIS BIO'])
     ).values_list('nom', 'pk')
     groups = [list(i) for i in group_query]
-    # groups = list(itertools.chain(*group_query))
-    # print(groups)
     liste = [{"id": item[0][1],
               "name": item[0][0], 'url': '#',  # retrieve query to array of dictionnaries
               'validators': ["menu_generator.validators.is_authenticated"],
               "submenu": get_families(item[0][0]),
               } for item in zip(groups)]
-    # [print(i, '\n') for i in liste]
-
-    # return liste
     return {'liste': liste}
 
 
@@ -51,20 +46,3 @@ def get_sub_families(family_name):
         liste.append(temp)
 
     return liste
-
-
-# MENUS = {
-#     # 'NAV_MENU_TOP': [
-#     #     {
-#     #         "name": "Logo",
-#     #         "url": "/home",
-#     #         "validators": ["menu_generator.validators.is_authenticated"],
-#     #     },
-#     #     {
-#     #         "name": "Deconnexion",
-#     #         "url": "/logout",
-#     #         "validators": ["menu_generator.validators.is_authenticated"],
-#     #     },
-#     # ],
-#     'NAV_MENU_LEFT': get_menus()
-# }

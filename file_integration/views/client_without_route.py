@@ -34,11 +34,8 @@ class ClientAutomate:
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
-        print('beginning db insert')
-        for rst in self:
+        for iteration, rst in enumerate(self):
             try:
-                print(rst['email'])
-
                 user, created = User.objects.update_or_create(
                     username=rst["code_client"],
 
@@ -48,6 +45,32 @@ class ClientAutomate:
                         password=rst["mot_de_passe"], )
                 )
 
+                """ if suppress client """
+                # # check if user has tarif equal to 0
+                # if rst['tarif'] == 0:
+                #     try:
+                #         user = User.objects.get(username=rst["code_client"])
+                #         user.delete()
+                #         print('user delete', rst["code_client"])
+                #     except ObjectDoesNotExist:
+                #             pass
+                # else:
+                #     user.is_active = True
+                #     user.save()
+             
+                #     try:
+                #         user.profilutilisateur.code_representant = rst["code_representant"]
+                #         user.profilutilisateur.adresse = rst["adresse"]
+                #         user.profilutilisateur.telephone = rst["telephone"]
+                #         user.profilutilisateur.tarif = rst["tarif"]
+                #         user.profilutilisateur.code_client = rst["code_client"]
+                #         user.profilutilisateur.save()
+                #         print('profile done')
+                #     except ObjectDoesNotExist as err:
+                #         print('!!!!!!!!!!!profile error!!!!!!!!!!!!!')
+                #         raise err
+                """ endif """
+
                 # check if user has tarif equal to 0
                 if rst['tarif'] == 0:
                     user.is_active = False
@@ -55,27 +78,23 @@ class ClientAutomate:
                 else:
                     user.is_active = True
                     user.save()
-                # to encrypt Password
-                # user.set_password(rst["mot_de_passe"])
-                # user.save()
-                # print('RESULT', user.qs)
-                # user = User.objects.get(email=rst['email']).id
+              
+                try:
+                    user.profilutilisateur.code_representant = rst["code_representant"]
+                    user.profilutilisateur.adresse = rst["adresse"]
+                    user.profilutilisateur.telephone = rst["telephone"]
+                    user.profilutilisateur.tarif = rst["tarif"]
+                    user.profilutilisateur.code_client = rst["code_client"]
+                    user.profilutilisateur.save()
+                   
+                except ObjectDoesNotExist as err:
+                    raise err
 
-                profile = ProfilUtilisateur.objects.update_or_create(
-                    utilisateur=user,
-                    defaults=dict(
-                        code_representant=rst["code_representant"]),
-                    adresse=rst["adresse"],
-                    telephone=rst["telephone"],
-                    tarif=rst["tarif"],
-                    code_client=rst["code_client"],
-
-                )
+               
 
             except Exception as err:
-                print('not inserted', rst['code_client'])
-                print(err)
                 raise err
+
     # Index_method
     @classmethod
     def file_treatement(cls, **kwargs):
@@ -106,8 +125,8 @@ class ClientAutomate:
             # array of dict
             obj_bdd = [{
                 "code_representant": val[4:7].strip(),
-                "code_client": val[10:16],
-                "nom": val[26:52],
+                "code_client": val[10:16].strip(),
+                "nom": val[26:52].strip(),
                 'mot_de_passe': val[10:16] + val[146:151],
                 "adresse": val[26:171].strip(),
                 "telephone": val[182:196],
@@ -116,15 +135,16 @@ class ClientAutomate:
                 "email": val[438:509].strip(),
 
             } for val in text_lines]
-            # print([val[230:240] for val in text_lines])
+           
 
             cls.insert_into_db(obj_bdd)  # call method to insert in db
 
-            resp = json.dumps(obj_bdd)
+            
             file.close()
             return True
 
         except Exception as error:
-            print("Error: {0}".format(error))
             return False
-            # return HttpResponse(500, content_type="application/json")
+            # raise error
+          
+            

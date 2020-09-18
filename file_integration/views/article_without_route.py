@@ -5,10 +5,12 @@ import string
 import numpy as np
 
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from website.models import Article, Groupe, Famille, SousFamille
 import os.path
+from pyexcel_xlsx import get_data
+from django.core.exceptions import ObjectDoesNotExist
 
 """ Article File"""
 
@@ -81,6 +83,23 @@ class ArticleAutomate:
             return float_self
         except ValueError:
             return 0.00
+
+    # get VAT
+    @staticmethod
+    def get_VAT():
+        xlsx_path = 'resources/import/TVA.xlsx'  # Xlsx file path
+        data = get_data(xlsx_path, start_row=1)
+
+        # VAT
+        for row in data['TVA']:
+            try:
+                if row:
+                    Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
+              
+            except Article.DoesNotExist as e:
+                print('ERROR VAT', e)
+                raise e
+        print('vat creation done')
 
     # Insert in DB
     @staticmethod
@@ -212,11 +231,9 @@ class ArticleAutomate:
                 "prix_vente": cls.is_float(val[161:169]),
 
                 "gencode": val[228:241],
-                # # "taux_TVA": 6,  # TO DEFINE
 
                 "tri": val[58:68],
                 "groupe": cls.is_integer(val[58:60]),
-                # "famille": cls.is_integer(val[62:64]),
                 "famille": cls.is_integer(val[61:64]),
                 "sous_famille": cls.is_integer(val[65:68]),
             } for val in text_lines]
@@ -225,11 +242,10 @@ class ArticleAutomate:
             [f.write(i['tri'] + '\n') for i in obj_bdd]
             f.close()
 
-            # print([i['tri'] for i in obj_bdd])
-
+            
             cls.insert_into_db(obj_bdd)  # call method to insert in db
             file.close()
-            resp = json.dumps(obj_bdd)
+            cls.get_VAT() # insert VAT from an other file
             return True
 
         except OSError as error:

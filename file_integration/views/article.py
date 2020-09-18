@@ -166,17 +166,17 @@ class ArticleViews(object):
                 
                 # if price ==0.00
                 try:
-                    if rst['prix_achat_1'] == 0.00:
+                    if rst['prix_achat_1'] == 0.00 or rst['prix_achat_2'] == 0.00 or rst['prix_achat_3'] == 0.00 or rst['prix_achat_4'] == 0.00:
                         try:
-                            print('suppress', rst["code_article"])
                             article = Article.objects.get(
                                 code_article=rst["code_article"],
                                 gencode=rst["gencode"],)
                             article.delete()
+                            print('suppress', rst["code_article"])
                         except ObjectDoesNotExist:
                             pass  
                     # if price > 0.00       
-                    if rst['prix_achat_1'] > 0.00:
+                    if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst['prix_achat_4'] > 0.00:
                         Article.objects.update_or_create(
                             code_article=rst["code_article"],
                             gencode=rst["gencode"],
@@ -192,7 +192,6 @@ class ArticleViews(object):
                                 groupe=group,
                                 famille=family,
                                 sous_famille=subfamily,
-                                # taux_TVA=rst["taux_TVA"],
                             )
 
 
@@ -249,11 +248,9 @@ class ArticleViews(object):
                     "prix_vente": cls.is_float(val[161:169]),
 
                     "gencode": val[228:241],
-                    # # "taux_TVA": 6,  # TO DEFINE
 
                     "tri": val[58:68],
                     "groupe": cls.is_integer(val[58:60]),
-                    # "famille": cls.is_integer(val[62:64]),
                     "famille": cls.is_integer(val[61:64]),
                     "sous_famille": cls.is_integer(val[65:68]),
                 } for val in text_lines]
@@ -262,15 +259,12 @@ class ArticleViews(object):
                 [f.write(i['tri'] + '\n') for i in obj_bdd]
                 f.close()
 
-                # print([i['tri'] for i in obj_bdd])
 
                 cls.insert_into_db(obj_bdd)  # call method to insert in db
                 file.close()
 
                 cls.get_VAT() # insert VAT from an other file
-                # resp = json.dumps(obj_bdd)
                 return HttpResponse(200, content_type='application/json')
-                # return HttpResponse(resp, content_type='application/json')
 
             except OSError as error:
                 print("OS error: {0}".format(error))

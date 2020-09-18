@@ -147,7 +147,8 @@ class Cart(object):
             del self.cart
             self.save()
         except Exception as e:
-            print('CART ERROR', e)
+            raise e
+            
 
     def clear_all(self, products):  # remove all item in cart
         try:
@@ -157,8 +158,8 @@ class Cart(object):
                     del self.cart[product_id]
                     self.save()
         except Exception as e:
-            print('ERRORR CLEANNING CART', e)
-
+            raise e
+            
     def decrement(self, product):
         for key, value in self.cart.items():
             if key == str(product.id):

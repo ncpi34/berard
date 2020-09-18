@@ -62,8 +62,6 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     queryset = HistoriqueCommande.objects.all()
     login_url = ''
 
-    # context_object_name = 'article'
-
     def get_object(self):
         id_ = self.kwargs.get('pk')
         return get_object_or_404(HistoriqueCommande, pk=id_)

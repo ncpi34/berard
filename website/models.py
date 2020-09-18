@@ -29,7 +29,6 @@ class ProfilUtilisateur(models.Model):
     def update_profile_signal(sender, instance, created, **kwargs):
         # instance.profile.save()
         if created:
-            print('created: ', created)
             ProfilUtilisateur.objects.get_or_create(utilisateur=instance)
         ProfilUtilisateur.objects.get_or_create(utilisateur=instance)    
         # instance.profilutilisateur.save()    
@@ -73,10 +72,6 @@ class Famille(models.Model):
 
 class SousFamille(models.Model):
     nom = models.CharField(max_length=100)
-    # famille = models.ForeignKey(Famille,
-    #                             null=True,
-    #                             on_delete=models.CASCADE,
-    #                             related_name='sub_family_by_family')
     famille = models.ManyToManyField(Famille,
                                      related_name='sub_family_by_family')
 
@@ -213,10 +208,5 @@ class FavorisClient(models.Model):
     def __str__(self):
         return self.article.libelle
 
-    def get_20_first_results(self):
+    def format_data(self):
         return {'libelle': self.article.libelle, 'quantite': self.quantite}
-
-    # def clean(self):
-    #     numFavorites = FavorisClient.objects.all().count()
-    #     if numFavorites > 19:
-    #         raise ValidationError("Vous ne pouvez pas créer plus de  {} favoris".format(numFavorites))
