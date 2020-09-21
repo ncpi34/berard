@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => { 
-    console.log('zeubiiii')
     let hidden_groups = document.querySelectorAll('.hidden_groups')
     
     // quantities form step
     let multiples = document.querySelectorAll('.product_multiples')
     let multiples_display = document.querySelectorAll('.quantity_val')
-    console.log('zeubiiii')
 
     // Insert After
     const insertAfter = (referenceNode, newNode) => {
@@ -30,9 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let i=0; i< multiples.length; i++) {
             if (hidden_groups[i].value === 'BOISSONS') { // only for products with group=BOISSONS
                 if(!isNaN(parseInt(multiples[i].innerHTML))) {
-                    multiples_display[i].step = multiples[i].innerHTML
+                    multiples_display[i].step = multiples[i].innerHTML.trim()
                     multiples_display[i].addEventListener('input', debounce(() => {
-                        console.log('movement!!!')
                         let value_onchange = multiples_display[i];
                         let multiple_expected = multiples[i].innerHTML;
                         // round result
@@ -56,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                         
                         
-                    }, 400))
+                    }, 500))
                 }
             }     
         }
