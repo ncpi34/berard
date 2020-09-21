@@ -65,16 +65,27 @@ class ProduitCommande(models.Model):
     prix = models.DecimalField(max_digits=100,
                                decimal_places=2,
                                default=0)
+    prix_HT = models.DecimalField(max_digits=100,
+                               decimal_places=2,
+                               default=0)
+    taux_TVA = models.FloatField(null=True)
     quantite = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return '{}'.format(self.id)
-
+    
+    def get_absolute_url(self):
+        return reverse('website:product_detail',
+                       args=[self.id])
+        
+    def calculate_price_with_taxes(self, arg):
+        return round( float(arg) * (self.taux_TVA / 100 + 1 ), 2 )
+    
     def get_cost(self):
         return self.prix * self.quantite
 
     def get_taxes(self) :
-        return float( self.get_cost() ) - ( float( self.get_cost() ) /( self.article.taux_TVA / 100 + 1))  
+        return float( self.get_cost() ) - ( float( self.get_cost() ) /( self.taux_TVA / 100 + 1))  
 
     def get_article(self):
         return self

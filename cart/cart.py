@@ -65,7 +65,7 @@ class Cart(object):
                             'prix_achat': str(self.get_price_by_user(product)),
                             'tva': product.taux_TVA,
                             'code_article': product.code_article,
-                            'prix_ht': str(self.get_price_by_user(product)),
+                            'prix_ht': str(self.get_price_without_taxes_by_user(product)),
                             'lot': product.conditionnement,
                         }
             else:
@@ -78,7 +78,7 @@ class Cart(object):
                         'prix_achat': str(self.get_price_by_user(product)),
                         'tva': product.taux_TVA,
                         'code_article': product.code_article,
-                        'prix_ht': str(self.get_price_by_user(product)),
+                        'prix_ht': str(self.get_price_without_taxes_by_user(product)),
                         'lot': product.conditionnement,
                     }
 
@@ -110,6 +110,18 @@ class Cart(object):
             return product.get_price_with_taxes_3()
         else:
             return product.get_price_with_taxes_4()
+        
+    def get_price_without_taxes_by_user(self, product):
+        tarif_id = self.request.session.get('tarif')
+        # return product[tarif]
+        if tarif_id == 1:
+            return product.prix_achat_1
+        elif tarif_id == 2:
+            return product.prix_achat_2
+        elif tarif_id == 3:
+            return product.prix_achat_3
+        else:
+            return product.prix_achat_4
 
     def remove(self, product):
         """

@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => { 
-
+    console.log('zeubiiii')
     let hidden_groups = document.querySelectorAll('.hidden_groups')
     
     // quantities form step
     let multiples = document.querySelectorAll('.product_multiples')
     let multiples_display = document.querySelectorAll('.quantity_val')
+    console.log('zeubiiii')
 
     // Insert After
     const insertAfter = (referenceNode, newNode) => {
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                         
                         
-                    }, 1000))
+                    }, 400))
                 }
             }     
         }

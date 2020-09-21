@@ -19,5 +19,3 @@ urlpatterns = [
     path('send_order/', SendOrderView.as_view(), name='send_order'),
 
 ]
-
-

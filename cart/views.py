@@ -158,6 +158,8 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                         commande=order,
                         article=article,
                         prix=float(item['prix_achat']),
+                        prix_HT=float(item['prix_ht']),
+                        taux_TVA=float(item['tva']),
                         quantite=item['quantity'],
                         )
                     item_order.save()
