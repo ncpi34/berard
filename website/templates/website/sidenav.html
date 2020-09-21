@@ -39,10 +39,10 @@
             <li>
                 <!-- Links -->
                 <img class="img-fluid img-thumbnail ml-2" src="/media/icons/{{ item.name }}.png" style="width:28px; height:28px"/>
-                <a class="nav-link d-inline-flex"
+                <a class="nav-link d-inline-flex groups_url"
                    href="{% url 'website:products_by_group' group=item.id %}">{{ item.name|title }}</a>
                 <a href="#{{ item.id }}"
-                   class="collapsible-header  waves-grey text-dark nav-link d-inline-flex float-right">
+                   class="collapsible-header  waves-grey text-dark nav-link d-inline-flex float-right groups_url">
                     <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i>
                 </a>
 
@@ -54,7 +54,7 @@
                     {% for menu in item.submenu %}
                         <li>
                             <a href="{% url 'website:products_by_family' group=item.id family=menu.id %}"
-                               id="submenu" class="waves-effect waves-blue">
+                               id="submenu" class="waves-effect waves-blue groups_url">
                                 <i class="material-icons">remove</i>
                                   {{ menu.name|lower }}
                               </a>

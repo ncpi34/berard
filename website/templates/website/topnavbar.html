@@ -89,34 +89,34 @@
                 <!-- Home -->
                 <li>
                   <a href="{% url 'website:home' %}">
-                  <i class="fas fa-home green-text" title="Accueil"></i>
+                  <i class="fas fa-home green-text groups_url" title="Accueil"></i>
                   </a>
                 </li>
                 <!-- Home -->
                 <!-- Products -->
                     <li>
                       <a href="{% url 'website:products' %}">
-                      <i class="fab fa-readme green-text" title="Catalogue"></i>
+                      <i class="fab fa-readme green-text groups_url" title="Catalogue"></i>
                       </a>
                     </li>
                   <!-- Products -->
                  <!-- Offers -->
                 <li>
                   <a href="{% url 'website:offers' %}">
-                      <i class="fas fa-star green-text" title="Offres"></i>
+                      <i class="fas fa-star green-text groups_url" title="Offres"></i>
                   </a>
                 </li>
                 <!-- Offers -->
                   <!-- Favorite -->
                     <li>
                             <a href="{% url 'website:favorites' %}">
-                            <i class="fas fa-heart green-text" title="Favoris"></i>
+                            <i class="fas fa-heart green-text groups_url" title="Favoris"></i>
                             </a>
                     </li>
                   <!-- Favorite -->
                 <!-- Basket -->
                 <li>
-                    <a href="{% url 'cart:cart_detail' %}" title="Panier">
+                    <a href="{% url 'cart:cart_detail' %}" title="Panier" class="groups_url">
                       {% if cart.get_total_items > 0 %}
                           <span class="badge green z-depth-1 position-absolute rounded-circle">
                               {{ cart.get_total_items }}
@@ -133,12 +133,12 @@
                 <!-- Basket -->
                 <!-- Order Summary -->
                 <li>
-                    <a href="{% url 'order:order_summary' %}" title="Historique" ><i class="fa fa-history green-text"></i></a>
+                    <a href="{% url 'order:order_summary' %}" title="Historique" ><i class="fa fa-history green-text groups_url"></i></a>
                 </li>
                 <!-- Order Summary -->
                 <!-- Logout -->
                 <li>
-                    <a href="{% url 'website:logout' %}" title="Déconnexion" >
+                    <a href="{% url 'website:logout' %}" title="Déconnexion" class="groups_url">
                         <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt red-text"></i></span>
                     </a>
                 </li>
@@ -172,7 +172,7 @@
           <!-- Home -->
             <li>
               <a href="{% url 'website:home' %}">
-              <i class="fas fa-home green-text"></i>
+              <i class="fas fa-home green-text groups_url"></i>
                   <p>Accueil</p>
               </a>
             </li>
@@ -180,7 +180,7 @@
           <!-- Products -->
             <li>
               <a href="{% url 'website:products' %}">
-              <i class="fab fa-readme green-text"></i>
+              <i class="fab fa-readme green-text groups_url"></i>
                   <p>Catalogue</p>
               </a>
             </li>
@@ -188,7 +188,7 @@
           <!-- Offers -->
                 <li>
                   <a href="{% url 'website:offers' %}">
-                      <i class="fas fa-star green-text"></i>
+                      <i class="fas fa-star green-text groups_url"></i>
                       <p>Offres</p>
                   </a>
                 </li>
@@ -196,7 +196,7 @@
           <!-- Favorite -->
             <li>
                     <a href="{% url 'website:favorites' %}">
-                    <i class="fas fa-heart green-text"></i>
+                    <i class="fas fa-heart green-text groups_url"></i>
                         <p>Favoris</p>
 
                     </a>
@@ -204,13 +204,13 @@
           <!-- Favorite -->
                 <li>
                     <a href="{% url 'order:order_summary' %}" title="Historique" >
-                        <i class="fa fa-history green-text"></i>
+                        <i class="fa fa-history green-text groups_url"></i>
                         <p>Historique</p>
                     </a>
                 </li>
           <!-- Order Summary -->
                 <li>
-                    <a href="{% url 'website:logout' %}" title="Déconnexion" >
+                    <a href="{% url 'website:logout' %}" title="Déconnexion" class="groups_url">
 <!--                        <span class="clearfix d-none d-sm-inline-block">-->
                             <i class="fas fa-sign-out-alt red-text"></i>
                             <p>Déconnexion</p>
