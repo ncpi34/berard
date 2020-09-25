@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     //floating
     const elemsBtns = document.querySelectorAll('.modal');
     const floatingBtn = M.FloatingActionButton.init(elemsBtns, {

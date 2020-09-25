@@ -147,6 +147,21 @@ class Article(models.Model):
             return '/media/img/nophoto.jpg'
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
+    
+    def get_price_without_taxes(self, arg):
+        tarif = self.request.user.tarif
+        if tarif == '1':
+            return self.prix_achat_1
+        elif tarif == '2':
+            return self.prix_achat_2
+        elif tarif == '3':
+            return self.prix_achat_3
+        elif tarif == '4':
+            return self.prix_achat_4
+        else:
+            return self.prix_achat_1
+        
+    
     def calculate_price_with_taxes(self, arg):
         return round( float(arg) * (self.taux_TVA / 100 + 1 ), 2 )
         

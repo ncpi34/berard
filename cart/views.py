@@ -228,7 +228,8 @@ def cart_add(request, product_id):  # add method
                  update_quantity=cd['update'])
         # redirect with hidden form
         encoded_url = cd['url']
-
+        print(cd)
+        print('UUURRRRRL', encoded_url)
     if encoded_url:
         return HttpResponseRedirect(encoded_url)
     else:

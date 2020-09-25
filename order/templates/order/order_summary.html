@@ -24,7 +24,7 @@
 
             <th scope="col">Date</th>
             <th scope="col">Nombre de produits</th>
-            <th scope="col">Total</th>
+            <th scope="col">Total HT</th>
         </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
                 </a>
             </th>
             <td>{{ history.get_number_products }}</td>
-            <td class="num">{{ history.get_total_cost_with_taxes }}€</td>
+            <td class="num">{{ history.get_total_cost_without_taxes }}€</td>
 
         </tr>
         {% endfor %}

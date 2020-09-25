@@ -104,8 +104,9 @@
                           0
                           </span>
                       {% endif %}
-                    <i class="fas fa-shopping-cart green-text">{{ cart.get_total_price_without_taxes }}€</i>
-                    </a>
+                    <i class="fas fa-shopping-cart green-text"></i>
+                  </a>
+                  <p class="black-text">{{ cart.get_total_price_without_taxes }}€ HT</p>
                 </li>
                 <!-- Basket -->
                 
@@ -199,7 +200,7 @@
                 <li>
                   <a href="{% url 'website:offers' %}">
                       <i class="fas fa-star green-text groups_url"></i>
-                      <p>Offres</p>
+                      <p>Opportunités</p>
                   </a>
                 </li>
                 <!-- Offers -->
