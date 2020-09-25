@@ -137,7 +137,7 @@ class Cart(object):
         """
         Get taxes of the cart
         """
-        result = [ float(item['prix_achat']  * item['quantity']) - ( float(item['prix_achat']) * item['quantity']  / (item['tva'] / 100 + 1) ) for item in self.cart.values()]
+        result = [ float(item['prix_achat'])  * item['quantity'] - ( float(item['prix_achat']) * item['quantity']  / (item['tva'] / 100 + 1) ) for item in self.cart.values()]
         return round(sum(result), 2)
         
 

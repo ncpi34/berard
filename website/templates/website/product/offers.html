@@ -2,7 +2,7 @@
 
 
 {% block navbar %}
-{% include "website/topnavbar.html" with title_pager='Offres' %}
+{% include "website/topnavbar.html"  %}
 {% endblock %}
 
 {% block content %}
@@ -16,9 +16,10 @@
       display: none;
     }
     </style>
-  <main style="margin-top: 8%">
+  <main>
 
-    <div class="main_container mt-5" style="min-height: 80vh;">
+    <div class="main_container" style="min-height: 80vh;">
+      <h3 class="text-center">Offres</h2>
 
     {% if articles %}
 

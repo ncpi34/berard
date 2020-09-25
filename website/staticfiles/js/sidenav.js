@@ -19,44 +19,18 @@
     });
     //navBar animation
     let prevScrollpos = window.pageYOffset;
-    window.onscroll = function() {
+    window.onscroll = () => {
     let currentScrollPos = window.pageYOffset;
-    let navbar = document.getElementById("navbar")
+    let navbar = document.getElementById("navbar");
       if (prevScrollpos > currentScrollPos) {
         navbar.style.top = "0";
+        console.log('actionnnnnnn');
       } else {
         navbar.style.top = "-60px";
       }
       prevScrollpos = currentScrollPos;
     }
 
-    // // animation searchbar
-    //  let iconclose = document.querySelector('#close_icon')
-    // const searchBar = document.querySelector('#search_icon');
-    // searchBar.addEventListener('click',  () => {
-    //     let searchbar = document.querySelector('#search')
-    //     searchbar.classList.toggle("searchbar");
-    //     searchbar.focus();
-    //
-    //
-    //    let iconsearch = document.querySelector('#search_icon')
-    //     iconsearch.classList.toggle("search_icon");
-    //
-    //
-    //     iconclose.classList.toggle("close_icon");
-    //
-    // })
-    // iconclose.addEventListener('click', ()=> {
-    //     let searchbar = document.querySelector('#search')
-    //     searchbar.value = ''
-    //     searchbar.classList.toggle("searchbar");
-    //
-    //    let iconsearch = document.querySelector('#search_icon')
-    //     iconsearch.classList.toggle("search_icon");
-    //
-    //
-    //     iconclose.classList.toggle("close_icon");
-    // })
 });
  const submitSearch = () => {
         if (document.querySelector('#search_form')) {

@@ -2,7 +2,7 @@
 
 
 {% block navbar %}
-{% include "website/topnavbar.html" with title_pager='Favoris' %}
+{% include "website/topnavbar.html" %}
 {% endblock %}
 
 {% block content %}
@@ -19,6 +19,7 @@
   <main>
 
     <div class="main_container" style="min-height: 80vh;margin-top: 8%">
+      <h3 class="text-center">Vos favoris</h2>
 
     {% if articles %}
 

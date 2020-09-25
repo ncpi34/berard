@@ -7,39 +7,167 @@
     a:hover{
         color: white;
     }
+    ul[title]::before {
+        content: attr(title);
+        /* then add some nice styling as needed, eg: */
+        display: block;
+        padding: 4px;
+        margin-left: -35px;
+        font-weight: bold;
+
+    }
+    .btn-circle.btn-sm { 
+            width: 30px; 
+            height: 30px; 
+            padding: 6px 0px; 
+            border-radius: 15px; 
+            font-size: 8px; 
+            text-align: center; 
+        } 
+        .btn-circle.btn-md { 
+            width: 50px; 
+            height: 50px; 
+            padding: 7px 10px; 
+            border-radius: 25px; 
+            font-size: 10px; 
+            text-align: center; 
+        } 
+        .btn-circle.btn-l { 
+            width: 60px; 
+            height: 60px; 
+            padding: 10px 16px; 
+            border-radius: 30px; 
+            font-size: 11px; 
+            text-align: center; 
+        } 
+        .btn-circle.btn-xl { 
+            width: 70px; 
+            height: 70px; 
+            padding: 10px 16px; 
+            border-radius: 35px; 
+            font-size: 12px; 
+            text-align: center; 
+        } 
+        /* Centered text */
+        .centered {
+            position: absolute;
+            top: 60%;
+            left: 40%;
+            transform: translate(-50%, -50%);
+        } 
+        #btn-login {
+            right: 20%!important;
+        }
+        /* Extra large devices (large laptops and desktops, 1200px and up) */
+    /* Extra small devices (phones, 600px and down) */
+    @media only screen and (max-width: 600px) {
+        #title-login-space{
+            margin-left: 5%!important;
+        }
+    }
+
+    /* Small devices (portrait tablets and large phones, 600px and up) */
+    @media only screen and (min-width: 600px) {
+        #title-login-space{
+            margin-left: 5%;
+        }
+
+    }
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        #login-title{
+            margin-top: -2%;
+        }
+
+    }
+
+    /* Large devices (laptops/desktops, 992px and up) */
+    @media only screen and (min-width: 992px) {
+
+        #title-login-space{
+            display: none;
+        }
+    }
+
+    /* Extra large devices (large laptops and desktops, 1200px and up) */
+    @media only screen and (min-width: 1200px) {
+        #login-title{
+            margin-top: -2%;
+            margin-left:auto;
+            margin-right:auto;
+        }
+
+    }
     </style>
-        <img class="w-25 d-flex ml-auto mr-auto mb-5" src="/media/img/logo-berard-distribution.png" />
-        <div class="container">
-        <div class="row">
-            <div class="col-7">
-                <img class="img-fluid w-75" src="/media/accueil.jpg" alt="présentation Berard Distribution">
+        <img class="w-25 d-flex" id="login-title"
+        src="/media/img/logo-berard-distribution.png" alt="logo société" />
+        <div class="container" style="margin-top: 4%;">
+                
+        <div class="row no-padding">
+            <div class="col-xs-6 col-sm-7" id="login-img">
+                <img class="img-fluid w-75 mt-5" src="/media/img/login.png" alt="rayons magasin">
             </div>
 
-            <div class="col-5 text-center">
-                <!-- <h1 class="text-center">Connexion</h1> -->
-                <div class="form-row">
-                <form method="post" class="form-group col-md-3 mx-auto" action="">
+            <div class="col-xs-6 col-sm-5" style="width: 150%;">
+                <img src="/media/img/login1.png" alt="fond vert"  class="img-fluid" >
+                <div class="centered">
+                    <h5 class="text-center white-text" id="title-login-space">Mes identifiants</h3>
                     <div class="form-row">
-                        {% csrf_token %}
-                            <!-- User -->
-                            <label>Utilisateur</label>
-                            <input type="text" name="username" id="username" class="form-control mb-3" placeholder="Utilisateur" required>
-                      
-                            <!-- Password -->
-                            <label>Mot de passe</label>
-                            <input type="password" name="password" id="password" class="form-control mb-3" placeholder="Mot de passe" required>
+                    <form method="post" class="form-group col-md-3 mx-auto" action="">
+                        <div class="form-row">
+                            {% csrf_token %}
+                                <!-- User -->
+                                <label>Utilisateur</label>
+                                <input type="text" name="username" id="username" class="form-control mb-3" placeholder="Client" required>
                         
-                        
-                            <div class="input-group mb-3">
-                            <a href="{% url 'website:forgot_password' %}">Mot de passe oublié</a>
+                                <!-- Password -->
+                                <label>Mot de passe</label>
+                                <input autocomplete="username" type="password" name="password" id="password" class="form-control mb-3" placeholder="Mdp" required>
+                            
+                            
+                                <div class="input-group mb-3">
+                                <a href="{% url 'website:forgot_password' %}">Mot de passe oublié</a>
+                                </div>
+                                <div id="btn-login" class="ml-5">
+                                    <button type="submit" class="btn btn-danger btn-circle btn-l" >ok</button>
+                                </div>
                             </div>
-                        <button type="submit" class="btn btn-success">Connexion</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
+                    
+        </div>
+        <div class="text-center">
+            <h5>Sur mon site Bérard je peux :</h6>
+                <p>Passer mes commandes</p>
+                <p>Voir mes historiques</p>
+                <p>Consulter les nouveautés</p>
+                <p>Profiter des opportunités</p>
             
         </div>
+        <div class="row fixed-bottom">
+            <div class="col">
+                <img src="/media/img/login_1.png" alt="icône" style="width:50%;">
+            </div>
+            <div class="col">
+                <img src="/media/img/login_2.png" alt="icône" style="width:50%;">
+            </div>
+            <div class="col">
+                <img src="/media/img/login_3.png" alt="icône" style="width:50%;">
+            </div>
+            <div class="col">
+                <img src="/media/img/login_4.png" alt="icône" style="width:50%;">
+            </div>
+            <div class="col mt-3">
+                <img src="/media/img/login_5.png" alt="icône" style="width:50%;">
+            </div>
+            <div class="col mt-3">
+                <img src="/media/img/login_6.png" alt="icône" style="width:50%;">
+            </div>
+        </div>
+        
     </div>
    
 {% endblock %}

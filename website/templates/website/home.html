@@ -2,7 +2,7 @@
 
 
 {% block navbar %}
-{% include "website/topnavbar.html" with title_pager='Accueil' %}
+{% include "website/topnavbar.html" %}
 {% endblock %}
 
 {% block content %}
@@ -25,11 +25,68 @@
     }
     </style>
     <!--Main layout-->
-  <main>
+  <main style="min-height:90vh;">
 
-    <div  id='pic_home_page' style="min-height: 85vh;" >
-      <img class="img-fluid d-flex ml-auto mr-auto" src="/media/accueil.jpg" alt="présentation Berard Distribution">
-        <!-- <p>{% lorem 3 p %}</p> -->
+    <div class="container" >
+      <div class="row">
+        <div class="col-9" style="margin-left:-8%">
+          <div>
+            <h3>Actualités</h3>
+            <p>{% lorem %} </p>
+          </div>
+          <div>
+            <h3>Nouveautés</h3>
+            <p>{% lorem %} </p>
+          </div>
+          <div>
+            <h3>Vos marques</h3>
+            <div class="row">
+              <div class="col">
+                <a href="/media/pdf/BELLE FRANCE.pdf" target="_blank">
+                  <img class="w-50" src="/media/img/belle_france.png" alt="marques partenaires">
+                </a>
+              </div>
+              <div class="col">
+                <a href="/media/pdf/DELICES DE BELLE FRANCE.pdff" target="_blank">
+                  <img class="w-50" src="/media/img/delices_belle_france.png" alt="marques partenaires">
+                </a>
+              </div>
+              <div class="col">
+                <a href="/media/pdf/BELLE FRANCE BIO.pdf" target="_blank">
+                  <img class="w-50" src="/media/img/bio.png" alt="marques partenaires">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div>
+            <h4>Vos enseignes</h4>
+            <p>Il y aura toujours une enseigne adaptée à votre environnement client…</p>
+            <a href="/media/pdf/Plaquette Epicerie & Co.pdf" target="_blank">
+              <img class="w-100 mb-3" src="/media/img/epicerie.png" alt="marques partenaires">
+            </a>
+            <a href="/media/pdf/Plaquette Coccinnelle.pdf" target="_blank">
+              <img class="w-100 mb-3" src="/media/img/cocci.png" alt="marques partenaires">
+            </a>
+          </div>
+          <div>
+            <h4>Vos solutions</h4>
+            <ul>
+              <li><a href="/media/pdf/- BERARD PLATS CUISINES + Nouveautés.pdf" target="_blank">Plats cuisinés Frais</a></li>
+              <li><a href="/media/pdf/BERARD fiche SOLPROD patisseries.pdf" target="_blank">Pâtisseries fraîches</a></li>
+              <li><a href="/media/pdf/BERARD fiche SP VIANDES.pdf" target="_blank">Viandes</a></li>
+              <li><a href="/media/pdf/BERARD fiches pates fraiches.pdf" target="_blank">Pâtes fraîches</a></li>
+              <li><a href="/media/pdf/BERARD fiches SOPROD snacking.pdf" target="_blank">Snacking</a></li>
+              <li><a href="/media/pdf/BERARD fiches SOPROD spec espagnoles.pdf" target="_blank">Spécialités Espagnoles</a></li>
+              <li><a href="/media/pdf/Catalogue Produits VINS DE CHEZ NOUS compressed.pdf" target="_blank">Les Vins de chez nous</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <div>
     </div>
 
 
