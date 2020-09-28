@@ -227,13 +227,9 @@ def cart_add(request, product_id):  # add method
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
         # redirect with hidden form
-        encoded_url = cd['url']
-        print(cd)
-        print('UUURRRRRL', encoded_url)
-    if encoded_url:
-        return HttpResponseRedirect(encoded_url)
-    else:
-        return HttpResponseRedirect('/produit')
+    encoded_url = cd['url'] or '/produit'
+    return HttpResponseRedirect(encoded_url)
+    
 
 @login_required(login_url="")
 def cart_detail(request):

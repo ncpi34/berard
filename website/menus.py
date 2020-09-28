@@ -9,7 +9,7 @@ from website.models import Groupe, Famille, SousFamille
 def get_menus(request):
     group_query = Groupe.objects.all().exclude(
         Q(nom__in=['DIVERS', 'BOISSONS BIO', 'ENTRETIEN BIO', 'EPICERIE BIO', 'FRAIS BIO'])
-    ).values_list('nom', 'pk')
+    ).order_by('ordre').values_list('nom', 'pk')
     groups = [list(i) for i in group_query]
     liste = [{"id": item[0][1],
               "name": item[0][0], 'url': '#',  # retrieve query to array of dictionnaries

@@ -66,9 +66,6 @@
                 <!--Form-->  
                   <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                     class="d-flex justify-content-left small" style="margin-bottom: -20px">
-                    <!--Redirect-->
-                     <input type="hidden" class="hidden_url" value="{{ request.get_full_path }}"/>
-                    <!--Redirect-->
                      {% csrf_token %}
                      <div class="row">
                        <div class="col">
@@ -102,15 +99,10 @@
                 <div class="col">
                   <div>
                   <h6>
-                      <span class="badge badge-info text-center">
-                              {% if request.session.tarif == 1  %} {{ article.get_price_with_taxes_1}}
-                                  {% elif request.session.tarif == 2 %} {{ article.get_price_with_taxes_2 }}
-                                  {% elif request.session.tarif == 3 %} {{ article.get_price_with_taxes_3 }}
-                                  {% elif request.session.tarif == 4 %} {{ article.get_price_with_taxes_4 }}
-                                  {% else %} Prix non disponible
-                              {% endif %}€
-    
-                      </span>
+                    <span class="badge badge-info text-center">
+                      {% load website_extras %}
+                        {{ request.session.tarif|without_taxes:article }}€
+                    </span>
                     </h6>
                   </div>
                     <div>

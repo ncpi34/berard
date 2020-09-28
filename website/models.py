@@ -40,6 +40,7 @@ class ProfilUtilisateur(models.Model):
 class Groupe(models.Model):
     nom = models.CharField(max_length=100,
                            unique=True)
+    ordre = models.IntegerField(null=True, blank=True)
                        
 
     def __str__(self):
@@ -148,21 +149,8 @@ class Article(models.Model):
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
     
-    def get_price_without_taxes(self, arg):
-        tarif = self.request.user.tarif
-        if tarif == '1':
-            return self.prix_achat_1
-        elif tarif == '2':
-            return self.prix_achat_2
-        elif tarif == '3':
-            return self.prix_achat_3
-        elif tarif == '4':
-            return self.prix_achat_4
-        else:
-            return self.prix_achat_1
-        
-    
     def calculate_price_with_taxes(self, arg):
+        print('with taxes')
         return round( float(arg) * (self.taux_TVA / 100 + 1 ), 2 )
         
     def get_price_with_taxes_1(self):
@@ -181,7 +169,19 @@ class Article(models.Model):
         if self.taux_TVA % 2 == 0.0:
             return int(self.taux_TVA)
         else:
-            return self.taux_TVA     
+            return self.taux_TVA    
+         
+    def get_price_without_taxes(self, tarif):
+        if tarif == 1:
+            return self.prix_achat_1
+        elif tarif == 2:
+            return self.prix_achat_2
+        elif tarif == 3:
+            return self.prix_achat_3
+        elif tarif == 4:
+            return self.prix_achat_4
+        else:
+            return self.prix_achat_1    
                         
 
 """ Offers """

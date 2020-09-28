@@ -55,7 +55,7 @@ class GroupViews(object):
             # Groupe
             for row in data['Groupe']:
                 try:
-                    Groupe.objects.update_or_create(pk=row[0], defaults=dict(nom=row[1]))
+                    Groupe.objects.update_or_create(pk=row[0], defaults=dict(nom=row[1], ordre=row[2]))
                     # group = Groupe(nom=row[1], )
                     # group.save()
                 except Exception as e:
