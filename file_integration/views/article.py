@@ -3,7 +3,7 @@ from ftplib import FTP
 import os
 import string
 import numpy as np
-
+import pandas as pd
 import json
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render

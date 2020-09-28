@@ -11,5 +11,7 @@ celerybeat-schedule.dir
 test
 tests
 order/migrations
+website/migrations
+cart/migrations
 resources/export
 /static_root
