@@ -83,6 +83,9 @@ class ProduitCommande(models.Model):
     
     def get_cost(self):
         return self.prix * self.quantite
+    
+    def get_cost_without_taxes(self):
+        return self.prix_HT * self.quantite
 
     def get_taxes(self) :
         return float( self.get_cost() ) - ( float( self.get_cost() ) /( self.taux_TVA / 100 + 1))  

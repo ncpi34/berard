@@ -276,11 +276,14 @@ def update_all_cart(request):
 
             for i in tab_join:
                 rst = i.split('/')
-                product = get_object_or_404(Article, id=int(rst[0]))
-                if int(rst[1]) is not 0:
-                    cart.add(product=product,
-                            quantity=int(rst[1]),
-                            update_quantity=True)
+                try:
+                    product = Article.objects.get(id=int(rst[0])) 
+                    if int(rst[1]) is not 0:
+                        cart.add(product=product,
+                                quantity=int(rst[1]),
+                                update_quantity=True)
+                except ArticleDoesNotExist:
+                    pass        
         except ValueError:
             data = json.loads(request.body)
             for i in data['quantity']:

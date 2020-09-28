@@ -83,12 +83,24 @@ class PdfCreator(object):
         return body_style
 
     @staticmethod
+    def get_footer_style_first_elem():
+        sample_style_sheet = getSampleStyleSheet()
+        body_style = sample_style_sheet['BodyText']
+        body_style.fontSize = 12
+        body_style.fonName = 'Helvetica'
+        body_style.alignment = TA_CENTER
+        # body_style.spaceAfter = 40
+        body_style.spaceBefore = 20
+        body_style.textColor = colors.black
+        return body_style
+    
+    @staticmethod
     def get_footer_style():
         sample_style_sheet = getSampleStyleSheet()
         body_style = sample_style_sheet['BodyText']
         body_style.fontSize = 12
         body_style.fonName = 'Helvetica'
-        body_style.alignment = TA_RIGHT
+        body_style.alignment = TA_CENTER
         # body_style.spaceAfter = 40
         body_style.spaceBefore = 10
         body_style.textColor = colors.black
@@ -100,7 +112,7 @@ class PdfCreator(object):
         tab = []
         for item in products:
             product = get_object_or_404(Article, id=item.article.id)
-            table = [product.code_article, product.gencode, item.prix, item.quantite, item.get_cost(), ]
+            table = [product.code_article, product.gencode, item.prix, item.quantite, item.get_cost_without_taxes(), ]
             tab.append(table)
         tab.insert(0, ['Code article', 'Gencod', 'P.U.', 'Quantité', 'Prix total'])
         return tab
@@ -151,6 +163,7 @@ class PdfCreator(object):
         body_style = cls.get_body_style()
         title_style = cls.get_title_style()
         footer_style = cls.get_footer_style()
+        footer_style_first_elem = cls.get_footer_style_first_elem()
         title_table_style = TableStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                                         ('VALIGN', (0, 0), (-1, -1), 'TOP')])
         body_table_style = TableStyle([('ALIGN', (0, 0), (-1, -1), 'CENTER'),
@@ -167,7 +180,7 @@ class PdfCreator(object):
                 rowHeights=[1.5 * inch], style=title_table_style),
             Paragraph('Commande du {}'.format(date), body_style),
             Table(data, style=body_table_style),
-            Paragraph(f"HT: {order.get_total_cost_without_taxes()} €", footer_style),
+            Paragraph(f"HT: {order.get_total_cost_without_taxes()} €", footer_style_first_elem),
             Paragraph(f"Taxes: {order.get_total_taxes()} €", footer_style),
             Paragraph(f"TTC: {order.get_total_cost_with_taxes()} €", footer_style),
 
