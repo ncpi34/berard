@@ -27,7 +27,7 @@
 
 
 
-  <title>{% block head_title %}Berard{% endblock %}</title>
+  <title>{% block head_title %}Berard Distribution{% endblock %}</title>
   {% block extra_head %}{% endblock %}
 
       <!-- Custom CSS -->
@@ -56,6 +56,9 @@
         background-repeat: repeat-y;
         background-size: 100% !important;
     }
+    @media screen  and (max-width: 750px){
+      main{margin-top: 10%;}
+}
 
     @media screen  and (min-width: 581px){
             #signout_link{
