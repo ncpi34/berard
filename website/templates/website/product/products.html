@@ -97,19 +97,14 @@
                 </div>
                 <!--Col-->
                 <div class="col">
-                  <div>
                   <h6>
-                    <span class="badge badge-info text-center">
+                    <span class="badge badge-info" style="font-size: 18px;">
                       {% load website_extras %}
                         {{ request.session.tarif|without_taxes:article }}€
                     </span>
-                    </h6>
-                  </div>
-                    <div>
-                      <label>TVA {{ article.format_VAT }} %</label>
-                    </div>
+                  </h6>
+                  <label>TVA {{ article.format_VAT }} %</label>
                 </div>
-              
               </div>
               <!--Col-->
               </div>

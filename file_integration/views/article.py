@@ -166,17 +166,8 @@ class ArticleViews(object):
                 
                 # if price ==0.00
                 try:
-                    if rst['prix_achat_1'] == 0.00 or rst['prix_achat_2'] == 0.00 or rst['prix_achat_3'] == 0.00 or rst['prix_achat_4'] == 0.00:
-                        try:
-                            article = Article.objects.get(
-                                code_article=rst["code_article"],
-                                gencode=rst["gencode"],)
-                            article.delete()
-                            print('suppress', rst["code_article"])
-                        except ObjectDoesNotExist:
-                            pass  
                     # if price > 0.00       
-                    if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst['prix_achat_4'] > 0.00:
+                    if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst['prix_achat_4'] > 0.00 or rst['code_article'] !='AAAA01' or rst['code_article'] is not 'AAAA02':
                         Article.objects.update_or_create(
                             code_article=rst["code_article"],
                             gencode=rst["gencode"],
@@ -197,6 +188,16 @@ class ArticleViews(object):
 
                         )
                     print('inserted', rst['libelle'])
+                    
+                    if rst['prix_achat_1'] == 0.00 or rst['prix_achat_2'] == 0.00 or rst['prix_achat_3'] == 0.00 or rst['prix_achat_4'] == 0.00 or rst['code_article'] == 'AAAA01' or rst['code_article'] == 'AAAA02':
+                        try:
+                            article = Article.objects.get(
+                                code_article=rst["code_article"],
+                                gencode=rst["gencode"],)
+                            article.delete()
+                            print('suppress', rst["code_article"])
+                        except ObjectDoesNotExist:
+                            pass  
 
                 except Exception as err:
                     f_art_err.write('not inserted ' + rst['code_article'] + '\n')

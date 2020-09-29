@@ -23,6 +23,17 @@
     #nav-icon1{
       display: none;
     }
+    fieldset
+    {
+        border:2px solid lightgreen;
+        -moz-border-radius:8px;
+        -webkit-border-radius:8px;	
+        border-radius:8px;	
+    }
+    #topnavbar-navigation  li {
+    width: calc(15% - 20px);
+    margin: 0 10px 0 0;
+    }
     </style>
     <!--Main layout-->
   <main style="min-height:90vh;">
@@ -30,16 +41,52 @@
     <div class="container" >
       <div class="row">
         <div class="col-9" style="margin-left:-8%">
-          <div>
-            <h3>Actualités</h3>
-            <p>{% lorem %} </p>
-          </div>
-          <div>
-            <h3>Nouveautés</h3>
-            <p>{% lorem %} </p>
-          </div>
-          <div>
-            <h3>Vos marques</h3>
+          <fieldset>
+            <legend>Actualités</legend>
+            <div class="row">
+              <div class="col">
+                <p style="text-decoration: underline">PORT DU MASQUE OBLIGATOIRE DANS LES LIEUX PUBLICS CLOS</p>
+              </div>
+              <div class="col">
+                <img class="img-fluid w-25" src="/media/img/actualites.png" alt="actualités">
+              </div>
+            </div>
+            <p>
+              D'après le décret n°2020-884 du 17 Juillet, le port du masque est obligatoire dans les lieux publics clos depuis le Lundi 20 Juillet 2020.
+              L’ensemble des commerces sont concernés par ce décret.
+              Pensez à télécharger l’affiche d’information clients en cliquant <a href="/media/pdf/affichecoronavirusmasqueobligatoire.pdf" target="_blank" 
+              style="text-decoration: underline;font-weight: bold;">ICI</a>
+            </p>
+          </fieldset>
+          <br>
+          <fieldset>
+            <legend>Nouveautés</legend>
+            <div class="row">
+              <div class="col">
+                <p>Chaque mois, des nouveautés produits pour dynamiser vos 
+                  gammes pour vos clients ! Découvrez ce mois ci la gamme 
+                  apéritive Délices de Belle France Olives & Apéritifs farcis 
+                </p>
+                <div class="row">
+                  <div class="col">
+                    <img class="w-100" src="/media/img/nouveaute1.png" alt="nouveautés">
+                  </div>
+                  <div class="col">
+                    <img class="w-100" src="/media/img/nouveaute2.png" alt="nouveautés">
+                  </div>
+                  <div class="col">
+                    <img class="w-100" src="/media/img/nouveaute3.png" alt="nouveautés">
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <img class="w-100" src="/media/img/nouveautes4.jpg" alt="nouveautés">
+              </div>
+            </div>
+          </fieldset>
+          <br>
+          <fieldset>
+            <legend>Vos marques: Cliquez pour découvrir</legend>
             <div class="row">
               <div class="col">
                 <a href="/media/pdf/BELLE FRANCE.pdf" target="_blank">
@@ -47,7 +94,7 @@
                 </a>
               </div>
               <div class="col">
-                <a href="/media/pdf/DELICES DE BELLE FRANCE.pdff" target="_blank">
+                <a href="/media/pdf/DELICES DE BELLE FRANCE.pdf" target="_blank">
                   <img class="w-50" src="/media/img/delices_belle_france.png" alt="marques partenaires">
                 </a>
               </div>
@@ -57,12 +104,12 @@
                 </a>
               </div>
             </div>
-          </div>
+          </fieldset>
         </div>
 
         <div class="col-3">
-          <div>
-            <h4>Vos enseignes</h4>
+          <fieldset>
+            <legend>Vos enseignes</legend>
             <p>Il y aura toujours une enseigne adaptée à votre environnement client…</p>
             <a href="/media/pdf/Plaquette Epicerie & Co.pdf" target="_blank">
               <img class="w-100 mb-3" src="/media/img/epicerie.png" alt="marques partenaires">
@@ -70,9 +117,11 @@
             <a href="/media/pdf/Plaquette Coccinnelle.pdf" target="_blank">
               <img class="w-100 mb-3" src="/media/img/cocci.png" alt="marques partenaires">
             </a>
-          </div>
-          <div>
-            <h4>Vos solutions</h4>
+          </fieldset>
+          <br>
+          <fieldset>
+            <br>
+            <legend>Vos solutions</legend>
             <ul>
               <li><a href="/media/pdf/- BERARD PLATS CUISINES + Nouveautés.pdf" target="_blank">Plats cuisinés Frais</a></li>
               <li><a href="/media/pdf/BERARD fiche SOLPROD patisseries.pdf" target="_blank">Pâtisseries fraîches</a></li>
@@ -82,7 +131,7 @@
               <li><a href="/media/pdf/BERARD fiches SOPROD spec espagnoles.pdf" target="_blank">Spécialités Espagnoles</a></li>
               <li><a href="/media/pdf/Catalogue Produits VINS DE CHEZ NOUS compressed.pdf" target="_blank">Les Vins de chez nous</a></li>
             </ul>
-          </div>
+          </fieldset>
 
         </div>
       </div>

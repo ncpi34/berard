@@ -24,7 +24,6 @@
     let navbar = document.getElementById("navbar");
       if (prevScrollpos > currentScrollPos) {
         navbar.style.top = "0";
-        console.log('actionnnnnnn');
       } else {
         navbar.style.top = "-60px";
       }

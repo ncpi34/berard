@@ -3,13 +3,17 @@
 {% load static %}
 
 {% block navbar %}
-{% include "website/topnavbar.html" with title_pager='Résumé' %}
+{% include "website/topnavbar.html" %}
 {% endblock %}
 
 {% block content %}
     <style>
     #nav-icon1{
       display: none;
+    }
+    #topnavbar-navigation  li {
+    width: calc(15% - 20px);
+    margin: 0 10px 0 0;
     }
     </style>
     <main style="min-height: 83vh; margin-top: 8%">
