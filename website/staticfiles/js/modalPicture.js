@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
        let modal = document.getElementById("img-modal");
        modal.src= box.id;
 
+       resizeIMG(modal)
+
        const elemsModal = document.querySelectorAll('.modal');
        const instance = M.Modal.init(elemsModal, {dismissible: true, preventScrolling: true})
 
@@ -36,3 +38,11 @@ let scrollpos = localStorage.getItem('scrollTop');
    }
 })
 })
+resizeIMG = (img) => {
+    let ratio = img.height /img.width
+    if (ratio > 2) {
+        img.style.width = '20%';
+    }  else {
+        img.style.width = '50%';   
+    }
+}
