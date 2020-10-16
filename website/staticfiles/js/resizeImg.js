@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
         img.forEach(i => {
           let ratio = i.clientHeight /i.clientWidth
           if (ratio > 2) {
-            i.style.width = '15%';
+            i.style.width = '12%';
           }  else {
-            i.classList.add('w-50')     
+            i.style.width = '35%';
           }
         })
       }
