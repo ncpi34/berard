@@ -102,7 +102,7 @@ class ClientViews(object):
     @classmethod
     def file_treatement(cls, request, **kwargs):
         if kwargs['password'] == 'berard_client':
-            host = "213.215.12.22"
+            host = "Berard.cloud.lcsgroup.fr"
             user = "admin"
             passw = "cMp5jU1C"
 

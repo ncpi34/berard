@@ -11,14 +11,15 @@ from website.models import Article, Groupe, Famille, SousFamille
 import os.path
 from pyexcel_xlsx import get_data
 from django.core.exceptions import ObjectDoesNotExist
+from os import path
+import xlsxwriter
+
 
 """ Article File"""
 
 
 class ArticleViews(object):
 
- 
-       
     # Check errors
     @staticmethod
     def get_errors_on_three_values(val_1, val_2, val_3):
@@ -86,6 +87,7 @@ class ArticleViews(object):
             return float_self
         except ValueError:
             return 0.00
+
     # get VAT
     @staticmethod
     def get_VAT():
@@ -97,12 +99,12 @@ class ArticleViews(object):
             try:
                 if row:
                     Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
-              
+
             except Article.DoesNotExist as e:
                 print('ERROR VAT', e)
                 raise e
         print('vat creation done')
-               
+
     # Insert in DB
     @staticmethod
     def insert_into_db(self):
@@ -163,11 +165,13 @@ class ArticleViews(object):
                     subfamily = SousFamille.objects.get(id=rst["sous_famille"])
                 except SousFamille.DoesNotExist:
                     subfamily = None
-                
+
                 # if price ==0.00
                 try:
                     # if price > 0.00       
-                    if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst['prix_achat_4'] > 0.00 or rst['code_article'] !='AAAA01' or rst['code_article'] is not 'AAAA02':
+                    if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst[
+                        'prix_achat_4'] > 0.00 or rst['code_article'] != 'AAAA01' or rst[
+                        'code_article'] is not 'AAAA02':
                         Article.objects.update_or_create(
                             code_article=rst["code_article"],
                             gencode=rst["gencode"],
@@ -185,19 +189,19 @@ class ArticleViews(object):
                                 sous_famille=subfamily,
                             )
 
-
                         )
                     print('inserted', rst['libelle'])
-                    
-                    if rst['prix_achat_1'] == 0.00 or rst['prix_achat_2'] == 0.00 or rst['prix_achat_3'] == 0.00 or rst['prix_achat_4'] == 0.00 or rst['code_article'] == 'AAAA01' or rst['code_article'] == 'AAAA02':
+
+                    if rst['prix_achat_1'] == 0.00 or rst['prix_achat_2'] == 0.00 or rst['prix_achat_3'] == 0.00 or rst[
+                        'prix_achat_4'] == 0.00 or rst['code_article'] == 'AAAA01' or rst['code_article'] == 'AAAA02':
                         try:
                             article = Article.objects.get(
                                 code_article=rst["code_article"],
-                                gencode=rst["gencode"],)
+                                gencode=rst["gencode"], )
                             article.delete()
                             print('suppress', rst["code_article"])
                         except ObjectDoesNotExist:
-                            pass  
+                            pass
 
                 except Exception as err:
                     f_art_err.write('not inserted ' + rst['code_article'] + '\n')
@@ -205,7 +209,7 @@ class ArticleViews(object):
                     print(err)
                     raise err
 
-                
+
             else:
                 f.write(rst['code_article'] + '\n')
 
@@ -216,7 +220,7 @@ class ArticleViews(object):
     @classmethod
     def file_treatement(cls, request, **kwargs):
         if kwargs['password'] == 'berard_article':
-            host = "213.215.12.22"
+            host = "Berard.cloud.lcsgroup.fr"
             user = "admin"
             passw = "cMp5jU1C"
 
@@ -260,11 +264,13 @@ class ArticleViews(object):
                 [f.write(i['tri'] + '\n') for i in obj_bdd]
                 f.close()
 
-
                 cls.insert_into_db(obj_bdd)  # call method to insert in db
                 file.close()
 
-                cls.get_VAT() # insert VAT from an other file
+                cls.get_VAT()  # insert VAT from an other file
+
+                # cls.check_picture() # to check pictures
+
                 return HttpResponse(200, content_type='application/json')
 
             except OSError as error:
@@ -272,3 +278,54 @@ class ArticleViews(object):
                 return False
         else:
             return HttpResponseBadRequest("Vous n'avez pas les accés")
+
+    @staticmethod
+    def check_picture():
+        articles = Article.objects.all()
+        workbook = xlsxwriter.Workbook('photo.xlsx')
+        worksheet = workbook.add_worksheet()
+
+        # Some data we want to write to the worksheet.
+        expenses = (
+            ['Rent', 1000],
+            ['Gas', 100],
+            ['Food', 300],
+            ['Gym', 50],
+        )
+
+        # Start from the first cell. Rows and columns are zero indexed.
+        row = 1
+        col = 0
+
+        # headers
+        worksheet.write(0, 0, 'Libelle')
+        worksheet.write(0, 1, 'code')
+        worksheet.write(0, 2, 'gencod')
+        worksheet.write(0, 3, 'rayon')
+        worksheet.write(0, 4, 'famille')
+
+        # Iterate over the data and write it out row by row.
+        for item in articles:
+            if not os.path.exists(f"D:\Projets\Berard\media\img\product\{item.code_article}.jpg"):
+                print('item', item)
+                worksheet.write(row, col, item.libelle)
+                worksheet.write(row, col + 1, item.code_article)
+                worksheet.write(row, col + 2, item.gencode)
+                if item.groupe is not None:
+                    worksheet.write(row, col + 3, item.groupe.nom)
+                if item.famille is not None:
+                    worksheet.write(row, col + 4, item.famille.nom)
+                # worksheet.write(row, col + 1, cost)
+                row += 1
+
+        # Write a total using a formula.
+        worksheet.write(row, 0, 'Total')
+        print('row', row)
+        worksheet.write(row, 1, f'{row - 1}')
+
+        workbook.close()
+
+        # for article in articles:
+        #     print(article)
+        # os.path.exists("file.txt")
+        return 'rr'
