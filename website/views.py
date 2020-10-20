@@ -73,7 +73,7 @@ class LoginView(View):
                     return render(self.request, 'auth/login.html')
             else:
                 messages.error(self.request, "Veuillez bien remplir les champs demandés")
-                return render(self.request, 'auth/login.html')        
+                return render(self.request, 'auth/login.html')
 
 
 """ Logout """
@@ -94,15 +94,20 @@ def logout_view(request):
     logout(request)
     return redirect('website:login')
 
-""" Home """
+
 class HomeView(LoginRequiredMixin, View):
+    """
+    Home
+    """
+
     def get(self, *args, **kwargs):
         return render(self.request, 'website/home.html')
 
-"""Offers View"""
-
 
 class OffersView(LoginRequiredMixin, ListView):
+    """
+    Offers View
+    """
     template_name = 'website/product/offers.html'
     # paginate_by = 60
     ordering = ['libelle']
@@ -111,7 +116,7 @@ class OffersView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         articles = Favori.objects.all()
-                
+
         return articles
 
     def get_context_data(self, **kwargs):
@@ -120,10 +125,10 @@ class OffersView(LoginRequiredMixin, ListView):
         return context
 
 
-""" Favorites View """
-
-
 class FavoritesView(LoginRequiredMixin, ListView):
+    """
+    Favorites View
+    """
     template_name = 'website/product/favorites.html'
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -154,10 +159,10 @@ class FavoritesView(LoginRequiredMixin, ListView):
         return context
 
 
-""" Products views"""
-
-
 class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
+    """
+    Products views
+    """
     template_name = 'website/product/products.html'
     paginate_by = 60
     ordering = ['libelle']
@@ -169,23 +174,26 @@ class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
         if self.request.GET.get('q'):
             query = self.request.GET.get('q')
             articles = Article.objects.filter(Q(code_article__contains=query.upper())
-                                                |Q(libelle__contains=query.upper())
-                                                ).exclude(Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
+                                              | Q(libelle__contains=query.upper())
+                                              ).exclude(Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
 
             return articles
         elif self.kwargs.get('group') and self.kwargs.get('family'):
             _family = self.kwargs.get("family")
             _group = self.kwargs.get("group")
-            articles = Article.objects.filter(Q(groupe__pk=_group) & Q(famille__pk=_family)).exclude(Q(prix_achat_1=0.00) | Q(actif=False)| Q(taux_TVA=None))
+            articles = Article.objects.filter(Q(groupe__pk=_group) & Q(famille__pk=_family)).exclude(
+                Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
             return articles
         elif self.kwargs.get('group'):
             _name = self.kwargs.get("group")
-            articles = Article.objects.filter(Q(groupe__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False)| Q(taux_TVA=None))
+            articles = Article.objects.filter(Q(groupe__pk=_name)).exclude(
+                Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
             return articles
 
         elif self.kwargs.get('subfamily'):
             _name = self.kwargs.get("subfamily")
-            articles = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
+            articles = Article.objects.filter(Q(sous_famille__pk=_name)).exclude(
+                Q(prix_achat_1=0.00) | Q(actif=False) | Q(taux_TVA=None))
             return articles
 
         else:
@@ -218,10 +226,10 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-""" Password forgot"""
-
-
 class ForgotPasswordView(View):
+    """
+    Password forgot
+    """
 
     def get(self, request, *args, **kwargs):
         form = ForgotPassForm()
