@@ -38,9 +38,10 @@ class ArticleViews(object):
                     cls.insert_into_db(array_of_obj)  # call method to insert in db
 
                     file.close()
-                    cls.get_VAT()  # insert VAT from an other file
 
-                    # cls.check_picture() # to check pictures
+                    cls.get_VAT()  # insert VAT from an other file
+                    # cls.del_article_not_in_txt(array_of_obj) # clean db
+                    cls.check_picture()  # to check pictures
 
                     return HttpResponse(200, content_type='application/json')
 
@@ -145,7 +146,35 @@ class ArticleViews(object):
         # for article in articles:
         #     print(article)
         # os.path.exists("file.txt")
-        return 'rr'
+        return True
+
+    @staticmethod
+    def del_article_not_in_txt(arr_obj):
+        f_delete = open('resources/del_articles.txt', 'w')
+        articles = Article.objects.all()
+        x = 0
+        print(articles.count())
+        result = False
+        while x < articles.count():
+            for item in arr_obj:
+                if articles[x].code_article is item["code_article"]:
+                    print('no deleted')
+                    result = True
+                    break
+                else:
+                    pass
+                    # art.delete()
+
+            if not result:
+                print('delete', articles[x].code_article)
+                f_delete.write('delete ' + articles[x].code_article + '\n')
+                articles[x].delete()
+            else:
+                print('not deleted', articles[x].code_article)
+
+            x += 1
+        f_delete.close()
+        return True
 
     @staticmethod
     def get_errors_on_three_values(val_1, val_2, val_3):
@@ -168,7 +197,6 @@ class ArticleViews(object):
     def get_error_on_one_value(val_1):
         print(val_1)
 
-    # GROUP
     @staticmethod
     def check_group(self):
         reg = re.split(r"\s{2,}", self)  # multidimensional list
@@ -183,7 +211,6 @@ class ArticleViews(object):
             else:
                 return int(reg[2][0:2].lstrip('0'))
 
-    # change to integer
     @staticmethod
     def is_integer(self):
         if self:
@@ -205,7 +232,6 @@ class ArticleViews(object):
         else:
             return None
 
-    # change to float
     @staticmethod
     def is_float(self):
         try:
@@ -214,7 +240,6 @@ class ArticleViews(object):
         except ValueError:
             return 0.00
 
-    # get VAT
     @staticmethod
     def get_VAT():
         xlsx_path = 'resources/import/TVA.xlsx'  # Xlsx file path
@@ -231,7 +256,6 @@ class ArticleViews(object):
                 raise e
         print('vat creation done')
 
-    # Insert in DB
     @staticmethod
     def insert_into_db(self):
         f = open('resources/erreurs/articles_tri_erreurs.txt', 'w')
@@ -287,28 +311,29 @@ class ArticleViews(object):
                 except SousFamille.DoesNotExist:
                     subfamily = None
                     print('coucou')
-                if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst['prix_achat_4'] > 0.00 or rst['code_article'] != 'AAAA01' or rst['code_article'] is not 'AAAA02':
+                if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst[
+                    'prix_achat_4'] > 0.00 or rst['code_article'] != 'AAAA01' or rst['code_article'] is not 'AAAA02':
                     print('>0.00')
                     try:
                         print('test')
                         Article.objects.update_or_create(
-                                code_article=rst["code_article"],
-                                gencode=rst["gencode"],
+                            code_article=rst["code_article"],
+                            gencode=rst["gencode"],
 
-                                defaults=dict(
-                                    libelle=rst['libelle'],
-                                    prix_vente=rst["prix_vente"],
-                                    prix_achat_1=rst["prix_achat_1"],
-                                    prix_achat_2=rst["prix_achat_2"],
-                                    prix_achat_3=rst["prix_achat_3"],
-                                    prix_achat_4=rst["prix_achat_4"],
-                                    conditionnement=rst["conditionnement"],
-                                    groupe=group,
-                                    famille=family,
-                                    sous_famille=subfamily,
-                                )
-
+                            defaults=dict(
+                                libelle=rst['libelle'],
+                                prix_vente=rst["prix_vente"],
+                                prix_achat_1=rst["prix_achat_1"],
+                                prix_achat_2=rst["prix_achat_2"],
+                                prix_achat_3=rst["prix_achat_3"],
+                                prix_achat_4=rst["prix_achat_4"],
+                                conditionnement=rst["conditionnement"],
+                                groupe=group,
+                                famille=family,
+                                sous_famille=subfamily,
                             )
+
+                        )
                         print('inserted', rst['libelle'])
                     except Exception as err:
                         f_art_err.write('not inserted ' + rst['code_article'] + '\n')
@@ -330,5 +355,6 @@ class ArticleViews(object):
             else:
                 f.write(rst['code_article'] + '\n')
 
+        f_delete.close()
         f_art_err.close()
         f.close()
