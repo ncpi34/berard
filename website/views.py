@@ -36,7 +36,14 @@ class LoginView(View):
         """ get cart not finalized """
         try:
             old_cart = PanierEnCours.objects.get(utilisateur=self.request.user.id).donnees
+            for i in old_cart.copy():
+                try:
+                    Article.objects.filter(pk=i)
+                except Article.DoesNotExist:
+                    old_cart.pop(i)
+
             self.request.session['cart'] = old_cart
+
         except PanierEnCours.DoesNotExist:
             pass
 

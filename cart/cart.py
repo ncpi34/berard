@@ -31,7 +31,7 @@ class Cart(object):
         products_ids = self.cart.keys()
         # get the product obj and add them to the cart
         products = Article.objects.filter(id__in=products_ids)
-
+        print('in iter')
         cart = self.cart.copy()
         for product in products:
             cart[str(product.id)]['product'] = product
