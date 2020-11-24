@@ -45,14 +45,14 @@
                 <!--Code & title-->
                 <a href="{{article.get_absolute_url}}">
                   <h6>{{ article.code_article }}</h6>
-                  <h6>{{ article.libelle|title }}</p>
+                  <h6>{{ article.libelle|title }}</h6>
                 </a>
                 <!--Code & title-->
 
                 <!--Img-->  
                 <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}"  >
-                        <img class="rounded img_modal img-fluid ml-auto mr-auto card-img-top"
-                             alt="photo" 
+                        <img class="rounded   img_modal img-fluid ml-auto mr-auto card-img-top"
+                             alt="photo" style="width: 34%;height: 6vw;object-fit: cover;"
                         src="{{ article.get_img }}"/>
                 </a>
                 <!--Img-->

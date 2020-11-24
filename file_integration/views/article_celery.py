@@ -3,7 +3,7 @@ from ftplib import FTP
 import os
 import string
 import numpy as np
-import pandas as pd
+
 import json
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render
@@ -11,45 +11,40 @@ from website.models import Article, Groupe, Famille, SousFamille
 import os.path
 from pyexcel_xlsx import get_data
 from django.core.exceptions import ObjectDoesNotExist
-from os import path
-import xlsxwriter
+
+""" Article File"""
 
 
-class ArticleViews(object):
-    """
-    Article File
-    """
+class ArticleAutomate:
 
+    # Index_method
     @classmethod
-    def file_treatement(cls, request, **kwargs):
-        if kwargs['password'] == 'berard_article':
-            # if path not exists
-            path = 'resources/import/'
-            if not os.path.exists(path):
-                os.makedirs(path)
-            ftp = cls.connect_ftp(path)
-            if ftp:
-                try:
+    def file_treatement(cls, **kwargs):
+        # if path not exists
+        path = 'resources/import/'
+        if not os.path.exists(path):
+            os.makedirs(path)
 
-                    with open(os.path.join(path, 'TART.PLN'), encoding="utf-8", errors='ignore') as file:
-                        text_lines = file.readlines()
+        ftp = cls.connect_ftp(path)
+        if ftp:
+            try:
+                with open(os.path.join(path, 'TART.PLN'), encoding="utf-8", errors='ignore') as file:
+                    text_lines = file.readlines()
 
-                    array_of_obj = cls.build_array(text_lines)
-                    cls.insert_into_db(array_of_obj)  # call method to insert in db
+                array_of_obj = cls.build_array(text_lines)
+                cls.insert_into_db(array_of_obj)  # call method to insert in db
 
-                    file.close()
+                file.close()
 
-                    cls.get_VAT()  # insert VAT from an other file
-                    # cls.del_article_not_in_txt(array_of_obj) # clean db
-                    # cls.check_picture()  # to check pictures
+                cls.get_VAT()  # insert VAT from an other file
+                # cls.del_article_not_in_txt(array_of_obj) # clean db
+                # cls.check_picture()  # to check pictures
 
-                    return HttpResponse(200, content_type='application/json')
+                return True
 
-                except OSError as error:
-                    print("OS error: {0}".format(error))
-                    return False
-        else:
-            return HttpResponseBadRequest("Vous n'avez pas les accés")
+            except OSError as error:
+                print("OS error: {0}".format(error))
+                return False
 
     @classmethod
     def build_array(cls, array):
@@ -78,6 +73,43 @@ class ArticleViews(object):
 
         return obj_bdd
 
+    # Check errors
+    @staticmethod
+    def get_errors_on_three_values(val_1, val_2, val_3):
+        try:
+            int(val_1)
+            print(int(val_1))
+        except ValueError:
+            try:
+                int(val_2)
+                print(int(val_2))
+            except ValueError:
+                try:
+                    int(val_3)
+                    print(int(val_3))
+                except ValueError:
+                    print('error on three values')
+
+    # Check errors
+    @staticmethod
+    def get_error_on_one_value(val_1):
+        print(val_1)
+
+    # GROUP
+    @staticmethod
+    def check_group(self):
+        reg = re.split(r"\s{2,}", self)  # multidimensional list
+        find = re.search(',', reg[2])
+        if find:
+            table_split = reg[2].replace(',', ' ').replace('-', ' ').split()
+            if table_split:
+                if len(table_split) > 4:
+                    return table_split[-3].lstrip('0')
+                else:
+                    return table_split[1].lstrip('0')
+            else:
+                return int(reg[2][0:2].lstrip('0'))
+
     @staticmethod
     def connect_ftp(paths):
         host = '213.215.12.22'
@@ -100,6 +132,8 @@ class ArticleViews(object):
         except Exception as e:
             print('error ftp', e)
             raise e
+
+
 
     @staticmethod
     def check_picture():
@@ -180,40 +214,6 @@ class ArticleViews(object):
         f_delete.close()
         return True
 
-    @staticmethod
-    def get_errors_on_three_values(val_1, val_2, val_3):
-        try:
-            int(val_1)
-            print(int(val_1))
-        except ValueError:
-            try:
-                int(val_2)
-                print(int(val_2))
-            except ValueError:
-                try:
-                    int(val_3)
-                    print(int(val_3))
-                except ValueError:
-                    print('error on three values')
-
-    # Check errors
-    @staticmethod
-    def get_error_on_one_value(val_1):
-        print(val_1)
-
-    @staticmethod
-    def check_group(self):
-        reg = re.split(r"\s{2,}", self)  # multidimensional list
-        find = re.search(',', reg[2])
-        if find:
-            table_split = reg[2].replace(',', ' ').replace('-', ' ').split()
-            if table_split:
-                if len(table_split) > 4:
-                    return table_split[-3].lstrip('0')
-                else:
-                    return table_split[1].lstrip('0')
-            else:
-                return int(reg[2][0:2].lstrip('0'))
 
     @staticmethod
     def is_integer(self):

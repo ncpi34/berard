@@ -1,50 +1,43 @@
 import codecs
 import ftplib
 import re
-from ftplib import FTP, FTP_TLS
+from ftplib import FTP
 import os
 import string
 import numpy as np
-
 import json
-
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.shortcuts import render
 from website.models import Article, ProfilUtilisateur
-from django.core.exceptions import ObjectDoesNotExist
+
+""" Client File"""
 
 
-class ClientViews(object):
-    """
-    Client File
-    """
+class ClientAutomate:
 
+    # Index_method
     @classmethod
-    def file_treatement(cls, request, **kwargs):
-        if kwargs['password'] == 'berard_client':
-            # if path not exists
-            path = 'resources/import/'
-            if not os.path.exists(path):
-                os.makedirs(path)
-            ftp = cls.connect_ftp(path)
-            if ftp:
-                try:
+    def file_treatement(cls, **kwargs):
+        path = 'resources/import/'
+        if not os.path.exists(path):
+            os.makedirs(path)
+        ftp = cls.connect_ftp(path)
+        if ftp:
+            try:
 
-                    with open(os.path.join(path, 'TCLT.PLN'), encoding='utf-8', errors='ignore') as file:
-                        text_lines = file.readlines()
+                with open(os.path.join(path, 'TCLT.PLN'), encoding='utf-8', errors='ignore') as file:
+                    text_lines = file.readlines()
 
-                    array_of_obj = cls.build_array(text_lines)
-                    cls.insert_into_db(array_of_obj)  # call method to insert in db
+                array_of_obj = cls.build_array(text_lines)
+                cls.insert_into_db(array_of_obj)  # call method to insert in db
 
-                    file.close()
-                    return HttpResponse(200, content_type='application/json')
+                file.close()
+                return True
 
-                except Exception as error:
-                    raise error
-
-        else:
-            return HttpResponseBadRequest("Vous n'avez pas les accés")
+            except Exception as error:
+                print('err:', error)
+                return False
 
     @classmethod
     def build_array(cls, array):
@@ -136,3 +129,4 @@ class ClientViews(object):
 
             except Exception as err:
                 raise err
+
