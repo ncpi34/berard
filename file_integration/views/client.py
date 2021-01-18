@@ -38,6 +38,7 @@ class ClientViews(object):
                     cls.insert_into_db(array_of_obj)  # call method to insert in db
 
                     file.close()
+                    print('done client')
                     return HttpResponse(200, content_type='application/json')
 
                 except Exception as error:

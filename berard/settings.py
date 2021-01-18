@@ -157,9 +157,9 @@ USE_TZ = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 """ StaticFiles """
-STATIC_URL = '/static_root/'  # path admin statics
+STATIC_URL = '/static/'  # path admin statics
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')  # path to save (public)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # path to save (public)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = (
     # os.path.join(BASE_DIR + 'static_root'),  # path  not admin statics
