@@ -1,7 +1,6 @@
 /berard_site
 website/__pycache__
 berard/__pycache__
-website/migrations
 /test
 celerybeat-schedule.bak
 celerybeat-schedule.dat
