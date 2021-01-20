@@ -210,3 +210,9 @@ ADMINS = (
     ('Le Dain Alexis', 'ledain.alexis@gmail.com'),
 )
 MANAGERS = ADMINS
+
+"""Ftp address"""
+# '213.215.12.22'
+BERARD_FTP_HOST = "Berard.cloud.lcsgroup.fr"
+BERARD_FTP_USER = "admin"
+BERARD_FTP_PWD = "cMp5jU1C"

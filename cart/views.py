@@ -4,9 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import DeleteView
 from django.views.generic.base import View
 from cart.cart import Cart
 from cart.forms import CartAddProductForm, CartCheckAllProductsForm
@@ -17,15 +15,11 @@ import datetime
 from datetime import date
 from django.http import HttpResponseRedirect
 import json
-from django.http import HttpResponse
-from django.http.response import JsonResponse
 from django.conf import settings
 
-""" Cart """
 
-
-""" Remove item """
-class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with modal
+class CartRemoveView(LoginRequiredMixin, View):
+    """ Remove item """
 
     def get(self, request, **kwargs):
         context = {
@@ -41,8 +35,10 @@ class CartRemoveView(LoginRequiredMixin, View):  # Remove item from cart with mo
         cart.remove(product)
         return redirect("cart:cart_detail")
 
-""" Send Order """
-class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
+
+class SendOrderView(LoginRequiredMixin, View):
+    """ Send Order """
+
     @staticmethod
     def check_unity(self):
         if self is not None:
@@ -79,14 +75,11 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
             return self + (x * (10 - len(self)))
 
     @staticmethod
-    def send_file_to_ftp(self):  # FTP
-        host = "213.215.12.22"
-        user = "admin"
-        passw = "cMp5jU1C"
+    def send_file_to_ftp(self):
         try:
-            ftp = FTP(host)
+            ftp = FTP(settings.BERARD_FTP_HOST)
             ftp.set_debuglevel(2)
-            ftp.login(user, passw)
+            ftp.login(settings.BERARD_FTP_USER, settings.BERARD_FTP_PWD)
             ftp.cwd('/Rep/IMPORT')
             file = open(self.name, 'rb')
             ftp.storbinary('STOR %s' % os.path.basename(self.name), file, 1024)
@@ -161,7 +154,7 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
                         prix_HT=float(item['prix_ht']),
                         taux_TVA=float(item['tva']),
                         quantite=item['quantity'],
-                        )
+                    )
                     item_order.save()
 
                     # add favorites products for user
@@ -200,6 +193,8 @@ class SendOrderView(LoginRequiredMixin, View):  # Confirm Cart orders
 
 
 """ Cart actions """
+
+
 @login_required(login_url="")
 @require_POST
 def order_summary_to_cart(request, order_id):
@@ -229,7 +224,7 @@ def cart_add(request, product_id):  # add method
         # redirect with hidden form
     encoded_url = cd['url'] or '/produit'
     return HttpResponseRedirect(encoded_url)
-    
+
 
 @login_required(login_url="")
 def cart_detail(request):
@@ -253,7 +248,7 @@ def cart_update(request, product_id):
         cart.add(product=product,
                  quantity=cd['quantity'],
                  update_quantity=True
-                )
+                 )
     else:
         data = json.loads(request.body)
         cart.add(product=product,
@@ -273,17 +268,16 @@ def update_all_cart(request):
         cd = form.cleaned_data
         try:
             tab_join = cd['quantity'].split(',')
-
             for i in tab_join:
                 rst = i.split('/')
                 try:
-                    product = Article.objects.get(id=int(rst[0])) 
+                    product = Article.objects.get(id=int(rst[0]))
                     if int(rst[1]) is not 0:
                         cart.add(product=product,
-                                quantity=int(rst[1]),
-                                update_quantity=True)
-                except ArticleDoesNotExist:
-                    pass        
+                                 quantity=int(rst[1]),
+                                 update_quantity=True)
+                except Article.DoesNotExist:
+                    pass
         except ValueError:
             data = json.loads(request.body)
             for i in data['quantity']:

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="13721083-7b27-4e10-aa28-d2f3a7374853" name="o2switch" url="http://michigan.o2switch.net">
-        <fileTransfer host="michigan.o2switch.net" port="21">
+      <webServer id="13721083-7b27-4e10-aa28-d2f3a7374853" name="o2switch" url="http://87.106.168.117">
+        <fileTransfer accessType="SFTP" host="87.106.168.117" port="22" sshConfigId="c72ea23d-32a0-4f80-a43b-f9dd355c8610" sshConfig="root@87.106.168.117:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

@@ -1,37 +1,33 @@
-import codecs
-import ftplib
-import re
-from ftplib import FTP, FTP_TLS
 import os
-import string
-import numpy as np
-
-import json
-
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
-from website.models import Article, ProfilUtilisateur
 from django.core.exceptions import ObjectDoesNotExist
+from file_integration.connect_to_ftp import connect_ftp
 
 
 class ClientViews(object):
     """
     Client File
     """
+    @staticmethod
+    def test_crontab():
+        with open("test_crontab.txt", "w") as f:
+            f.write('Hello World')
 
     @classmethod
     def file_treatement(cls, request, **kwargs):
         if kwargs['password'] == 'berard_client':
+            cls.test_crontab()
             # if path not exists
             path = 'resources/import/'
             if not os.path.exists(path):
                 os.makedirs(path)
-            ftp = cls.connect_ftp(path)
+            f = 'TCLT.PLN'
+            ftp = connect_ftp(path, f)
             if ftp:
                 try:
 
-                    with open(os.path.join(path, 'TCLT.PLN'), encoding='utf-8', errors='ignore') as file:
+                    with open(os.path.join(path, f), encoding='utf-8', errors='ignore') as file:
                         text_lines = file.readlines()
 
                     array_of_obj = cls.build_array(text_lines)
@@ -62,29 +58,6 @@ class ClientViews(object):
 
         } for val in array]
         return obj_bdd
-
-    @staticmethod
-    def connect_ftp(path):
-        host = '213.215.12.22'
-        # host = "Berard.cloud.lcsgroup.fr"
-        user = "admin"
-        passw = "cMp5jU1C"
-        # FTP
-        ftp = FTP(host)
-        ftp.login(user, passw)
-        try:
-            ftp.cwd('/Rep/EXPORT')
-            ftp.retrbinary('RETR TCLT.PLN', open(os.path.join(path, 'TCLT.PLN'), 'wb').write)
-            ftp.quit()
-            return True
-        except Exception:
-            ftp.cwd('/Rep__/EXPORT')
-            ftp.retrbinary('RETR TCLT.PLN', open(os.path.join(path, 'TCLT.PLN'), 'wb').write)
-            ftp.quit()
-            return True
-        except Exception as e:
-            print('error ftp', e)
-            raise e
 
     @staticmethod
     def concat(val_1, val_2):

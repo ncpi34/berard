@@ -1,15 +1,7 @@
-import codecs
-import ftplib
-import re
-from ftplib import FTP
 import os
-import string
-import numpy as np
-import json
 from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.shortcuts import render
-from website.models import Article, ProfilUtilisateur
+from django.core.exceptions import ObjectDoesNotExist
+from file_integration.connect_to_ftp import connect_ftp
 
 """ Client File"""
 
@@ -22,7 +14,8 @@ class ClientAutomate:
         path = 'resources/import/'
         if not os.path.exists(path):
             os.makedirs(path)
-        ftp = cls.connect_ftp(path)
+        f = 'TCLT.PLN'
+        ftp = connect_ftp(path, f)
         if ftp:
             try:
 
@@ -54,29 +47,6 @@ class ClientAutomate:
 
         } for val in array]
         return obj_bdd
-
-    @staticmethod
-    def connect_ftp(path):
-        host = '213.215.12.22'
-        # host = "Berard.cloud.lcsgroup.fr"
-        user = "admin"
-        passw = "cMp5jU1C"
-        # FTP
-        ftp = FTP(host)
-        ftp.login(user, passw)
-        try:
-            ftp.cwd('/Rep/EXPORT')
-            ftp.retrbinary('RETR TCLT.PLN', open(os.path.join(path, 'TCLT.PLN'), 'wb').write)
-            ftp.quit()
-            return True
-        except Exception:
-            ftp.cwd('/Rep__/EXPORT')
-            ftp.retrbinary('RETR TCLT.PLN', open(os.path.join(path, 'TCLT.PLN'), 'wb').write)
-            ftp.quit()
-            return True
-        except Exception as e:
-            print('error ftp', e)
-            raise e
 
     @staticmethod
     def concat(val_1, val_2):

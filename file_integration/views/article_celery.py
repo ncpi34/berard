@@ -1,12 +1,7 @@
 import re
-from ftplib import FTP
 import os
-import string
-import numpy as np
-
-import json
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
+import xlsxwriter
+from file_integration.connect_to_ftp import connect_ftp
 from website.models import Article, Groupe, Famille, SousFamille
 import os.path
 from pyexcel_xlsx import get_data
@@ -24,11 +19,11 @@ class ArticleAutomate:
         path = 'resources/import/'
         if not os.path.exists(path):
             os.makedirs(path)
-
-        ftp = cls.connect_ftp(path)
+        f = "TART.PLN"
+        ftp = connect_ftp(path, f)
         if ftp:
             try:
-                with open(os.path.join(path, 'TART.PLN'), encoding="utf-8", errors='ignore') as file:
+                with open(os.path.join(path, f), encoding="utf-8", errors='ignore') as file:
                     text_lines = file.readlines()
 
                 array_of_obj = cls.build_array(text_lines)
@@ -109,29 +104,6 @@ class ArticleAutomate:
                     return table_split[1].lstrip('0')
             else:
                 return int(reg[2][0:2].lstrip('0'))
-
-    @staticmethod
-    def connect_ftp(paths):
-        host = '213.215.12.22'
-        # host = "Berard.cloud.lcsgroup.fr"
-        user = "admin"
-        passw = "cMp5jU1C"
-        # FTP
-        ftp = FTP(host)
-        ftp.login(user, passw)
-        try:
-            ftp.cwd('/Rep/EXPORT')
-            ftp.retrbinary('RETR TART.PLN', open(os.path.join(paths, 'TART.PLN'), 'wb').write)
-            ftp.quit()
-            return True
-        except Exception:
-            ftp.cwd('/Rep__/EXPORT')
-            ftp.retrbinary('RETR TART.PLN', open(os.path.join(paths, 'TART.PLN'), 'wb').write)
-            ftp.quit()
-            return True
-        except Exception as e:
-            print('error ftp', e)
-            raise e
 
 
 
