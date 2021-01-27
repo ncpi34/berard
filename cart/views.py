@@ -144,7 +144,6 @@ class SendOrderView(LoginRequiredMixin, View):
                 file.write(line2.format(**context))
 
                 for item in cart:
-                    print('item: ', item)
                     article = Article.objects.get(id=item['article_id'])
 
                     # insert orders
