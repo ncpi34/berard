@@ -14,29 +14,29 @@ import os
 from django.contrib.messages import constants as messages
 import environ
 from django.utils.translation import ugettext_lazy as _
-
+from dotenv import load_dotenv
 # celery imports
 from celery.schedules import crontab
 import berard.tasks
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, 'berard/.env'))
 
-root = environ.Path(__file__) - 3  # three folder back (/a/b/c/ - 3 = /)
-env = environ.Env(DEBUG=(bool, False), )
-environ.Env.read_env()
-
-SITE_ROOT = root()
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
-
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG')
 TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 
 DATABASES = {
-    'default': env.db(),
-    'extra': env.db('DATABASE_URL')
+    'default': {
+        'ENGINE': os.getenv("DB_ENGINE"),
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PWD"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"),
+    }
 }
-
-ALLOWED_HOSTS = ['*']
 
 FIRST_CONNECTION = False
 # MATERIAL_ADMIN_SITE = {
@@ -89,7 +89,7 @@ INSTALLED_APPS = [
     'order',
 ]
 
-CART_SESSION_ID = 'cart' # during 15 days
+CART_SESSION_ID = 'cart'  # during 15 days
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -177,16 +177,15 @@ MESSAGE_TAGS = {
 }
 
 """ Email config """
-# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "/resources/sent_emails")
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'test34980test@gmail.com'
-EMAIL_HOST_PASSWORD = 'Test34980'
+
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
 
 """ Caches """
 CACHES = {
@@ -197,9 +196,9 @@ CACHES = {
 }
 
 """ Celery """
-CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 # CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -213,6 +212,6 @@ MANAGERS = ADMINS
 
 """Ftp address"""
 # '213.215.12.22'
-BERARD_FTP_HOST = "Berard.cloud.lcsgroup.fr"
-BERARD_FTP_USER = "admin"
-BERARD_FTP_PWD = "cMp5jU1C"
+BERARD_FTP_HOST = os.getenv("BERARD_FTP_HOST")
+BERARD_FTP_USER = os.getenv("BERARD_FTP_USER")
+BERARD_FTP_PWD = os.getenv("BERARD_FTP_PWD")

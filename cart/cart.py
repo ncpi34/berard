@@ -6,7 +6,6 @@ from website.models import Article
 import json
 from decimal import Decimal
 
-
 """Cart Module"""
 
 
@@ -58,18 +57,19 @@ class Cart(object):
         price_null = self.get_price_by_user(product) != 0.00
         if price_null:
             if product.groupe == 'BOISSONS':
-                    if product.id not in self.cart.keys() and quantity is not 0 and  quantity % int(product.conditionnement) == 0:
-                        self.cart[product.id] = {
-                            'userid': self.request.user.id,
-                            'article_id': id_product,
-                            'libelle': product.libelle,
-                            'quantity': 0,
-                            'prix_achat': str(self.get_price_by_user(product)),
-                            'tva': product.taux_TVA,
-                            'code_article': product.code_article,
-                            'prix_ht': str(self.get_price_without_taxes_by_user(product)),
-                            'lot': product.conditionnement,
-                        }
+                if product.id not in self.cart.keys() and quantity is not 0 and quantity % int(
+                        product.conditionnement) == 0:
+                    self.cart[product.id] = {
+                        'userid': self.request.user.id,
+                        'article_id': id_product,
+                        'libelle': product.libelle,
+                        'quantity': 0,
+                        'prix_achat': str(self.get_price_by_user(product)),
+                        'tva': product.taux_TVA,
+                        'code_article': product.code_article,
+                        'prix_ht': str(self.get_price_without_taxes_by_user(product)),
+                        'lot': product.conditionnement,
+                    }
             else:
                 if product.id not in self.cart.keys() and quantity is not 0:
                     self.cart[product.id] = {
@@ -87,7 +87,7 @@ class Cart(object):
                 if update_quantity:
                     if quantity is not 0:
                         self.cart[product.id]['quantity'] = quantity
-                    
+
                 else:
                     self.cart[product.id]['quantity'] += quantity
                 self.save()
@@ -112,7 +112,7 @@ class Cart(object):
             return product.get_price_with_taxes_3()
         else:
             return product.get_price_with_taxes_4()
-        
+
     def get_price_without_taxes_by_user(self, product):
         tarif_id = self.request.session.get('tarif')
         # return product[tarif]
@@ -133,15 +133,12 @@ class Cart(object):
         if product_id in self.cart:
             del self.cart[product_id]
             self.save()
-         
 
     def get_total_taxes(self):
         """
         Get taxes of the cart
         """
-        result = [ float(item['prix_achat'])  * item['quantity'] - ( float(item['prix_achat']) * item['quantity']  / (item['tva'] / 100 + 1) ) for item in self.cart.values()]
-        return round(sum(result), 2)
-        
+        return self.get_total_price() - self.get_total_price_without_taxes()
 
     def get_total_price(self):
         """
@@ -149,12 +146,12 @@ class Cart(object):
         """
         return sum(Decimal(item['prix_achat']) * item['quantity'] for item in self.cart.values())
 
-    
     def get_total_price_without_taxes(self):
         """
         Get price of the cart without taxes
         """
-        return round(float(self.get_total_price()) - self.get_total_taxes(), 2)  
+        return sum(Decimal(item['prix_ht']) * item['quantity'] for item in self.cart.values())
+
 
     def clear(self):  # remove cart from session
         try:
@@ -162,7 +159,6 @@ class Cart(object):
             self.save()
         except Exception as e:
             raise e
-            
 
     def clear_all(self, products):  # remove all item in cart
         try:
@@ -173,7 +169,7 @@ class Cart(object):
                     self.save()
         except Exception as e:
             raise e
-            
+
     def decrement(self, product):
         for key, value in self.cart.items():
             if key == str(product.id):

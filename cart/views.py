@@ -144,6 +144,7 @@ class SendOrderView(LoginRequiredMixin, View):
                 file.write(line2.format(**context))
 
                 for item in cart:
+                    print('item: ', item)
                     article = Article.objects.get(id=item['article_id'])
 
                     # insert orders
@@ -170,7 +171,7 @@ class SendOrderView(LoginRequiredMixin, View):
                     context = {
                         "code_client": user.username,
                         "code_article": article.code_article + whitespace * 2,
-                        "prix_achat": self.format_price(item['prix_achat']),
+                        "prix_achat": self.format_price(item['prix_ht']),
                         "libelle": self.format_name(article.libelle),
                         # "conditionnement": '{0:04}'.format(int(article.conditionnement)),
                         "conditionnement": self.check_unity(article.conditionnement),
@@ -180,7 +181,7 @@ class SendOrderView(LoginRequiredMixin, View):
                     file.write(line3.format(**context))
                 file.close()
 
-                self.send_file_to_ftp(file)  # to send order to ftp server
+                self.send_file_to_ftp(file)
 
                 # cart.clear()
                 cart.clear_all(cart)

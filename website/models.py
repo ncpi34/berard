@@ -150,7 +150,7 @@ class Article(models.Model):
     # get_img.allow_tags = True
     
     def calculate_price_with_taxes(self, arg):
-        return round( float(arg) * (self.taux_TVA / 100 + 1 ), 2 )
+        return round(float(arg) * (self.taux_TVA / 100 + 1), 2)
         
     def get_price_with_taxes_1(self):
         return self.calculate_price_with_taxes(self.prix_achat_1)
