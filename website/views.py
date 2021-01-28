@@ -99,10 +99,11 @@ def save_cart_before_logout(request):
 def logout_view(request):
     save_cart_before_logout(request)
     logout(request)
-    return redirect('website:login')
+    messages.warning(request, 'Vous êtes désormais déconnecté')
+    return redirect('website:home')
 
 
-class HomeView(LoginRequiredMixin, View):
+class HomeView(View):
     """
     Home
     """
@@ -111,7 +112,7 @@ class HomeView(LoginRequiredMixin, View):
         return render(self.request, 'website/home.html')
 
 
-class OffersView(LoginRequiredMixin, ListView):
+class OffersView(ListView):
     """
     Offers View
     """
@@ -166,7 +167,7 @@ class FavoritesView(LoginRequiredMixin, ListView):
         return context
 
 
-class ArticleView(LoginRequiredMixin, ListView, SuccessMessageMixin):
+class ArticleView(ListView, SuccessMessageMixin):
     """
     Products views
     """

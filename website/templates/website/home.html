@@ -9,7 +9,6 @@
     {% include 'website/modals/display_picture.html' %}
     {% include 'helpers/cart_button.html' %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <style>
       @media screen and (max-width: 992px) {
         #pic_home_page { margin-top: 20%;}
@@ -30,17 +29,11 @@
         -webkit-border-radius:8px;	
         border-radius:8px;	
     }
-    #topnavbar-navigation  li {
-    width: calc(15% - 20px);
-    margin: 0 10px 0 0;
-    }
     </style>
     <!--Main layout-->
-  <main style="min-height:90vh;">
-
-    <div class="container" >
+    <main class="container mt-5 mx-auto" style="min-height:83vh;">
       <div class="row">
-        <div class="col-9" style="margin-left:-8%">
+        <div class="col-9">
           <fieldset>
             <legend>Actualités</legend>
             <div class="row">
@@ -137,8 +130,6 @@
       </div>
       <div>
     </div>
-
-
   </main>
 
 

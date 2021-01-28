@@ -8,18 +8,7 @@
 
 {% block content %}
 {% include 'helpers/cart_button.html' %}
-<style>
-  #nav-icon1{
-    display: none;
-  }
-  #topnavbar-navigation  li {
-    width: calc(15% - 20px);
-    margin: 0 10px 0 0;
-    }
-  </style>
-<main class="" style="min-height: 85vh">
-    <div class="container dark-grey-text mt-5">
-
+<main class="container mx-auto mt-5" style="min-height: 83vh;">
       <!--Grid row-->
       <div class="row wow fadeIn">
 
@@ -56,7 +45,7 @@
                 class="d-flex justify-content-left">
               {{ form }}
               {% csrf_token %}
-              <button id="add_basket" class="form-control btn-success  btn_send" type="submit">
+              <button id="add_basket" class="form-control btn-success btn_send" type="submit">
                   Ajouter au panier
               </button>
           </form>
@@ -112,8 +101,6 @@
       <!--Grid column-->
       </div>
       <!--Grid row-->
-
-    </div>
   </main>
 
 {% endblock content %}

@@ -8,16 +8,7 @@
 {% block content %}
     {% include 'cart/confirm_modal_mat.html' %}
     {% include 'cart/suppress_modal_mat.html' %}
-    <style>
-        #nav-icon1{
-          display: none;
-        }
-        #topnavbar-navigation  li {
-        width: calc(15% - 20px);
-        margin: 0 10px 0 0;
-        }
-        </style>
-    <main style="margin-top: 10%">
+    <main style="">
     <div class="container" style="min-height: 80vh">
     <div class="table-responsive">
 <p id="message"></p>
@@ -163,12 +154,13 @@
 
 
     {% else %}
-        <div class="container text-center mt-5" style="min-height: 80vh; margin-top: 15%">
-            <h4 class="text-left mb-5">Votre panier est vide ...</h4>
-
-        <p class="text-right">
-
-        </p>
+        <div class="container text-center" style="min-height: 80vh;">
+                <div class="mt-5 font-weight-bold">
+                    <h4 class="mt-5">Votre panier est vide ...</h4>
+                    <a href="{% url "website:products" %}">
+                        <button class="btn btn-primary">Voir les produits</button>
+                    </a>
+                </div>
         </div>
 
    {% endif %}

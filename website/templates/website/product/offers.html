@@ -9,26 +9,10 @@
     {% include 'website/modals/display_picture.html' %}
     {% include 'helpers/cart_button.html' %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
     <!--Main layout-->
-    <style>
-    #nav-icon1{
-      display: none;
-    }
-    #topnavbar-navigation  li {
-    width: calc(15% - 20px);
-    margin: 0 10px 0 0;
-    }
-    </style>
-  <main>
-
-    <div class="main_container" style="min-height: 80vh;">
-      <h3 class="text-center">Opportunités</h2>
-
+    <main class="container mx-auto mt-5" style="min-height: 83vh;">
         {% if articles %}
         <section class=" mb-4">
-       
-       
                <!--Grid row-->
                <div class="row justify-content-center wow fadeIn ">
                   <!-- <div class="row wow fadeIn no-gutters"> -->
@@ -129,8 +113,11 @@
              <!--Section: Products v.3-->
 
         {% else %}
-            <div class="container text-center" style="min-height: 80vh; margin-top: 15%">
-            <h4>Pas d'offres promotionnelles pour le moment ...</h4>
+            <div class="container text-center" style="min-height: 80vh;">
+                <div class="mt-5 font-weight-bold">
+                    <h2 class="mb-5">Opportunités</h2>
+                    <h4 class="">Pas d'offres promotionnelles pour le moment ...</h4>
+                </div>
             </div>
         {% endif %}
     </div>
@@ -154,11 +141,7 @@
            {% endif %}
     </div>
 {% endif %}
-
-
   </main>
-
-
 {% endblock content %}
 
 {% block extrascripts %}

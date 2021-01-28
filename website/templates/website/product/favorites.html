@@ -9,26 +9,10 @@
     {% include 'website/modals/display_picture.html' %}
     {% include 'helpers/cart_button.html' %}
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-    <style>
-      #nav-icon1{
-        display: none;
-      }
-      #topnavbar-navigation  li {
-      width: calc(15% - 20px);
-      margin: 0 10px 0 0;
-      }
-      </style>
     <!--Main layout-->
-  <main>
-
-    <div class="main_container" style="min-height: 80vh;margin-top: 8%">
-      <h3 class="text-center">Vos favoris</h2>
-
+<main class="container mx-auto mt-5" style="min-height: 83vh;">
         {% if articles %}
         <section class=" mb-4">
-       
-       
                <!--Grid row-->
                <div class="row justify-content-center wow fadeIn ">
                   <!-- <div class="row wow fadeIn no-gutters"> -->
@@ -46,7 +30,7 @@
                        <!--Code & title-->
                        <a href="{{article.get_absolute_url}}">
                          <h6>{{ article.code_article }}</h6>
-                         <h6>{{ article.libelle|title }}</p>
+                         <h6>{{ article.libelle|title }}</h6>
                        </a>
                        <!--Code & title-->
        
@@ -154,11 +138,7 @@
            {% endif %}
     </div>
 {% endif %}
-
-
   </main>
-
-
 {% endblock content %}
 
 {% block extrascripts %}

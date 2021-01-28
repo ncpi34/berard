@@ -13,19 +13,27 @@
     @media screen and (min-width: 992px) {
        #img_navbar{
         margin-left: 310px!important;
+        }
+        main{
+            margin-left: 310px!important;
+        }
     }
-    }
- 
-</style>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-<div style="margin-top: 70px" id="main-content">
-    <!--Main layout-->
-  <main>
 
-    <div class="main_container" style="min-height: 80vh;">
+    @media screen and (max-width: 992px) {
+       #nav-icon1{
+            display: block;
+        }
+        main{
+            margin-left:0!important;
+        }
+
+    }
+</style>
+    <!--Main layout-->
+<main class="mt-5" style="min-height: 83vh;">
 
     {% if articles %}
- <section class=" mb-4">
+    <section class=" mb-4">
 
 
         <!--Grid row-->
@@ -33,7 +41,7 @@
            <!-- <div class="row wow fadeIn no-gutters"> -->
               {% for article in articles %}
           <!--Grid column-->
-          <div class="articles col-lg-3 col-md-3  col-sm-6 mb-3">
+          <div class="articles col-lg-3 col-md-3 col-sm-6 mb-3 shadow-sm">
 
             <!--Card-->
 
@@ -62,7 +70,7 @@
                     <p style="font-size: 12px">{{ article.gencode }}</p>
                   </a>
                 <!--Gencod-->
-
+                {% if user.is_authenticated %}
                 <!--Form-->  
                   <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                     class="d-flex justify-content-left small" style="margin-bottom: -20px">
@@ -78,7 +86,9 @@
                        </div>
                      </div>
                   </form>
-                <!--Form-->    
+                <!--Form-->
+                {% else %}
+              {% endif %}
               <div class="row d-flex justify-content-center">
                 <!--Hidden Group-->
                 <input type="hidden" class="hidden_groups" value="{{ article.groupe }}"/>
@@ -153,7 +163,7 @@
     </div>
 {% endif %}
   </main>
-</div>
+
 
 {% endblock content %}
 

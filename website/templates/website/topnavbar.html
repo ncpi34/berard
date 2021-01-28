@@ -11,14 +11,21 @@
 
 #navbar{
   background-color: #333;
-  position: fixed;
   top: 0;
-  width: 100%;
+  width: 100%;height: 160px;
   display: block;
   transition: top 0.3s;
     z-index: 1;
 
 }
+#nav-icon1{
+          display: none;
+        }
+
+#topnavbar-navigation  li {
+        width: calc(15% - 20px);
+        margin: 0 10px 0 0;
+        }
 
 
 ::-webkit-input-placeholder {
@@ -56,11 +63,22 @@
     height:45px;
     text-align: center;
   }
+@media screen and (max-width: 992px) {
+       #navbar{
+  background-color: #333;
+  top: 0;
+  width: 100%;
+           height: 100%;
+  display: block;
+  transition: top 0.3s;
+    z-index: 1;
 
+}
+    }
 </style>
 
   <nav  class="nav-extended" >
-    <div id="navbar" class="nav-wrapper white"  >
+    <div id="navbar" class="nav-wrapper white shadow-lg">
 
     <!--Top menu -->
 
@@ -83,14 +101,14 @@
 
                         <h5 class="wrap green-text"> {{ title_pager }} {{ price }} </h5>
                         <a href="{% url 'website:home' %}">
-                          <img id="img_navbar" class="rounded ml-lg-5" style="width: 15%;"
+                          <img id="img_navbar" class="rounded mt-2 ml-lg-5" style="width: 15%;"
                           src="/media/img/logo-berard-distribution.png" />
                         </a>
                       
             
             <!-- Navbar -->
             
-            <ul  class="right hide-on-med-and-down">
+            <ul  class="right hide-on-med-and-down mt-2">
                 <!-- Basket -->
                 <li>
                     <a href="{% url 'cart:cart_detail' %}" title="Panier" class="groups_url">
@@ -108,7 +126,8 @@
                   <p class="black-text">{{ cart.get_total_price_without_taxes }}€ HT</p>
                 </li>
                 <!-- Basket -->
-                
+
+                {% if user.is_authenticated %}
                 <!-- Logout -->
                 <li>
                     <a href="{% url 'website:logout' %}" title="Déconnexion" class="groups_url">
@@ -116,11 +135,21 @@
                     </a>
                 </li>
                 <!-- Logout -->
+                    {% else %}
+                <!-- Login -->
+                <li>
+                    <a href="{% url 'website:login' %}" title="Connexion" class="groups_url">
+                        <span class="clearfix d-none d-sm-inline-block"><i class="fas fa-sign-out-alt green-text"></i></span>
+                    </a>
+                </li>
+                <!-- Login -->
+            {% endif %}
+
             </ul>
             <!-- Navbar -->
 
             <!-- Second Navbar -->
-            <ul class=" hide-on-med-and-down mt-3" id="topnavbar-navigation">
+            <ul class=" hide-on-med-and-down sticky-top right mt-2" >
               <!-- Home -->
               <li>
                 <a href="{% url 'website:home' %}">
@@ -130,39 +159,39 @@
               <!-- Home -->
               <!-- Products -->
                   <li>
-                    <a href="{% url 'website:products' %}" class="border-right light-green rounded btn-nav">
+                    <a href="{% url 'website:products' %}" class="border-right green rounded btn-nav">
                     CATALOGUE
                     </a>
                   </li>
                 <!-- Products -->
                <!-- Offers -->
               <li>
-                <a href="{% url 'website:offers' %}" class="border-right light-green rounded">
+                <a href="{% url 'website:offers' %}" class="border-right green rounded">
                     OPPORTUNITÉS
                 </a>
               </li>
               <!-- Offers -->
+                 {% if user.is_authenticated %}
                 <!-- Favorite -->
                   <li>
-                      <a href="{% url 'website:favorites' %}" class="border-right light-green rounded">
+                      <a href="{% url 'website:favorites' %}" class="border-right green rounded">
                         FAVORIS
                       </a>
                   </li>
                 <!-- Favorite -->
                 <!-- Order Summary -->
                 <li>
-                  <a href="{% url 'order:order_summary' %}" class="light-green rounded" >
+                  <a href="{% url 'order:order_summary' %}" class="green rounded" >
                     HISTORIQUE
                     </a>
               </li>
               <!-- Order Summary -->
+                {% endif %}
             </ul>
-            <!-- Second Navbar --> 
-
-            
-            
+            <!-- Second Navbar -->
         </div>
       </div>
+
 
       <!--Top menu -->
       <!-- Navbar to sidenav -->
@@ -203,6 +232,7 @@
                   </a>
                 </li>
                 <!-- Offers -->
+          {% if user.is_authenticated %}
           <!-- Favorite -->
             <li>
                     <a href="{% url 'website:favorites' %}">
@@ -226,6 +256,14 @@
                     </a>
                 </li>
           <!-- Order Summary -->
+              {% else %}
+              <li>
+                    <a href="{% url 'website:login' %}" title="Connexion" class="groups_url">
+                            <i class="fas fa-sign-out-alt green-text"></i>
+                            <p>Connexion</p>
+                    </a>
+                </li>
+          {% endif %}
       </ul>
 
       <!-- Navbar to sidenav -->

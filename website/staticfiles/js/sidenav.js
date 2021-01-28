@@ -17,18 +17,6 @@
         closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
         draggable: true // Choose whether you can drag to open on touch screens
     });
-    //navBar animation
-    let prevScrollpos = window.pageYOffset;
-    window.onscroll = () => {
-    let currentScrollPos = window.pageYOffset;
-    let navbar = document.getElementById("navbar");
-      if (prevScrollpos > currentScrollPos) {
-        navbar.style.top = "0";
-      } else {
-        navbar.style.top = "-60px";
-      }
-      prevScrollpos = currentScrollPos;
-    }
 
 });
  const submitSearch = () => {
