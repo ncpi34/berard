@@ -34,8 +34,6 @@
 
     {% if articles %}
     <section class=" mb-4">
-
-
         <!--Grid row-->
         <div class="row justify-content-center wow fadeIn ">
            <!-- <div class="row wow fadeIn no-gutters"> -->
@@ -51,7 +49,7 @@
               <div class="card-body text-center">
 
                 <!--Code & title-->
-                <a href="{{article.get_absolute_url}}">
+                <a href="{{ article.get_absolute_url }}">
                   <h6>{{ article.code_article }}</h6>
                   <h6>{{ article.libelle|title }}</h6>
                 </a>
@@ -80,7 +78,7 @@
                         Qté: {{ form }}
                        </div>
                        <div class="col">
-                        <button class="form-control btn btn-success btn_send" type="submit">
+                        <button class="form-control shadow-lg btn btn-success btn_send" type="submit">
                           <i class="fas fa-cart-plus"></i>
                       </button>
                        </div>
@@ -88,6 +86,11 @@
                   </form>
                 <!--Form-->
                 {% else %}
+                    <div class="alert alert-warning text-center" role="alert">
+                        <a href="{% url 'website:login' %}">
+                            Connectez vous
+                        </a>
+                    </div>
               {% endif %}
               <div class="row d-flex justify-content-center">
                 <!--Hidden Group-->

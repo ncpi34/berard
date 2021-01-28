@@ -5,9 +5,6 @@ from order.models import HistoriqueCommande
 from django.db.models import Q
 
 
-"""Order Summary"""
-
-
 class OrderSummaryView(LoginRequiredMixin, ListView):
     template_name = 'order/order_summary.html'
     queryset = HistoriqueCommande.objects.all()
@@ -20,7 +17,6 @@ class OrderSummaryView(LoginRequiredMixin, ListView):
         return history
 
 
-""" Order Detail """
 class OrderDetailView(LoginRequiredMixin, DetailView):
     template_name = 'order/order_detail.html'
     queryset = HistoriqueCommande.objects.all()
@@ -33,4 +29,3 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrderDetailView, self).get_context_data(**kwargs)
         return context
-

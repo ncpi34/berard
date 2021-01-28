@@ -12,52 +12,51 @@
       <!--Grid row-->
       <div class="row wow fadeIn">
 
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-
-          <img src="{{ object.get_img }}" class="img-fluid" alt="image">
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-
-          <!--Content-->
-          <div class="p-4 row">
-
-            <div class="col">
-              <p class="lead font-weight-bold">{{ object.libelle }}</p class="lead font-weight-bold">
+            <!--Grid column-->
+            <div class="col-md-6 mb-4">
+              <img src="{{ object.get_img }}" class="img-fluid" alt="image">
             </div>
+            <!--Grid column-->
 
             <!--Grid column-->
-            <div class="col">
+            <div class="col-md-6 mb-4">
+                <p class="lead font-weight-bold">{{ object.libelle }}</p>
+                <!--Grid column-->
+            <div class="row">
               <h6>
                 <span class="badge badge-info text-center">
                   {% load website_extras %}
                   {{ request.session.tarif|without_taxes:article }}€
                 </span>
               </h6>
-            </div>  
+            </div>
             <!--Grid column-->
-
-            <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
-                class="d-flex justify-content-left">
-              {{ form }}
-              {% csrf_token %}
-              <button id="add_basket" class="form-control btn-success btn_send" type="submit">
-                  Ajouter au panier
-              </button>
-          </form>
-
+            </div>
+            <!--Grid column-->
           </div>
-          <!--Content-->
+        <!-- Row -->
 
+
+        <div class="mx-auto w-25">
+            {% if user.is_authenticated %}
+            <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
+                    class="d-flex justify-content-left ">
+                  {{ form }}
+                  {% csrf_token %}
+                  <button id="add_basket" class="shadow-lg form-control btn-success btn_send" type="submit">
+                      <i class="fas fa-cart-plus"></i>
+                  </button>
+              </form>
+            {% else %}
+                    <div class="alert alert-warning text-center" role="alert">
+                        <a href="{% url 'website:login' %}">
+                            Connectez vous
+                        </a>
+                    </div>
+            {% endif %}
         </div>
-        <!--Grid column-->
 
-      </div>
-      <!--Grid row-->
+
 
       <hr>
 

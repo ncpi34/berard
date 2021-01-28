@@ -47,7 +47,7 @@
                            <p style="font-size: 12px">{{ article.article.gencode }}</p>
                          </a>
                        <!--Gencod-->
-       
+                        {% if user.is_authenticated %}
                        <!--Form-->  
                          <form action="{% url 'cart:cart_add' product_id=article.article.id %}" method="post"
                            class="d-flex justify-content-left small" style="margin-bottom: -20px">
@@ -63,7 +63,14 @@
                               </div>
                             </div>
                          </form>
-                       <!--Form-->    
+                       <!--Form-->
+                     {% else %}
+                            <div class="alert alert-warning text-center" role="alert">
+                                <a href="{% url 'website:login' %}">
+                                    Connectez vous
+                                </a>
+                            </div>
+                      {% endif %}
                      <div class="row d-flex justify-content-center">
                        <!--Hidden Group-->
                        <input type="hidden" class="hidden_groups" value="{{ article.groupe }}"/>
@@ -95,11 +102,7 @@
                      <!--Col-->
                      </div>
                      <!--Row-->
-                     
-                       
-                     
                      <!--Card content-->
-       
                    </div>
                    <!--Card-->
        

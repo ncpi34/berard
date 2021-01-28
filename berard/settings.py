@@ -13,11 +13,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from django.contrib.messages import constants as messages
 import environ
+from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from dotenv import load_dotenv
 # celery imports
 from celery.schedules import crontab
 import berard.tasks
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE_DIR, 'berard/.env'))
@@ -37,6 +39,8 @@ DATABASES = {
         'PORT': os.getenv("DB_PORT"),
     }
 }
+
+LOGIN_URL = reverse_lazy("website:login")
 
 FIRST_CONNECTION = False
 # MATERIAL_ADMIN_SITE = {

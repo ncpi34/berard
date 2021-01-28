@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {
     let hidden_groups = document.querySelectorAll('.hidden_groups')
     
     // quantities form step
@@ -23,10 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
         };
       }
       
-    
+    // only for products with differents groups
     if(multiples &&  multiples_display){
         for (let i=0; i< multiples.length; i++) {
-            if (hidden_groups[i].value === 'BOISSONS') { // only for products with group=BOISSONS
+            console.log(hidden_groups[i].value)
+            if (hidden_groups[i].value === 'BOISSONS' || hidden_groups[i].value === 'SURGELES' || hidden_groups[i].value === 'BOISSONS BIO') {
                 if(!isNaN(parseInt(multiples[i].innerHTML))) {
                     multiples_display[i].step = multiples[i].innerHTML.trim()
                     multiples_display[i].addEventListener('input', debounce(() => {

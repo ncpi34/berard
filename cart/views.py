@@ -195,7 +195,7 @@ class SendOrderView(LoginRequiredMixin, View):
 """ Cart actions """
 
 
-@login_required(login_url="")
+@login_required(login_url="login")
 @require_POST
 def order_summary_to_cart(request, order_id):
     order = HistoriqueCommande.objects.get(id=int(order_id))
@@ -209,7 +209,7 @@ def order_summary_to_cart(request, order_id):
     return redirect("cart:cart_detail")
 
 
-@login_required(login_url="")
+@login_required(login_url="login")
 @require_POST
 def cart_add(request, product_id):  # add method
     cart = Cart(request)
@@ -222,11 +222,11 @@ def cart_add(request, product_id):  # add method
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
         # redirect with hidden form
-    encoded_url = cd['url'] or '/produit'
+        encoded_url = cd['url'] or '/produit'
     return HttpResponseRedirect(encoded_url)
 
 
-@login_required(login_url="")
+# @login_required(login_url="login")
 def cart_detail(request):
     cart = Cart(request)
     quantity = CartCheckAllProductsForm
@@ -272,7 +272,7 @@ def update_all_cart(request):
                 rst = i.split('/')
                 try:
                     product = Article.objects.get(id=int(rst[0]))
-                    if int(rst[1]) is not 0:
+                    if int(rst[1]) != 0:
                         cart.add(product=product,
                                  quantity=int(rst[1]),
                                  update_quantity=True)

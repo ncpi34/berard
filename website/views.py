@@ -2,32 +2,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView
-
-from berard.settings import EMAIL_HOST_USER
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
 from website.models import Article, Groupe, ProfilUtilisateur, Favori, FavorisClient
-from order.models import HistoriqueCommande
 from cart.models import PanierEnCours
 from django.db.models import Q
-from django.core.mail import send_mail, BadHeaderError
-from django.views.decorators.cache import cache_page
-import time
+from django.core.mail import send_mail
 from django.contrib.messages.views import SuccessMessageMixin
 from django.conf import settings
-from django.contrib.sessions.models import Session
-import asyncio
-import operator
 import pandas as pd
-
-""" login"""
 
 
 class LoginView(View):
@@ -104,18 +91,12 @@ def logout_view(request):
 
 
 class HomeView(View):
-    """
-    Home
-    """
 
     def get(self, *args, **kwargs):
         return render(self.request, 'website/home.html')
 
 
 class OffersView(ListView):
-    """
-    Offers View
-    """
     template_name = 'website/product/offers.html'
     # paginate_by = 60
     ordering = ['libelle']
@@ -134,9 +115,6 @@ class OffersView(ListView):
 
 
 class FavoritesView(LoginRequiredMixin, ListView):
-    """
-    Favorites View
-    """
     template_name = 'website/product/favorites.html'
     ordering = ['libelle']
     context_object_name = 'articles'
@@ -168,9 +146,6 @@ class FavoritesView(LoginRequiredMixin, ListView):
 
 
 class ArticleView(ListView, SuccessMessageMixin):
-    """
-    Products views
-    """
     template_name = 'website/product/products.html'
     paginate_by = 60
     ordering = ['libelle']
@@ -215,7 +190,7 @@ class ArticleView(ListView, SuccessMessageMixin):
         return context
 
 
-class ArticleDetailView(LoginRequiredMixin, DetailView):
+class ArticleDetailView(DetailView):
     template_name = 'website/product/product.html'
     queryset = Article.objects.all()
     login_url = ''
@@ -235,10 +210,6 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
 
 
 class ForgotPasswordView(View):
-    """
-    Password forgot
-    """
-
     def get(self, request, *args, **kwargs):
         form = ForgotPassForm()
         return render(request, 'auth/password_forgot.html', locals())
@@ -263,5 +234,6 @@ class ForgotPasswordView(View):
 
                 except User.DoesNotExist:
                     messages.error(request,
-                                   'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard distribution')
+                                   'Nous ne parvenons pas à vous envoyer un email, veuillez contacter Berard '
+                                   'distribution')
                     return render(request, 'auth/password_forgot.html', locals())
