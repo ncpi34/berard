@@ -3,6 +3,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.html import format_html
 from pathlib import Path
+
+from django_resized import ResizedImageField
+
 from website.helpers import RandomFileName
 from django.db.models import Q
 from django.db.models import Count
@@ -10,6 +13,8 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from decimal import Decimal
+
+from website.singleton import SingletonModel
 
 """ Profil """
 
@@ -30,7 +35,7 @@ class ProfilUtilisateur(models.Model):
         # instance.profile.save()
         if created:
             ProfilUtilisateur.objects.get_or_create(utilisateur=instance)
-        ProfilUtilisateur.objects.get_or_create(utilisateur=instance)    
+        ProfilUtilisateur.objects.get_or_create(utilisateur=instance)
         # instance.profilutilisateur.save()    
 
 
@@ -41,7 +46,6 @@ class Groupe(models.Model):
     nom = models.CharField(max_length=100,
                            unique=True)
     ordre = models.IntegerField(null=True, blank=True)
-                       
 
     def __str__(self):
         return self.nom
@@ -146,12 +150,13 @@ class Article(models.Model):
             return Path("/media/img/product/" + self.code_article + ".jpeg")
         else:
             return '/media/img/nophoto.jpg'
+
     # get_img.short_description = 'Image'
     # get_img.allow_tags = True
-    
+
     def calculate_price_with_taxes(self, arg):
         return round(float(arg) * (self.taux_TVA / 100 + 1), 2)
-        
+
     def get_price_with_taxes_1(self):
         return self.calculate_price_with_taxes(self.prix_achat_1)
 
@@ -162,14 +167,14 @@ class Article(models.Model):
         return self.calculate_price_with_taxes(self.prix_achat_3)
 
     def get_price_with_taxes_4(self):
-        return self.calculate_price_with_taxes(self.prix_achat_4)  
+        return self.calculate_price_with_taxes(self.prix_achat_4)
 
     def format_VAT(self):
         if self.taux_TVA % 2 == 0.0:
             return int(self.taux_TVA)
         else:
-            return self.taux_TVA    
-         
+            return self.taux_TVA
+
     def get_price_without_taxes(self, tarif):
         if tarif == 1:
             return self.prix_achat_1
@@ -180,19 +185,19 @@ class Article(models.Model):
         elif tarif == 4:
             return self.prix_achat_4
         else:
-            return self.prix_achat_1    
-                        
+            return self.prix_achat_1
+
 
 """ Offers """
 
 
 class Favori(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE, primary_key=True, )
+
     class Meta:
         verbose_name = "Favoris"
         verbose_name_plural = "Favoris"
 
-     
     def __str__(self):
         return self.article.libelle
 
@@ -224,3 +229,35 @@ class FavorisClient(models.Model):
 
     def format_data(self):
         return {'libelle': self.article.libelle, 'quantite': self.quantite}
+
+
+class Nouveaute(SingletonModel):
+    text = models.TextField(null=True, blank=True)
+
+    class Meta:
+        # app_label = 'website'
+        verbose_name = "nouveautés"
+        verbose_name_plural = 'nouveautés'
+
+    def __unicode__(self):
+        return self.text
+
+
+class NouveautePhoto(models.Model):
+    img = ResizedImageField(max_length=10000000, size=[500, 300], upload_to=RandomFileName('img/new'),
+                            quality=80, blank=True, null=True)
+
+    class Meta:
+        # app_label = 'website'
+        verbose_name = 'photos nouveauté'
+        verbose_name_plural = 'photos nouveauté'
+
+    def __str__(self):
+        return self.img.url.split("/")[-1]
+
+    def clean(self):
+        number = NouveautePhoto.objects.all().count()
+        if number < 4:
+            self.save()
+        else:
+            raise ValidationError("Vous ne pouvez pas ajouter  plus de  {} photos".format(number))

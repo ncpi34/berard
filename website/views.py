@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from cart.forms import CartAddProductForm
 from website.filters import ArticleFilter
 from website.forms import LoginForm, ForgotPassForm
-from website.models import Article, Groupe, ProfilUtilisateur, Favori, FavorisClient
+from website.models import Article, Groupe, ProfilUtilisateur, Favori, FavorisClient, Nouveaute, NouveautePhoto
 from cart.models import PanierEnCours
 from django.db.models import Q
 from django.core.mail import send_mail
@@ -93,7 +93,24 @@ def logout_view(request):
 class HomeView(View):
 
     def get(self, *args, **kwargs):
-        return render(self.request, 'website/home.html')
+        qs_novelties = Nouveaute.objects.all()
+        novelties_text = None
+        if qs_novelties.exists():
+            novelties_text = qs_novelties[0]
+
+        qs_novelties_pic = NouveautePhoto.objects.all()
+        novelties_pic = None
+        pic_list = []
+        if qs_novelties_pic.exists():
+            for i in qs_novelties_pic:
+                pic_list.append(i)
+            novelties_pic = pic_list
+
+        return render(self.request, 'website/home.html',
+                      {
+                          'novelties': novelties_text,
+                          'novelties_pic': novelties_pic
+                      })
 
 
 class OffersView(ListView):

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
+from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 
-from website.models import ProfilUtilisateur, Article, Favori
+from website.models import ProfilUtilisateur, Article, Favori, Nouveaute, NouveautePhoto
 from order.models import HistoriqueCommande, ProduitCommande
 from django.db.models import ManyToOneRel, ForeignKey, OneToOneField
 from django.contrib.auth.models import User
@@ -13,8 +14,20 @@ from django.db.models import Q
 admin.site.unregister(Group)
 
 """Register part"""
+admin.site.register(Nouveaute)
 
-""" Article """
+
+# admin.site.register(NouveautePhoto)
+
+
+@admin.register(NouveautePhoto)
+class NouveautePhotoAdmin(admin.ModelAdmin):
+    readonly_fields = ["thumbnails_pic"]
+
+    def thumbnails_pic(self, obj):
+        return mark_safe(f'<img src="{obj.img.url}" width="200px" />')
+
+    thumbnails_pic.short_description = 'visuel'
 
 
 @admin.register(Article)
@@ -54,9 +67,12 @@ class HistoriqueViews(admin.ModelAdmin):
 
 """ CustomUser """
 
+
 class TarifInline(admin.StackedInline):
     model = ProfilUtilisateur
-    exclude = ('telephone', 'adresse', 'code_client', 'code_representant', )
+    exclude = ('telephone', 'adresse', 'code_client', 'code_representant',)
+
+
 class CustomUserAdmin(UserAdmin):
     inlines = (TarifInline,)
     # exclude = ('username',)
@@ -67,7 +83,6 @@ class CustomUserAdmin(UserAdmin):
             'email',
             'password',
         )}),
-
 
         ('Permissions', {'fields': ('is_active',
                                     )}),
@@ -82,12 +97,15 @@ admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
 """ Favorite"""
+
+
 @admin.register(Favori)
 class FavoritesViews(admin.ModelAdmin):
-     def queryset(self, request):
+    def queryset(self, request):
         qs = super().queryset(request)
         return qs.exclude(Q(article__prix_achat_1=0.00) | Q(article__actif=False) | Q(article__taux_TVA=None))
-  
+
+
 """Unregister part"""
 admin.site.unregister(HistoriqueCommande)
 

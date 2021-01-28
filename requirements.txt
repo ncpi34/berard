@@ -31,6 +31,7 @@ django-material==0.5.1
 django-material-admin==1.7.3
 django-menu-generator==1.0.4
 django-modeltranslation==0.15
+django-resized==0.3.11
 django-shopping-cart==0.1
 django-timezone-field==4.0
 django-widget-tweaks==1.4.8

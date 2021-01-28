@@ -33,7 +33,7 @@
     <!--Main layout-->
     <main class="container mt-5 mx-auto" style="min-height:83vh;">
       <div class="row">
-        <div class="col-9">
+        <div class="col-lg-9">
           <fieldset>
             <legend>Actualités</legend>
             <div class="row">
@@ -56,24 +56,35 @@
             <legend>Nouveautés</legend>
             <div class="row">
               <div class="col">
-                <p>Chaque mois, des nouveautés produits pour dynamiser vos 
-                  gammes pour vos clients ! Découvrez ce mois ci la gamme 
-                  apéritive Délices de Belle France Olives & Apéritifs farcis 
-                </p>
+              {% if novelties %}
+                <p>{{ novelties.text }}</p>
+              {% else %}
+                  <p>Pas de nouveauté pour l'instant</p>
+              {% endif %}
+
                 <div class="row">
-                  <div class="col">
-                    <img class="w-100" src="/media/img/nouveaute1.png" alt="nouveautés">
-                  </div>
-                  <div class="col">
-                    <img class="w-100" src="/media/img/nouveaute2.png" alt="nouveautés">
-                  </div>
-                  <div class="col">
-                    <img class="w-100" src="/media/img/nouveaute3.png" alt="nouveautés">
-                  </div>
+                    {% if novelties_pic %}
+                        {% for item in novelties_pic %}
+                          <div class="col">
+                            <img class="w-75" src="{{ item.img.url }}" alt="nouveautés">
+                          </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="col">
+                            <img class="w-75" src="/media/img/nouveaute1.png" alt="nouveautés">
+                        </div>
+                        <div class="col">
+                            <img class="w-75" src="/media/img/nouveaute2.png" alt="nouveautés">
+                        </div>
+                        <div class="col">
+                            <img class="w-75" src="/media/img/nouveaute3.png" alt="nouveautés">
+                        </div>
+                        <div class="col">
+                            <img class="w-75" src="/media/img/nouveautes4.jpg" alt="nouveautés">
+                        </div>
+                    {% endif %}
                 </div>
-              </div>
-              <div class="col">
-                <img class="w-100" src="/media/img/nouveautes4.jpg" alt="nouveautés">
+
               </div>
             </div>
           </fieldset>
@@ -100,7 +111,7 @@
           </fieldset>
         </div>
 
-        <div class="col-3">
+        <div class="col-lg-3">
           <fieldset>
             <legend>Vos enseignes</legend>
             <p>Il y aura toujours une enseigne adaptée à votre environnement client…</p>
