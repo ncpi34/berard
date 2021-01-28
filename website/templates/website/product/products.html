@@ -138,33 +138,55 @@
         <!--Grid row-->
       </section>
       <!--Section: Products v.3-->
-      
         {% else %}
             <div class="container text-center" style="min-height: 80vh; margin-top: 15%">
             <h4>Pas d'articles pour le moment ...</h4>
             </div>
         {% endif %}
-    </div>
-   <!-- Pagination-->
-  {% if is_paginated %}
-    <div class="pagination justify-content-end mr-5">
-           {% if page_obj.has_previous %}
-               <a href="?page={{ page_obj.previous_page_number }}">
-               <button class="btn btn-success waves-effect">
-                   <i class="material-icons">chevron_left</i>
-               </button>
-               </a>
-           {% endif %}
-            <p class="mt-3">Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</p>
-           {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}">
-                <button class="btn btn-success waves-effect">
-                   <i class="material-icons">chevron_right</i>
-               </button>
-           </a>
-           {% endif %}
-    </div>
-{% endif %}
+
+ <!-- Pagination-->
+        {% if is_paginated %}
+            {% load proper_paginate %}
+            {% load url_replace %}
+            {% load proper_paginate %}
+            {% load url_replace %}
+            <ul class="bg-dark d-flex justify-content-center d-inline ">
+                {% if page_obj.number == 1 %}
+                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>⇤</span></li>
+                {% else %}
+                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                           href="?{% url_replace request 'page' 1 %}">⇤</a></li>
+                {% endif %}
+                {% if page_obj.has_previous %}
+                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                           href="?{% url_replace request 'page' page_obj.previous_page_number %}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paginator|proper_paginate:page_obj.number %}
+                    {% if page_obj.number == i %}
+                        <li class="block nav-item d-inline-flex  align-items-center mr-4 text-white">
+                            <span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                               href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                           href="?{% url_replace request 'page' page_obj.next_page_number %}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>&raquo;</span></li>
+                {% endif %}
+                {% if page_obj.number == paginator.num_pages %}
+                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>⇥</span></li>
+                {% else %}
+                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                           href="?{% url_replace request 'page' paginator.num_pages %}">⇥</a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+       <!-- Pagination-->
   </main>
 
 
