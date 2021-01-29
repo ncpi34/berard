@@ -18,16 +18,17 @@ class ClientViews(object):
     def file_treatement(cls, request, **kwargs):
         if kwargs['password'] == 'berard_client':
             cls.test_crontab()
-            # if path not exists
-            path = 'resources/import/'
-            if not os.path.exists(path):
-                os.makedirs(path)
-            f = 'TCLT.PLN'
-            ftp = connect_ftp(path, f)
+            path_server = 'resources/import/'
+            if not os.path.exists(path_server):
+                os.makedirs(path_server)
+
+            path_ftp = '/Rep/EXPORT'
+            f = "TCLT.PLN"
+            ftp = connect_ftp(path_server, path_ftp, f)
             if ftp:
                 try:
 
-                    with open(os.path.join(path, f), encoding='utf-8', errors='ignore') as file:
+                    with open(os.path.join(path_server, f), encoding='utf-8', errors='ignore') as file:
                         text_lines = file.readlines()
 
                     array_of_obj = cls.build_array(text_lines)
@@ -88,7 +89,7 @@ class ClientViews(object):
                         last_name=rst['nom'],
                         password=rst["mot_de_passe"], )
                 )
-
+                print(rst["code_client"], " done")
                 # check if user has tarif equal to 0
                 if rst['tarif'] == 0:
                     user.is_active = False

@@ -15,15 +15,17 @@ class ArticleAutomate:
     # Index_method
     @classmethod
     def file_treatement(cls, **kwargs):
-        # if path not exists
-        path = 'resources/import/'
-        if not os.path.exists(path):
-            os.makedirs(path)
+        path_server = 'resources/import/'
+        if not os.path.exists(path_server):
+            os.makedirs(path_server)
+
+        path_ftp = '/Rep/EXPORT'
         f = "TART.PLN"
-        ftp = connect_ftp(path, f)
+        ftp = connect_ftp(path_server, path_ftp, f)
         if ftp:
             try:
-                with open(os.path.join(path, f), encoding="utf-8", errors='ignore') as file:
+
+                with open(os.path.join(path_server, f), encoding="utf-8", errors='ignore') as file:
                     text_lines = file.readlines()
 
                 array_of_obj = cls.build_array(text_lines)
@@ -218,19 +220,29 @@ class ArticleAutomate:
 
     @staticmethod
     def get_VAT():
-        xlsx_path = 'resources/import/TVA.xlsx'  # Xlsx file path
-        data = get_data(xlsx_path, start_row=1)
+        path_server = 'resources/import/'
+        if not os.path.exists(path_server):
+            os.makedirs(path_server)
 
-        # VAT
-        for row in data['TVA']:
+        path_ftp = '/SiteWeb/tva_produits'
+        f = "TVA.xlsx"
+        ftp = connect_ftp(path_server, path_ftp, f)
+        if ftp:
             try:
-                if row:
-                    Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
+                data = get_data(os.path.join(path_server, f), start_row=1)
+                for row in data['TVA']:
+                    try:
+                        if row:
+                            Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
+                            print('vat ok')
+                    except Article.DoesNotExist as e:
+                        print('ERROR VAT', e)
+                        raise e
+                print('vat creation done')
 
-            except Article.DoesNotExist as e:
-                print('ERROR VAT', e)
-                raise e
-        print('vat creation done')
+            except OSError as error:
+                print("OS error: {0}".format(error))
+                return False
 
     @staticmethod
     def insert_into_db(self):

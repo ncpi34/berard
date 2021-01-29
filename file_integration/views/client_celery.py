@@ -11,15 +11,17 @@ class ClientAutomate:
     # Index_method
     @classmethod
     def file_treatement(cls, **kwargs):
-        path = 'resources/import/'
-        if not os.path.exists(path):
-            os.makedirs(path)
-        f = 'TCLT.PLN'
-        ftp = connect_ftp(path, f)
+        path_server = 'resources/import/'
+        if not os.path.exists(path_server):
+            os.makedirs(path_server)
+
+        path_ftp = '/Rep/EXPORT'
+        f = "TCLT.PLN"
+        ftp = connect_ftp(path_server, path_ftp, f)
         if ftp:
             try:
 
-                with open(os.path.join(path, 'TCLT.PLN'), encoding='utf-8', errors='ignore') as file:
+                with open(os.path.join(path_server, f), encoding='utf-8', errors='ignore') as file:
                     text_lines = file.readlines()
 
                 array_of_obj = cls.build_array(text_lines)

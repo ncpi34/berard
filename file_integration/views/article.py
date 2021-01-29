@@ -17,15 +17,17 @@ class ArticleViews(object):
     @classmethod
     def file_treatement(cls, request, **kwargs):
         if kwargs['password'] == 'berard_article':
-            path = 'resources/import/'
-            if not os.path.exists(path):
-                os.makedirs(path)
+            path_server = 'resources/import/'
+            if not os.path.exists(path_server):
+                os.makedirs(path_server)
+
+            path_ftp = '/Rep/EXPORT'
             f = "TART.PLN"
-            ftp = connect_ftp(path, "TART.PLN")
+            ftp = connect_ftp(path_server, path_ftp, f)
             if ftp:
                 try:
 
-                    with open(os.path.join(path, f), encoding="utf-8", errors='ignore') as file:
+                    with open(os.path.join(path_server, f), encoding="utf-8", errors='ignore') as file:
                         text_lines = file.readlines()
 
                     array_of_obj = cls.build_array(text_lines)
@@ -100,7 +102,6 @@ class ArticleViews(object):
         # Iterate over the data and write it out row by row.
         for item in articles:
             if not os.path.exists(f"D:\Projets\Berard\media\img\product\{item.code_article}.jpg"):
-                print('item', item)
                 worksheet.write(row, col, item.libelle)
                 worksheet.write(row, col + 1, item.code_article)
                 worksheet.write(row, col + 2, item.gencode)
@@ -113,7 +114,6 @@ class ArticleViews(object):
 
         # Write a total using a formula.
         worksheet.write(row, 0, 'Total')
-        print('row', row)
         worksheet.write(row, 1, f'{row - 1}')
 
         workbook.close()
@@ -128,12 +128,10 @@ class ArticleViews(object):
         f_delete = open('resources/del_articles.txt', 'w')
         articles = Article.objects.all()
         x = 0
-        print(articles.count())
         result = False
         while x < articles.count():
             for item in arr_obj:
                 if articles[x].code_article is item["code_article"]:
-                    print('no deleted')
                     result = True
                     break
                 else:
@@ -141,7 +139,6 @@ class ArticleViews(object):
                     # art.delete()
 
             if not result:
-                print('delete', articles[x].code_article)
                 f_delete.write('delete ' + articles[x].code_article + '\n')
                 articles[x].delete()
             else:
@@ -155,15 +152,12 @@ class ArticleViews(object):
     def get_errors_on_three_values(val_1, val_2, val_3):
         try:
             int(val_1)
-            print(int(val_1))
         except ValueError:
             try:
                 int(val_2)
-                print(int(val_2))
             except ValueError:
                 try:
                     int(val_3)
-                    print(int(val_3))
                 except ValueError:
                     print('error on three values')
 
@@ -217,19 +211,30 @@ class ArticleViews(object):
 
     @staticmethod
     def get_VAT():
-        xlsx_path = 'resources/import/TVA.xlsx'  # Xlsx file path
-        data = get_data(xlsx_path, start_row=1)
+        path_server = 'resources/import/'
+        if not os.path.exists(path_server):
+            os.makedirs(path_server)
 
-        # VAT
-        for row in data['TVA']:
+        path_ftp = '/SiteWeb/tva_produits'
+        f = "TVA.xlsx"
+        ftp = connect_ftp(path_server, path_ftp, f)
+        if ftp:
             try:
-                if row:
-                    Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
+                data = get_data(os.path.join(path_server, f), start_row=1)
+                for row in data['TVA']:
+                    try:
+                        if row:
+                            Article.objects.filter(code_article=row[0]).update(taux_TVA=row[1])
+                            print('vat ok')
+                    except Article.DoesNotExist as e:
+                        print('ERROR VAT', e)
+                        raise e
+                print('vat creation done')
 
-            except Article.DoesNotExist as e:
-                print('ERROR VAT', e)
-                raise e
-        print('vat creation done')
+            except OSError as error:
+                print("OS error: {0}".format(error))
+                return False
+
 
     @staticmethod
     def insert_into_db(self):
@@ -285,12 +290,10 @@ class ArticleViews(object):
                     subfamily = SousFamille.objects.get(id=rst["sous_famille"])
                 except SousFamille.DoesNotExist:
                     subfamily = None
-                    print('coucou')
-                if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 or rst[
-                    'prix_achat_4'] > 0.00 or rst['code_article'] != 'AAAA01' or rst['code_article'] is not 'AAAA02':
-                    print('>0.00')
+                if rst['prix_achat_1'] > 0.00 or rst['prix_achat_2'] > 0.00 or rst['prix_achat_3'] > 0.00 \
+                        or rst['prix_achat_4'] > 0.00 or rst['code_article'] != 'AAAA01' or rst['code_article'] != 'AAAA02':
                     try:
-                        print('test')
+
                         Article.objects.update_or_create(
                             code_article=rst["code_article"],
                             gencode=rst["gencode"],
@@ -309,7 +312,8 @@ class ArticleViews(object):
                             )
 
                         )
-                        print('inserted', rst['libelle'])
+                        print(rst["code_article"], " done")
+
                     except Exception as err:
                         f_art_err.write('not inserted ' + rst['code_article'] + '\n')
                         print('not inserted', rst['code_article'])
@@ -317,7 +321,6 @@ class ArticleViews(object):
                         raise err
 
                 else:
-                    print('===0.00')
                     try:
                         article = Article.objects.get(
                             code_article=rst["code_article"],
