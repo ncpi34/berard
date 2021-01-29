@@ -195,8 +195,9 @@ class Favori(models.Model):
     article = models.OneToOneField(Article, on_delete=models.CASCADE, primary_key=True, )
 
     class Meta:
-        verbose_name = "Favoris"
-        verbose_name_plural = "Favoris"
+        # app_label = 'website'
+        verbose_name = "opportunités"
+        verbose_name_plural = 'opportunités'
 
     def __str__(self):
         return self.article.libelle
