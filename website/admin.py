@@ -13,13 +13,11 @@ from django.db.models import Q
 """Unregister Part"""
 admin.site.unregister(Group)
 
-"""Register part"""
+# News text
 admin.site.register(Nouveaute)
 
 
-# admin.site.register(NouveautePhoto)
-
-
+# News pictures
 @admin.register(NouveautePhoto)
 class NouveautePhotoAdmin(admin.ModelAdmin):
     readonly_fields = ["thumbnails_pic"]
@@ -49,25 +47,8 @@ class ArticleViews(admin.ModelAdmin):
 
 # prepopulated_fields = {'slug': ('libelle',)}
 
-class ArticlesInLine(admin.TabularInline):
-    model = ProduitCommande
-    raw_id_fields = ['article']
 
-
-""" Order Summary """
-
-
-@admin.register(HistoriqueCommande)
-class HistoriqueViews(admin.ModelAdmin):
-    list_display = ['date', 'get_articles', 'utilisateur']
-    list_filter = ['date']
-    date_hierarchy = 'date'
-    inlines = [ArticlesInLine]
-
-
-""" CustomUser """
-
-
+# User
 class TarifInline(admin.StackedInline):
     model = ProfilUtilisateur
     exclude = ('telephone', 'adresse', 'code_client', 'code_representant',)
@@ -96,9 +77,8 @@ class CustomUserAdmin(UserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 
-""" Favorite"""
 
-
+# Opportunities
 @admin.register(Favori)
 class FavoritesViews(admin.ModelAdmin):
     def queryset(self, request):
@@ -106,8 +86,28 @@ class FavoritesViews(admin.ModelAdmin):
         return qs.exclude(Q(article__prix_achat_1=0.00) | Q(article__actif=False) | Q(article__taux_TVA=None))
 
 
-"""Unregister part"""
-admin.site.unregister(HistoriqueCommande)
+# Orders
+class OrderInLine(admin.TabularInline):
+    model = ProduitCommande
+
+
+@admin.register(HistoriqueCommande)
+class OrderViews(admin.ModelAdmin):
+    list_display = ['id', 'date', 'utilisateur', 'get_total_cost_without_taxes']
+    list_filter = ['date']
+    search_fields = ('date',)
+    date_hierarchy = 'date'
+    inlines = [OrderInLine]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 """ Site visual """
 admin.site.site_header = 'Administration Berard Distribution'

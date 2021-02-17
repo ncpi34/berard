@@ -91,6 +91,8 @@ INSTALLED_APPS = [
     'cart',
     'file_integration',
     'order',
+
+    'user_visit',
 ]
 
 CART_SESSION_ID = 'cart'  # during 15 days
@@ -103,8 +105,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.common.BrokenLinkEmailsMiddleware'  # in case of 404 send email
+    'django.middleware.common.BrokenLinkEmailsMiddleware',  # in case of 404 send email
     # 'django.middleware.locale.LocaleMiddleware', # i18n
+    'user_visit.middleware.UserVisitMiddleware',
 ]
 
 ROOT_URLCONF = 'berard.urls'
