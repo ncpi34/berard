@@ -18,62 +18,20 @@
   to {transform:scale(1)}
 }
 /* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px){
-  .modal-content {
-    width: 100%;
-  }
-     #menu-modal{
-        height:40%
-    }
-}
-    @media only screen and (min-width: 700px){
-      #img-modal {
-        width: 35%;
-      }
-      #menu-modal{
-          height:60%
-      }
-    }
+
 #btn {
       position: absolute;
       top: 5%;
-      right: 5%;
+      right: 25%;
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
       border-radius: 10px;
 }
 </style>
 
-<!--        <img id="img-modal" class="modal img-fluid"  src=""/>-->
-<div class="modal" id="menu-modal">
-
-  
-  
-          <img id="img-modal" class="modal-content img-fluid m-auto"  src=""/>
-  
-             <i id="btn" class="modal-close material-icons  red-text ">close</i>
-  
-  
-  
-  </div>
+<div class="modal" id="menu-modal" style="width: 100%;max-width: 100%;height: auto;">
+    <img id="img-modal" class="modal-content img-fluid m-auto" src="" style=""/>
+    <i id="btn" class="modal-close material-icons  red-text ">close</i>
+</div>
 
 
-<!--<script>-->
-<!--    document.addEventListener('DOMContentLoaded', () => {-->
-<!--        // 1. Create the button-->
-<!--        let button = document.createElement("a");-->
-<!--        button.innerHTML = '<i class="material-icons close_modal red-text">close</i>'-->
-<!--        button.className = "modal-close  btn-flat close_modal_picture";-->
-
-<!--        // 2. Append somewhere-->
-<!--        let modal = document.querySelector("#img-modal");-->
-<!--        console.log(modal)-->
-<!--        modal.appendChild(button);-->
-
-<!--        // 3. Add event handler-->
-<!--        button.addEventListener ("click", function() {-->
-<!--          alert("did something");-->
-<!--        });-->
-<!--    })-->
-
-<!--</script>-->

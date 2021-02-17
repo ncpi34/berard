@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // only for products with differents groups
     if(multiples &&  multiples_display){
         for (let i=0; i< multiples.length; i++) {
-            console.log(hidden_groups[i].value)
             if (hidden_groups[i].value === 'BOISSONS' || hidden_groups[i].value === 'SURGELES' || hidden_groups[i].value === 'BOISSONS BIO') {
                 if(!isNaN(parseInt(multiples[i].innerHTML))) {
                     multiples_display[i].step = multiples[i].innerHTML.trim()
@@ -35,11 +34,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         let multiple_expected = multiples[i].innerHTML;
                         // round result
                         if (value_onchange.value % multiple_expected !== 0) {
-                            let result_to_display = Math.round(value_onchange.value / multiple_expected) * multiple_expected
-    
-                            value_onchange.value = result_to_display 
+                            value_onchange.value = Math.round(value_onchange.value / multiple_expected) * multiple_expected
                             // create error display
-                            if(value_onchange.value == 0) {
+                            if(value_onchange.value === 0) {
                                 let p = document.createElement('p')
                                 p.innerHTML = "Veuillez ajouter un minimum de " +  multiple_expected
                                 p.style.color = 'red'

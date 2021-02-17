@@ -66,7 +66,7 @@ class GroupViews(object):
             # FAMILY
             for row in data['FamilleMTM']:
 
-                if row[0] is not "":
+                if row[0] != "":
 
                     if re.search(',', str(row[0])):
                         tab_str_split = str(row[0]).split(',')
@@ -106,7 +106,7 @@ class GroupViews(object):
             # SUBFAMILY
             for row in data['SousFamilleMTM']:
 
-                if row[0] is not "":
+                if row[0] != "":
 
                     if re.search(',', str(row[0])):
                         tab_str_split = str(row[0]).split(',')

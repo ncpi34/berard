@@ -205,7 +205,7 @@ class Favori(models.Model):
     def clean(self):
         numFavorites = Favori.objects.all().count()
         if numFavorites > 5:
-            raise ValidationError("Vous ne pouvez pas créer plus de  {} favoris".format(numFavorites))
+            raise ValidationError("Vous ne pouvez pas créer plus de  {} opportunités".format(numFavorites))
 
 
 """ Favorites """

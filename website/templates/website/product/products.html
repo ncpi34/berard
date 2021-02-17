@@ -58,7 +58,7 @@
                 <!--Img-->  
                 <a  href="#menu-modal" class="modal-trigger pic_button" id="{{ article.get_img }}"  >
                         <img class="rounded img_modal img-fluid ml-auto mr-auto card-img-top"
-                             alt="photo" style="width: 34%;height: 6vw;object-fit: scale-down;"
+                             alt="photo" style="width: 50%;height: 8vw;object-fit: scale-down;"
                         src="{{ article.get_img }}"/>
                 </a>
                 <!--Img-->
@@ -85,12 +85,6 @@
                      </div>
                   </form>
                 <!--Form-->
-                {% else %}
-                    <div class="alert alert-warning text-center" role="alert">
-                        <a href="{% url 'website:login' %}">
-                            Connectez vous
-                        </a>
-                    </div>
               {% endif %}
               <div class="row d-flex justify-content-center">
                 <!--Hidden Group-->
@@ -122,8 +116,13 @@
               <!--Col-->
               </div>
               <!--Row-->
-              
-                
+              {% if not user.is_authenticated %}
+                <div class="alert alert-warning text-center" role="alert">
+                        <a href="{% url 'website:login' %}">
+                            Veuillez vous connecter
+                        </a>
+                    </div>
+            {% endif %}
               
               <!--Card content-->
 
@@ -150,38 +149,38 @@
             {% load url_replace %}
             {% load proper_paginate %}
             {% load url_replace %}
-            <ul class="bg-dark d-flex justify-content-center d-inline ">
+            <ul class="bg-grey d-flex text-info justify-content-center d-inline ">
                 {% if page_obj.number == 1 %}
-                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>⇤</span></li>
+                    <li class="disabled nav-item d-inline-flex text-info align-items-center mr-4 text-white"><span>⇤</span></li>
                 {% else %}
-                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                    <li><a class="block nav-item d-inline-flex text-info align-items-center mr-4 text-white"
                            href="?{% url_replace request 'page' 1 %}">⇤</a></li>
                 {% endif %}
                 {% if page_obj.has_previous %}
-                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                    <li><a class="block nav-item d-inline-flex text-info align-items-center mr-4 text-white"
                            href="?{% url_replace request 'page' page_obj.previous_page_number %}">&laquo;</a></li>
                 {% else %}
-                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>&laquo;</span></li>
+                    <li class="disabled nav-item d-inline-flex text-info align-items-center mr-4 text-white"><span>&laquo;</span></li>
                 {% endif %}
                 {% for i in paginator|proper_paginate:page_obj.number %}
                     {% if page_obj.number == i %}
-                        <li class="block nav-item d-inline-flex  align-items-center mr-4 text-white">
+                        <li class="block nav-item d-inline-flex text-dark align-items-center mr-4 text-white">
                             <span>{{ i }} <span class="sr-only">(current)</span></span></li>
                     {% else %}
-                        <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                        <li><a class="block nav-item d-inline-flex text-info align-items-center mr-4 text-white"
                                href="?{% url_replace request 'page' i %}">{{ i }}</a></li>
                     {% endif %}
                 {% endfor %}
                 {% if page_obj.has_next %}
-                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                    <li><a class="block nav-item d-inline-flex text-info align-items-center mr-4 text-white"
                            href="?{% url_replace request 'page' page_obj.next_page_number %}">&raquo;</a></li>
                 {% else %}
-                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>&raquo;</span></li>
+                    <li class="disabled nav-item d-inline-flex text-info align-items-center mr-4 text-white"><span>&raquo;</span></li>
                 {% endif %}
                 {% if page_obj.number == paginator.num_pages %}
-                    <li class="disabled nav-item d-inline-flex  align-items-center mr-4 text-white"><span>⇥</span></li>
+                    <li class="disabled nav-item d-inline-flex text-info align-items-center mr-4 text-white"><span>⇥</span></li>
                 {% else %}
-                    <li><a class="block nav-item d-inline-flex  align-items-center mr-4 text-white"
+                    <li><a class="block nav-item d-inline-flex text-info align-items-center mr-4 text-white"
                            href="?{% url_replace request 'page' paginator.num_pages %}">⇥</a></li>
                 {% endif %}
             </ul>
