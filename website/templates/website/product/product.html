@@ -24,10 +24,12 @@
                 <!--Grid column-->
             <div class="row">
               <h6>
-                <span class="badge badge-info text-center">
-                  {% load website_extras %}
-                  {{ request.session.tarif|without_taxes:article }}€
-                </span>
+                  {% if user.is_authenticated %}
+                    <span class="badge badge-info text-center">
+                      {% load website_extras %}
+                      {{ request.session.tarif|without_taxes:article }}€
+                    </span>
+                  {% endif %}
               </h6>
             </div>
             <!--Grid column-->

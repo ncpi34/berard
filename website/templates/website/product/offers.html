@@ -84,10 +84,12 @@
                        <!--Col-->
                        <div class="col">
                         <h6>
-                          <span class="badge badge-info" style="font-size: 18px;">
-                            {% load website_extras %}
-                              {{ request.session.tarif|without_taxes:article.article }}€
-                          </span>
+                            {% if user.is_authenticated %}
+                              <span class="badge badge-info" style="font-size: 18px;">
+                                {% load website_extras %}
+                                  {{ request.session.tarif|without_taxes:article.article }}€
+                              </span>
+                            {% endif %}
                         </h6>
                         <label>TVA {{ article.article.format_VAT }} %</label>
                        </div>
