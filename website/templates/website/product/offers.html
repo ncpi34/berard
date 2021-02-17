@@ -64,12 +64,6 @@
                             </div>
                          </form>
                        <!--Form-->
-                     {% else %}
-                            <div class="alert alert-warning text-center" role="alert">
-                                <a href="{% url 'website:login' %}">
-                                    Connectez vous
-                                </a>
-                            </div>
                       {% endif %}
                      <div class="row d-flex justify-content-center">
                        <!--Hidden Group-->
@@ -102,6 +96,13 @@
                      <!--Col-->
                      </div>
                      <!--Row-->
+                   {% if not user.is_authenticated %}
+                        <div class="alert alert-warning text-center" role="alert">
+                                <a href="{% url 'website:login' %}">
+                                    Veuillez vous connecter
+                                </a>
+                            </div>
+                    {% endif %}
                      <!--Card content-->
                    </div>
                    <!--Card-->
