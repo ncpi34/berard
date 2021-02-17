@@ -151,9 +151,10 @@ class FavoritesView(LoginRequiredMixin, ListView):
         else:
             df = df.sort_values('quantite')
             sorted_list_of_dicts = df.T.to_dict().values()
-
             for article in list(sorted_list_of_dicts)[0:20]:  # 20first results
-                art += Article.objects.filter(libelle=article['libelle'])
+                qs_article = Article.objects.filter(pk=article['pk'])
+                if qs_article.exists() and article['price'] > 0:
+                    art += qs_article
             return art
 
     def get_context_data(self, **kwargs):

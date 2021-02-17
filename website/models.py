@@ -229,7 +229,7 @@ class FavorisClient(models.Model):
         return self.article.libelle
 
     def format_data(self):
-        return {'libelle': self.article.libelle, 'quantite': self.quantite}
+        return {'pk': self.article.pk, 'quantite': self.quantite, 'price': self.article.prix_achat_1 }
 
 
 class Nouveaute(SingletonModel):
