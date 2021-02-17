@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'website/base.html' %}
 
 {% load static %}
@@ -53,3 +54,60 @@
 {% endblock %}
 
 
+=======
+{% extends 'website/base.html' %}
+
+{% load static %}
+
+{% block navbar %}
+{% include "website/topnavbar.html"  %}
+{% endblock %}
+
+
+{% block content %}
+    <main class="container mx-auto" style="min-height: 83vh;">
+    {% if histories %}
+        <h3 class="text-center">Historique Commandes</h3>
+    {% endif %}
+    <div class="table-responsive mt-2" >
+    {% if histories %}
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th scope="col">Date</th>
+            <th scope="col">Nombre de produits</th>
+            <th scope="col">Total HT</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for history in histories %}
+
+        <tr>
+
+            <th>
+                <a style="color:blue" href="{{ history.get_absolute_url }}">
+                {{ history.date }}
+                </a>
+            </th>
+            <td>{{ history.get_number_products }}</td>
+            <td class="num">{{ history.get_total_cost_without_taxes }}€</td>
+
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% else %}
+         <div class="container mx-auto text-center mt-5" style="min-height: 80vh; margin-top: 15%">
+             <h4 class="mt-4 mb-5">Pas d'historique ...</h4>
+        </div>
+{% endif %}
+    </div>
+  </main>
+{% endblock %}
+
+
+>>>>>>> 6845ee2966aaff033532792a412d9c2db020a80a

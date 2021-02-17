@@ -15,6 +15,8 @@ class HistoriqueCommande(models.Model):
                                     null=True)
 
     class Meta:
+        verbose_name = "Commandes"
+        verbose_name_plural = "Commandes"
         ordering = ('-date',)
 
     def __str__(self):

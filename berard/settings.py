@@ -91,7 +91,8 @@ INSTALLED_APPS = [
     'cart',
     'file_integration',
     'order',
-    'user_visit'
+    'user_visit',
+
 ]
 
 CART_SESSION_ID = 'cart'  # during 15 days
