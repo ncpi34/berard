@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(BASE_DIR, 'berard/.env'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = os.getenv('DEBUG')
+DEBUG = (os.getenv("DEBUG") == 'True')
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS")
 
@@ -96,6 +96,7 @@ INSTALLED_APPS = [
 ]
 
 CART_SESSION_ID = 'cart'  # during 15 days
+SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -192,7 +193,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_USE_TLS = (os.getenv("EMAIL_USE_TLS") == 'True')
 
 """ Caches """
 CACHES = {
