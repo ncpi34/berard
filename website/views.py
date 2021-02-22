@@ -47,6 +47,9 @@ class LoginView(View):
                 try:
                     user = User.objects.get(username=username, password=password)
                     try:
+                        if user.profilutilisateur.tarif == '0':
+                            messages.error(self.request, "Vous n'avez pas accès à ce site")
+                            return render(self.request, 'auth/login.html')
                         if user:
                             tarif = user.profilutilisateur.tarif
                             login(self.request, user)
