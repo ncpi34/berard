@@ -75,19 +75,28 @@ class SendOrderView(LoginRequiredMixin, View):
             return self + (x * (10 - len(self)))
 
     @staticmethod
-    def send_file_to_ftp(self):
+    def send_file_to_ftp(f):
         try:
             ftp = FTP(settings.BERARD_FTP_HOST)
-            ftp.set_debuglevel(2)
+            # ftp.set_debuglevel(2)
             ftp.login(settings.BERARD_FTP_USER, settings.BERARD_FTP_PWD)
             ftp.cwd('/Rep/IMPORT')
-            file = open(self.name, 'rb')
-            ftp.storbinary('STOR %s' % os.path.basename(self.name), file, 1024)
+            file = open(f.name, 'rb')
+            ftp.storbinary('STOR %s' % os.path.basename(f.name), file, 1024)
             file.close()
 
-        except Exception as e:
-            print('FTP ERROR ', e)
-            raise e
+        except:
+            try:
+                ftp = FTP(settings.BERARD_FTP_HOST)
+                # ftp.set_debuglevel(2)
+                ftp.login(settings.BERARD_FTP_USER, settings.BERARD_FTP_PWD)
+                ftp.cwd('/Rep/IMPORT')
+                file = open(f.name, 'rb')
+                ftp.storbinary('STOR %s' % os.path.basename(f.name), file, 1024)
+                file.close()
+            except Exception as e:
+                print('FTP ERROR ', e)
+                raise e
 
     def get(self, request, **kwargs):
         return render(request, 'cart/confirm_modal_mat.html')
@@ -202,10 +211,11 @@ def order_summary_to_cart(request, order_id):
     products = ProduitCommande.objects.filter(commande__id=int(order_id))
     cart = Cart(request)
     for item in products:
-        product = get_object_or_404(Article, id=item.article.id)
-        cart.add(product=product,
-                 quantity=item.quantite,
-                 )
+        qs_product = Article.objects.filter(id=item.article.id)
+        if qs_product.exists():
+            cart.add(product=qs_product[0],
+                     quantity=item.quantite,
+                     )
     return redirect("cart:cart_detail")
 
 
@@ -213,12 +223,12 @@ def order_summary_to_cart(request, order_id):
 @require_POST
 def cart_add(request, product_id):  # add method
     cart = Cart(request)
-    product = get_object_or_404(Article, id=product_id)
+    qs_product = Article.objects.filter(id=product_id)
     form = CartAddProductForm(request.POST)
     encoded_url = ''
-    if form.is_valid():
+    if form.is_valid() and qs_product.exists():
         cd = form.cleaned_data
-        cart.add(product=product,
+        cart.add(product=qs_product[0],
                  quantity=cd['quantity'],
                  update_quantity=cd['update'])
         # redirect with hidden form

@@ -8,7 +8,6 @@ from django.db.models import Q
 class OrderSummaryView(LoginRequiredMixin, ListView):
     template_name = 'order/order_summary.html'
     queryset = HistoriqueCommande.objects.all()
-    login_url = ''
     context_object_name = 'histories'
 
     def get_queryset(self):
@@ -20,7 +19,6 @@ class OrderSummaryView(LoginRequiredMixin, ListView):
 class OrderDetailView(LoginRequiredMixin, DetailView):
     template_name = 'order/order_detail.html'
     queryset = HistoriqueCommande.objects.all()
-    login_url = ''
 
     def get_object(self):
         id_ = self.kwargs.get('pk')
