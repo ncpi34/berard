@@ -202,10 +202,10 @@ class ArticleDetailView(DetailView):
     def get_object(self):
         id_ = self.kwargs.get('pk')
         # views_numb
-        article = Article.objects.get(id=id_)
+        article = Article.objects.get(code_article=id_)
         article.nb_vues += 1
         article.save()
-        return get_object_or_404(Article, pk=id_)
+        return get_object_or_404(Article, code_article=id_)
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)

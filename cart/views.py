@@ -31,7 +31,7 @@ class CartRemoveView(LoginRequiredMixin, View):
     def post(self, request, **kwargs):
         cart = Cart(request)
         _pk = kwargs.get("product_id")
-        product = get_object_or_404(Article, id=_pk)
+        product = get_object_or_404(Article, code_article=_pk)
         cart.remove(product)
         return redirect("cart:cart_detail")
 
@@ -211,7 +211,7 @@ def order_summary_to_cart(request, order_id):
     products = ProduitCommande.objects.filter(commande__id=int(order_id))
     cart = Cart(request)
     for item in products:
-        qs_product = Article.objects.filter(id=item.article.id)
+        qs_product = Article.objects.filter(code_article=item.article.code_article)
         if qs_product.exists():
             cart.add(product=qs_product[0],
                      quantity=item.quantite,
@@ -223,7 +223,7 @@ def order_summary_to_cart(request, order_id):
 @require_POST
 def cart_add(request, product_id):  # add method
     cart = Cart(request)
-    qs_product = Article.objects.filter(id=product_id)
+    qs_product = Article.objects.filter(code_article=product_id)
     form = CartAddProductForm(request.POST)
     encoded_url = ''
     if form.is_valid() and qs_product.exists():
@@ -243,7 +243,9 @@ def cart_detail(request):
     for item in cart:
         item['update_quantity_form'] = CartAddProductForm(
             initial={'quantity': item['quantity'],
-                     'update': True})
+                     'update': True,
+                     'code': item['code_article']
+                     })
 
     return render(request, 'cart/cart-detail.html', {'cart': cart, 'quantity': quantity})
 
@@ -251,7 +253,7 @@ def cart_detail(request):
 @require_POST
 def cart_update(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(Article, id=product_id)
+    product = get_object_or_404(Article, code_article=product_id)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
@@ -276,12 +278,13 @@ def update_all_cart(request):
 
     if form.is_valid():
         cd = form.cleaned_data
+        print('cd', cd)
         try:
             tab_join = cd['quantity'].split(',')
             for i in tab_join:
                 rst = i.split('/')
                 try:
-                    product = Article.objects.get(id=int(rst[0]))
+                    product = Article.objects.get(code_article=rst[0])
                     if int(rst[1]) != 0:
                         cart.add(product=product,
                                  quantity=int(rst[1]),
@@ -289,7 +292,10 @@ def update_all_cart(request):
                 except Article.DoesNotExist:
                     pass
         except ValueError:
+            print('mes couilles')
+            print(request.body)
             data = json.loads(request.body)
+            print('data', data)
             for i in data['quantity']:
                 rst = i.split('/')
                 product = get_object_or_404(Article, id=int(rst[0]))

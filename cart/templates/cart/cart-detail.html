@@ -16,7 +16,8 @@
         <div class="row">
             <div class="col mb-5">
                 <form  name="myform2"
-              action="{% url 'cart:update_all_cart' %}" method="post">
+              action="{% url 'cart:update_all_cart' %}"
+                       method="post">
                     <div class="text-left">
                         {{ quantity.quantity }}
                     <button
@@ -86,7 +87,7 @@
                 <form name="myform1"
                       class="form_update"
                       data-id="{{product.id}}"
-                      action="{% url 'cart:cart_update' product.id %}" method="post"
+                      action="{% url 'cart:cart_update' product.code_article %}" method="post"
                 >
                         <div class="mr-1">
                             {{ order_item.update_quantity_form.quantity }}
@@ -101,7 +102,7 @@
             </div>
 
                 <div>
-                    <form name="myform" action="{% url 'cart:cart_remove' product.id %}" method="post">
+                    <form name="myform" action="{% url 'cart:cart_remove' product.code_article %}" method="post">
                          {% csrf_token %}
                         <button
                            type="submit"
@@ -250,11 +251,10 @@
             let ids = [];
             prod_url.forEach((val, index) => {
                 const quantity = quant_val[index];
-
                 let obj = {'id':0, 'quantity':0};
                 obj['id'] = val.href.split('/').slice(-1)[0];
                 obj['quantity'] = quantity.value;
-                ids.push(parseInt(val.href.split('/').slice(-1)[0]) + '/' + parseInt(quantity.value))
+                ids.push(val.href.split('/').slice(-1)[0] + '/' + parseInt(quantity.value))
             });
 
         document.querySelector('#hidden_values').value=ids

@@ -21,6 +21,13 @@ class CartAddProductForm(forms.Form):
                                         'class': 'hidden_value'
                                     }
                                 ))
+    code = forms.BooleanField(required=False,
+                                initial=False,
+                                widget=forms.HiddenInput(
+                                    attrs={
+                                        'class': 'hidden_value'
+                                    }
+                                ))
     url = forms.CharField(required=False,
                           widget=forms.HiddenInput(
                               attrs={
