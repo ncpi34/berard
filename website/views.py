@@ -141,24 +141,7 @@ class FavoritesView(LoginRequiredMixin, ListView):
     login_url = ''
 
     def get_queryset(self):
-        articles = FavorisClient.objects.filter(utilisateur=self.request.user).iterator()
-        art = []
-        obj_from_method_db = []
-        for article in articles:
-            obj_from_method_db.append(article.format_data())
-
-        # sort by quantity
-        df = pd.DataFrame(obj_from_method_db)
-        if df.empty:
-            return ''
-        else:
-            df = df.sort_values('quantite')
-            sorted_list_of_dicts = df.T.to_dict().values()
-            for article in list(sorted_list_of_dicts)[0:20]:  # 20first results
-                qs_article = Article.objects.filter(pk=article['pk'])
-                if qs_article.exists() and article['price'] > 0:
-                    art += qs_article
-            return art
+        return Article.objects.filter(article_favorite__utilisateur=self.request.user).order_by('groupe_id')
 
     def get_context_data(self, **kwargs):
         context = super(FavoritesView, self).get_context_data(**kwargs)

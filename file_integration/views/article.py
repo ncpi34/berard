@@ -218,9 +218,8 @@ class ArticleViews(object):
 
                         Article.objects.update_or_create(
                             code_article=rst["code_article"],
-                            gencode=rst["gencode"],
-
                             defaults=dict(
+                                gencode=rst["gencode"],
                                 libelle=rst['libelle'],
                                 prix_vente=rst["prix_vente"],
                                 prix_achat_1=rst["prix_achat_1"],

@@ -42,4 +42,7 @@ https://testsite.uno/file/article/berard_article
 https://testsite.uno/file/vat/berard_vat
 https://testsite.uno/file/client/berard_client
 
+https://testsite.uno/file/non_unq/art_non_unq
+https://testsite.uno/file/del_carts
+
 python manage.py createsuperuser
