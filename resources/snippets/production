@@ -39,6 +39,7 @@ add TVA.xlsx to import
 
 https://testsite.uno/file/group/berard_group
 https://testsite.uno/file/article/berard_article
+https://testsite.uno/file/vat/berard_vat
 https://testsite.uno/file/client/berard_client
 
 python manage.py createsuperuser
