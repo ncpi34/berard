@@ -19,7 +19,7 @@ urlpatterns = [
     path('client/<password>/', ClientViews.file_treatement, name='client_treatement'),
     path('group/<password>/', GroupViews.create_group_and_others_xlsx, name='group_treatement'),
 
-    path('non_unq/<password>/', DeleteDoubleArticleViews.file_treatement, name='non_unq'),
-    path('del_carts/', DeleteCartsViews.file_treatement, name='del_carts'),
+    # path('non_unq/<password>/', DeleteDoubleArticleViews.file_treatement, name='non_unq'),
+    # path('del_carts/', DeleteCartsViews.file_treatement, name='del_carts'),
 
 ]
