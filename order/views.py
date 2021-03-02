@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
+
+from cart.cart import Cart
 from order.models import HistoriqueCommande
 from django.db.models import Q
 
@@ -27,3 +29,9 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(OrderDetailView, self).get_context_data(**kwargs)
         return context
+
+
+def suppress_cart(request):
+    cart = Cart(request)
+    cart.clear_all(cart)
+    return redirect('order:order_summary')

@@ -9,6 +9,9 @@
 
 {% block content %}
     <main class="container mx-auto" style="min-height: 83vh;">
+        <a href="{% url 'order:suppress_cart' %}">
+            <button class="btn btn-danger">Supprimer panier actuel si erreur</button>
+        </a>
     {% if histories %}
         <h3 class="text-center">Historique Commandes</h3>
     {% endif %}

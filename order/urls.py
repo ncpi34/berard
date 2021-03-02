@@ -12,4 +12,5 @@ urlpatterns = [
     path('accueil_commande/', OrderSummaryView.as_view(), name='order_summary'),
     path('detail_commande/<int:pk>', OrderDetailView.as_view(), name='order_detail'),
     path('pdf/<order_id>', PdfCreator.build_pdf, name='generate_pdf'),
+    path('suppress_cart', suppress_cart, name='suppress_cart'),
 ]

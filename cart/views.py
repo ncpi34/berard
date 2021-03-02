@@ -32,7 +32,7 @@ class CartRemoveView(LoginRequiredMixin, View):
     def post(self, request, **kwargs):
         cart = Cart(request)
         _pk = kwargs.get("product_id")
-        product = get_object_or_404(Article, code_article=_pk)
+        product = get_object_or_404(Article, pk=_pk)
         cart.remove(product)
         return redirect("cart:cart_detail")
 
@@ -224,7 +224,7 @@ def order_summary_to_cart(request, order_id):
 @require_POST
 def cart_add(request, product_id):  # add method
     cart = Cart(request)
-    qs_product = Article.objects.filter(code_article=product_id)
+    qs_product = Article.objects.filter(pk=product_id)
     form = CartAddProductForm(request.POST)
     encoded_url = ''
     if form.is_valid() and qs_product.exists():
@@ -242,7 +242,7 @@ def cart_detail(request):
     cart = Cart(request)
     quantity = CartCheckAllProductsForm
     for item in cart:
-        qs_art = Article.objects.filter(code_article=item['code_article'])
+        qs_art = Article.objects.filter(pk=item['article_id'])
         if qs_art.exists():
             item['update_quantity_form'] = CartAddProductForm(
                 initial={'quantity': item['quantity'],
@@ -251,15 +251,13 @@ def cart_detail(request):
                          })
         else:
             cart.remove(item)
-
-
     return render(request, 'cart/cart-detail.html', {'cart': cart, 'quantity': quantity})
 
 
 @require_POST
 def cart_update(request, product_id):
     cart = Cart(request)
-    product = get_object_or_404(Article, code_article=product_id)
+    product = get_object_or_404(Article, pk=product_id)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data

@@ -70,7 +70,7 @@
                 <!--Gencod-->
                 {% if user.is_authenticated %}
                 <!--Form-->  
-                  <form action="{% url 'cart:cart_add' product_id=article.code_article %}" method="post"
+                  <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                     class="d-flex justify-content-left small" style="margin-bottom: -20px">
                      {% csrf_token %}
                      <div class="row">

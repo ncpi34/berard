@@ -41,7 +41,7 @@
 
         <div class="mx-auto w-25">
             {% if user.is_authenticated %}
-            <form action="{% url 'cart:cart_add' product_id=article.code_article %}" method="post"
+            <form action="{% url 'cart:cart_add' product_id=article.id %}" method="post"
                     class="d-flex justify-content-left ">
                   {{ form }}
                   {% csrf_token %}
