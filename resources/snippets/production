@@ -37,12 +37,12 @@ python manage.py runserver
 
 add TVA.xlsx to import
 
-https://testsite.uno/file/group/berard_group
-https://testsite.uno/file/article/berard_article
-https://testsite.uno/file/vat/berard_vat
-https://testsite.uno/file/client/berard_client
+https://berardsitemarchand.fr//file/group/berard_group
+https://berardsitemarchand.fr/file/article/berard_article
+https://berardsitemarchand.fr/file/vat/berard_vat
+https://berardsitemarchand.fr/file/client/berard_client
 
-https://testsite.uno/file/non_unq/art_non_unq
-https://testsite.uno/file/del_carts
+https://berardsitemarchand.fr/file/non_unq/art_non_unq
+https://berardsitemarchand.fr/file/del_carts
 
 python manage.py createsuperuser

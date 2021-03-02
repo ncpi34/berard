@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import View
 from cart.cart import Cart
 from cart.forms import CartAddProductForm, CartCheckAllProductsForm
+from cart.models import PanierEnCours
 from website.models import Article, FavorisClient, ProfilUtilisateur
 from order.models import HistoriqueCommande, ProduitCommande
 from django.contrib import messages
@@ -241,11 +242,16 @@ def cart_detail(request):
     cart = Cart(request)
     quantity = CartCheckAllProductsForm
     for item in cart:
-        item['update_quantity_form'] = CartAddProductForm(
-            initial={'quantity': item['quantity'],
-                     'update': True,
-                     'code': item['code_article']
-                     })
+        qs_art = Article.objects.filter(code_article=item['code_article'])
+        if qs_art.exists():
+            item['update_quantity_form'] = CartAddProductForm(
+                initial={'quantity': item['quantity'],
+                         'update': True,
+                         'code': item['code_article']
+                         })
+        else:
+            cart.remove(item)
+
 
     return render(request, 'cart/cart-detail.html', {'cart': cart, 'quantity': quantity})
 

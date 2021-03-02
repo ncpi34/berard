@@ -24,9 +24,8 @@ class LoginView(View):
         try:
             old_cart = PanierEnCours.objects.get(utilisateur=self.request.user.id).donnees
             for i in old_cart.copy():
-                try:
-                    Article.objects.filter(pk=i)
-                except Article.DoesNotExist:
+                qs_art = Article.objects.filter(code_article=old_cart.copy()[i]['code_article'])
+                if not qs_art.exists():
                     old_cart.pop(i)
 
             self.request.session['cart'] = old_cart
@@ -78,6 +77,7 @@ class LoginView(View):
 
 def save_cart_before_logout(request):
     """ Save cart before logout"""
+    print(request.session.get('cart'))
     PanierEnCours.objects.update_or_create(
         utilisateur=int(request.session.get('_auth_user_id')),
 
