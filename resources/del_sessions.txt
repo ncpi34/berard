@@ -1,0 +1,10 @@
+python manage.py shell
+from django.contrib.sessions.models import Session
+Session.objects.all().count()
+Session.objects.all().delete()
+
+python manage.py clearsessions
+
+
+###psql
+TRUNCATE django_session;
