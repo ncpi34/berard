@@ -135,7 +135,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('website:product_detail',
-                       args=[self.code_article])
+                       args=[self.pk])
 
     def get_img(self):
         if Path("media/img/product/" + self.code_article + ".png").is_file():

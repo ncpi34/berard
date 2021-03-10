@@ -40,11 +40,19 @@ python manage.py test --verbosity 2
 python manage.py test catalog.tests
 python manage.py test catalog.tests.test_models.YourTestClass.test_one_plus_one_equals_two
 
+!!!Session
+python manage.py clearsessions
+python manage.py shell
+from django.contrib.sessions.models import Session
+Session.objects.all().delete()
+
 !!!SHELL
 python manage.py shell
 from restaurant.models import Restaurant
 Restaurant.objects.all()
 Restaurant.objects.filter(user__username='fidji')
+from cart.models import PanierEnCours
+PanierEnCours.objects.all().delete()
 
 post = Post.objects.get(title="Sample title")
 post.publish()

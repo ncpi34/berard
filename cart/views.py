@@ -287,14 +287,13 @@ def update_all_cart(request):
             tab_join = cd['quantity'].split(',')
             for i in tab_join:
                 rst = i.split('/')
-                try:
-                    product = Article.objects.get(code_article=rst[0])
-                    if int(rst[1]) != 0:
-                        cart.add(product=product,
-                                 quantity=int(rst[1]),
-                                 update_quantity=True)
-                except Article.DoesNotExist:
-                    pass
+                qs_product = Article.objects.filter(id=rst[0])
+                if int(rst[1]) != 0 and qs_product.exists():
+                    cart.add(product=qs_product[0],
+                             quantity=int(rst[1]),
+                             update_quantity=True)
+                else:
+                    cart.remove(qs_product[0])
         except ValueError:
             print('mes couilles')
             print(request.body)

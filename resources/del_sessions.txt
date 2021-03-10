@@ -8,3 +8,8 @@ python manage.py clearsessions
 
 ###psql
 TRUNCATE django_session;
+
+periodic task
+https://bradmontgomery.net/blog/scheduled-tasks-or-cron-jobs-with-django/
+https://stackoverflow.com/questions/57357120/how-to-trigger-session-deletion-automatically-after-it-expires
+https://pypi.org/project/django-session-cleanup/

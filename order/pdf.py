@@ -118,7 +118,8 @@ class PdfCreator(object):
         order = HistoriqueCommande.objects.get(id=int(kwargs['order_id']))
         date = str(order.date)[0:10]  # date splited
 
-        file_name = re.sub(r'-|:|\s', r'', cls.change_hour(order.date)) + '.pdf'  # name of the file
+        # file_name = re.sub(r'-|:|\s', r'', cls.change_hour(order.date)) + '.pdf'  # name of the file
+        file_name = f'{order.pk}.pdf'  # name of the file
 
         buffer = io.BytesIO()
 
