@@ -53,43 +53,21 @@ class Cart(object):
         Add a product to the cart or update its quantity.
         """
         id_product = str(product.id)
-        # newItem = True
         price_null = self.get_price_by_user(product) != 0.00
+        # quantity % int(product.conditionnement) == 0
         if price_null:
-            if product.groupe == 'BOISSONS':
-                if product.id not in self.cart.keys() and quantity is not 0 and quantity % int(
-                        product.conditionnement) == 0:
-                    self.cart[product.id] = {
-                        'userid': self.request.user.id,
-                        'article_id': id_product,
-                        'libelle': product.libelle,
-                        'quantity': 0,
-                        'prix_achat': str(self.get_price_by_user(product)),
-                        'tva': product.taux_TVA,
-                        'code_article': product.code_article,
-                        'prix_ht': str(self.get_price_without_taxes_by_user(product)),
-                        'lot': product.conditionnement,
-                    }
-            else:
-                if product.id not in self.cart.keys() and quantity is not 0:
-                    self.cart[product.id] = {
-                        'userid': self.request.user.id,
-                        'article_id': id_product,
-                        'libelle': product.libelle,
-                        'quantity': 0,
-                        'prix_achat': str(self.get_price_by_user(product)),
-                        'tva': product.taux_TVA,
-                        'code_article': product.code_article,
-                        'prix_ht': str(self.get_price_without_taxes_by_user(product)),
-                        'lot': product.conditionnement,
-                    }
-
-                if update_quantity:
-                    if quantity is not 0:
-                        self.cart[product.id]['quantity'] = quantity
-
-                else:
-                    self.cart[product.id]['quantity'] += quantity
+            if quantity > 0:
+                self.cart[product.id] = {
+                    'userid': self.request.user.id,
+                    'article_id': id_product,
+                    'libelle': product.libelle,
+                    'quantity': quantity,
+                    'prix_achat': str(self.get_price_by_user(product)),
+                    'tva': product.taux_TVA,
+                    'code_article': product.code_article,
+                    'prix_ht': str(self.get_price_without_taxes_by_user(product)),
+                    'lot': product.conditionnement,
+                }
                 self.save()
 
     def get_total_items(self):
